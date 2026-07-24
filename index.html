@@ -682,13 +682,15 @@
     areaValue.textContent = Math.round(area).toLocaleString('tr-TR') + ' m²';
 
     // Basit / örnek tahmin modeli — gerçek fiyatlandırmanızla değiştirin:
-    const capByArea = area / 6;             // ~6 m² başına 1 kWp varsayımı
-    const capByBill = (bill / 450) * 1.3;   // faturaya göre yaklaşık ihtiyaç
-    const capacityKw = Math.min(Math.max(capByArea, 1), capByBill, 500);
+    // Kurulu güç (ve dolayısıyla maliyet) çatı alanına göre belirlenir — bu yüzden alan kaydırıcısı
+    // her zaman sonucu etkiler. Tasarruf ise faturayı geçemez (gerçekçi üst sınır).
+    const capacityKw = Math.min(Math.max(area / 6, 1), 500); // ~6 m² başına 1 kWp varsayımı
+    const usefulKwForBill = (bill / 450) * 1.3;              // faturayı karşılamak için gereken kapasite
+    const effectiveKw = Math.min(capacityKw, usefulKwForBill);
 
     const costPerKw = 13000;                // ₺/kWp örnek birim fiyat
     const systemCost = capacityKw * costPerKw;
-    const monthlySaving = Math.min(bill * 0.85, capacityKw * region * 380);
+    const monthlySaving = Math.min(bill * 0.85, effectiveKw * region * 380);
     const paybackYears = systemCost / (monthlySaving * 12);
     const annualGain = monthlySaving * 12;
     const total25 = (monthlySaving * 12 * 25) - systemCost;
