@@ -15,4 +15,5 @@ export function initMobileMenu() {
   menuBtn.addEventListener('click', openMenu);
   menuClose.addEventListener('click', closeMenu);
   document.querySelectorAll('.mobile-link').forEach((a) => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
 }

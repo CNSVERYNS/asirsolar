@@ -1,0 +1,12 @@
+{
+  "name": "ASIR SOLAR",
+  "short_name": "AsırSolar",
+  "description": "İstanbul güneş enerjisi çözüm ortağı",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F1626",
+  "theme_color": "#FF6B00",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

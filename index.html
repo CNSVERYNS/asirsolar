@@ -31,6 +31,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ASIR SOLAR | İstanbul Güneş Enerjisi Çözümleri</title>
 <meta name="description" content="ASIR SOLAR — İstanbul merkezli güneş enerjisi çözüm ortağı. Konut ve ticari güneş enerjisi kurulumu, ROI hesaplayıcı ve ücretsiz keşif.">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://asirsolar.vercel.app/">
+<meta property="og:title" content="ASIR SOLAR | İstanbul Güneş Enerjisi Çözümleri">
+<meta property="og:description" content="Elektrik faturanıza son verin. ASIR SOLAR ile güneş enerjisine geçin, yatırımınızı 4–6 yılda geri kazanın. Ücretsiz keşif ve ROI hesaplayıcı.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1761472823286-9f6093ed6663?auto=format&fit=crop&w=1200&q=80">
+<meta property="og:locale" content="tr_TR">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ASIR SOLAR | İstanbul Güneş Enerjisi Çözümleri">
+<meta name="twitter:description" content="Elektrik faturanıza son verin. Ücretsiz keşif ve anlık ROI hesaplayıcı.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1761472823286-9f6093ed6663?auto=format&fit=crop&w=1200&q=80">
+<!-- Manifest -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#FF6B00">
+<link rel="apple-touch-icon" href="/favicon.svg">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -111,7 +127,7 @@
         Elektrik Faturanıza<br><span class="gold-text">Son Verin</span>
       </h1>
       <p class="text-base md:text-lg text-slate-300 leading-relaxed mb-9 max-w-xl">
-        ASIR SOLAR ile güneş enerjisine geçin. Yatırımınızı <span class="text-white font-semibold">3–5 yılda</span> geri kazanın, sonrası tamamen kâr.
+        ASIR SOLAR ile güneş enerjisine geçin. Yatırımınızı <span class="text-white font-semibold">4–6 yılda</span> geri kazanın, 25 yıl boyunca kâr edin.
       </p>
       <div class="flex flex-wrap items-center gap-4 mb-14">
         <a href="#iletisim" class="bg-[#FF6B00] hover:bg-[#ff7d1f] text-white font-bold text-base px-9 py-4 rounded-full transition-all hover:scale-105">Ücretsiz Keşif İste</a>
@@ -122,13 +138,13 @@
       </div>
       <div class="flex flex-wrap items-center gap-6 sm:gap-10">
         <div>
-          <div class="font-display font-extrabold text-3xl sm:text-4xl text-white">500<span class="text-[#FF6B00]">+</span></div>
+          <div class="font-display font-extrabold text-3xl sm:text-4xl text-white"><span data-count="500">500</span><span class="text-[#FF6B00]">+</span></div>
           <div class="text-xs text-slate-400 mt-1 tracking-wide">Tamamlanan Proje</div>
         </div>
         <div class="w-px h-12 bg-white/15"></div>
         <div>
-          <div class="font-display font-extrabold text-3xl sm:text-4xl text-white">%35</div>
-          <div class="text-xs text-slate-400 mt-1 tracking-wide">Ortalama Tasarruf</div>
+          <div class="font-display font-extrabold text-3xl sm:text-4xl text-white">%80<span class="text-[#FF6B00]">+</span></div>
+          <div class="text-xs text-slate-400 mt-1 tracking-wide">Ortalama Fatura Azalması</div>
         </div>
         <div class="w-px h-12 bg-white/15"></div>
         <div>
@@ -158,7 +174,7 @@
                 <label for="billRange" class="text-sm font-medium text-slate-300">Aylık elektrik faturanız</label>
                 <span id="billValue" class="font-display font-bold text-lg text-[#FFD700]">₺4.500</span>
               </div>
-              <input id="billRange" type="range" min="500" max="10000" step="50" value="4500" class="w-full">
+              <input id="billRange" type="range" min="500" max="10000" step="50" value="1500" class="w-full">
               <div class="flex justify-between text-xs text-slate-500 mt-2"><span>₺500</span><span>₺10.000</span></div>
             </div>
             <div>
@@ -166,7 +182,7 @@
                 <label for="areaRange" class="text-sm font-medium text-slate-300">Çatı / alan büyüklüğü</label>
                 <span id="areaValue" class="font-display font-bold text-lg text-[#FFD700]">180 m²</span>
               </div>
-              <input id="areaRange" type="range" min="50" max="5000" step="10" value="180" class="w-full">
+              <input id="areaRange" type="range" min="50" max="5000" step="10" value="100" class="w-full">
               <div class="flex justify-between text-xs text-slate-500 mt-2"><span>50 m²</span><span>5000 m²</span></div>
             </div>
             <div>
@@ -236,6 +252,9 @@
             <div class="text-xs tracking-widest text-slate-400 mb-2">25 YILDA TOPLAM NET KAZANÇ</div>
             <div id="outTotal" class="font-display font-black text-3xl md:text-5xl gold-text">₺1.905.000</div>
             <div class="flex items-center justify-center gap-2 mt-3 text-xs text-slate-400"><i class="fa-solid fa-circle-info"></i> Tahmini değerdir; kesin teklif ücretsiz keşif sonrası netleşir.</div>
+            <button id="calcShareWa" class="mt-4 inline-flex items-center gap-2 bg-[#25D366]/15 border border-[#25D366]/30 hover:bg-[#25D366]/25 text-[#25D366] font-semibold text-sm px-5 py-2.5 rounded-full transition-colors">
+              <i class="fa-brands fa-whatsapp text-base"></i> Sonuçları WhatsApp'a Gönder
+            </button>
           </div>
         </div>
       </div>
@@ -244,7 +263,7 @@
 </section>
 
 <!-- ===================== NEDEN SOLAR ===================== -->
-<section id="neden-solar" class="relative py-20 md:py-24">
+<section id="neden-solar" class="relative py-20 md:py-24 fade-in">
   <div class="relative max-w-[1240px] mx-auto px-6 md:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start mb-16 md:mb-20">
       <div class="lg:col-span-7">
@@ -325,7 +344,7 @@
 </section>
 
 <!-- ===================== ÇÖZÜMLER ===================== -->
-<section id="cozumler" class="relative py-20 md:py-24">
+<section id="cozumler" class="relative py-20 md:py-24 fade-in">
   <div class="max-w-[1240px] mx-auto px-6 md:px-8">
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 md:mb-14">
       <div>
@@ -336,7 +355,7 @@
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <article class="group relative rounded-3xl overflow-hidden h-[320px] lg:h-[520px] cursor-pointer shadow-md lg:col-span-7">
-        <img src="https://images.unsplash.com/photo-1504762300654-109d62172feb?auto=format&fit=crop&w=1100&q=75" alt="Konut çatısında güneş paneli, kuş bakışı" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1504762300654-109d62172feb?auto=format&fit=crop&w=1100&q=75" alt="Konut çatısında güneş paneli, kuş bakışı" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
         <div class="absolute inset-0 bg-gradient-to-t from-[#101A30] via-[#101A30]/40 to-transparent"></div>
         <div class="absolute bottom-0 p-7 md:p-9">
           <div class="inline-flex items-center gap-2 bg-[#101A30] border border-white/15 rounded-full px-3 py-1 mb-4 text-xs font-semibold text-[#FFB050]">5–20 kWp</div>
@@ -347,7 +366,7 @@
       </article>
       <div class="lg:col-span-5 grid grid-rows-2 gap-6">
         <article class="group relative rounded-3xl overflow-hidden h-[250px] lg:h-auto cursor-pointer shadow-md">
-          <img src="https://images.unsplash.com/photo-1680355065203-43ad84bb6e69?auto=format&fit=crop&w=900&q=75" alt="Geniş ticari güneş enerjisi santrali, sıra sıra paneller" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1680355065203-43ad84bb6e69?auto=format&fit=crop&w=900&q=75" alt="Geniş ticari güneş enerjisi santrali, sıra sıra paneller" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
           <div class="absolute inset-0 bg-gradient-to-t from-[#101A30] via-[#101A30]/45 to-transparent"></div>
           <div class="absolute bottom-0 p-6">
             <div class="inline-flex items-center gap-2 bg-[#101A30] border border-white/15 rounded-full px-3 py-1 mb-3 text-xs font-semibold text-[#FFB050]">20–500 kWp</div>
@@ -356,7 +375,7 @@
           </div>
         </article>
         <article class="group relative rounded-3xl overflow-hidden h-[250px] lg:h-auto cursor-pointer shadow-md">
-          <img src="https://images.unsplash.com/photo-1574360773950-133867861ae9?auto=format&fit=crop&w=900&q=75" alt="Mavi güneş panelleri, gündüz" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1574360773950-133867861ae9?auto=format&fit=crop&w=900&q=75" alt="Mavi güneş panelleri, gündüz" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
           <div class="absolute inset-0 bg-gradient-to-t from-[#101A30] via-[#101A30]/45 to-transparent"></div>
           <div class="absolute bottom-0 p-6">
             <div class="inline-flex items-center gap-2 bg-[#101A30] border border-white/15 rounded-full px-3 py-1 mb-3 text-xs font-semibold text-[#FFB050]">Pasif Gelir</div>
@@ -370,7 +389,7 @@
 </section>
 
 <!-- ===================== GALERİ (yer tutucu görseller — gerçek proje fotoğraflarıyla değiştirilecek) ===================== -->
-<section id="galeri" class="relative py-20 md:py-24">
+<section id="galeri" class="relative py-20 md:py-24 fade-in">
   <div class="max-w-[1240px] mx-auto px-6 md:px-8">
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
       <div>
@@ -396,33 +415,33 @@
     <div id="galleryTrack" class="flex gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-3 no-scrollbar">
       <!-- Tarla / Bağ / Bahçe -->
       <article data-cat="tarla" class="gallery-card snap-start shrink-0 w-[260px] sm:w-[300px] rounded-2xl overflow-hidden relative h-[220px] group">
-        <img src="https://images.unsplash.com/photo-1589201529153-5297335c1684?auto=format&fit=crop&w=800&q=75" alt="Tarlaya kurulmuş zemin tipi güneş enerjisi paneli sistemi" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1589201529153-5297335c1684?auto=format&fit=crop&w=800&q=75" alt="Tarlaya kurulmuş zemin tipi güneş enerjisi paneli sistemi" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
         <div class="absolute inset-0 bg-gradient-to-t from-[#101A30] via-[#101A30]/25 to-transparent"></div>
         <span class="absolute top-3 left-3 bg-[#101A30]/85 border border-white/15 text-[11px] font-semibold text-[#FFB050] px-3 py-1 rounded-full">Tarla / Bağ / Bahçe</span>
         <div class="absolute bottom-3 left-3 right-3 text-white text-sm font-semibold">Örnek Proje — İl/İlçe eklenecek</div>
       </article>
       <article data-cat="tarla" class="gallery-card snap-start shrink-0 w-[260px] sm:w-[300px] rounded-2xl overflow-hidden relative h-[220px] group">
-        <img src="https://images.unsplash.com/photo-1756913453779-ea366264b54a?auto=format&fit=crop&w=800&q=75" alt="Geniş arazi üzerine kurulmuş güneş enerjisi tarlası" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1756913453779-ea366264b54a?auto=format&fit=crop&w=800&q=75" alt="Geniş arazi üzerine kurulmuş güneş enerjisi tarlası" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
         <div class="absolute inset-0 bg-gradient-to-t from-[#101A30] via-[#101A30]/25 to-transparent"></div>
         <span class="absolute top-3 left-3 bg-[#101A30]/85 border border-white/15 text-[11px] font-semibold text-[#FFB050] px-3 py-1 rounded-full">Tarla / Bağ / Bahçe</span>
         <div class="absolute bottom-3 left-3 right-3 text-white text-sm font-semibold">Örnek Proje — İl/İlçe eklenecek</div>
       </article>
       <!-- Ev Elektriği -->
       <article data-cat="ev" class="gallery-card snap-start shrink-0 w-[260px] sm:w-[300px] rounded-2xl overflow-hidden relative h-[220px] group">
-        <img src="https://images.unsplash.com/photo-1655300283246-1ef0317a565d?auto=format&fit=crop&w=800&q=75" alt="Ev çatısına kurulmuş güneş paneli sistemi" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1655300283246-1ef0317a565d?auto=format&fit=crop&w=800&q=75" alt="Ev çatısına kurulmuş güneş paneli sistemi" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
         <div class="absolute inset-0 bg-gradient-to-t from-[#101A30] via-[#101A30]/25 to-transparent"></div>
         <span class="absolute top-3 left-3 bg-[#101A30]/85 border border-white/15 text-[11px] font-semibold text-[#FFB050] px-3 py-1 rounded-full">Ev Elektriği</span>
         <div class="absolute bottom-3 left-3 right-3 text-white text-sm font-semibold">Örnek Proje — İl/İlçe eklenecek</div>
       </article>
       <article data-cat="ev" class="gallery-card snap-start shrink-0 w-[260px] sm:w-[300px] rounded-2xl overflow-hidden relative h-[220px] group">
-        <img src="https://images.unsplash.com/photo-1504762300654-109d62172feb?auto=format&fit=crop&w=800&q=75" alt="Konut çatısında güneş paneli, kuş bakışı" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1504762300654-109d62172feb?auto=format&fit=crop&w=800&q=75" alt="Konut çatısında güneş paneli, kuş bakışı" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
         <div class="absolute inset-0 bg-gradient-to-t from-[#101A30] via-[#101A30]/25 to-transparent"></div>
         <span class="absolute top-3 left-3 bg-[#101A30]/85 border border-white/15 text-[11px] font-semibold text-[#FFB050] px-3 py-1 rounded-full">Ev Elektriği</span>
         <div class="absolute bottom-3 left-3 right-3 text-white text-sm font-semibold">Örnek Proje — İl/İlçe eklenecek</div>
       </article>
       <!-- Şirket Elektriği -->
       <article data-cat="sirket" class="gallery-card snap-start shrink-0 w-[260px] sm:w-[300px] rounded-2xl overflow-hidden relative h-[220px] group">
-        <img src="https://images.unsplash.com/photo-1775317628391-a0429fe3be1b?auto=format&fit=crop&w=800&q=75" alt="Sanayi tesisi çatısına kurulmuş güneş enerjisi sistemi" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1775317628391-a0429fe3be1b?auto=format&fit=crop&w=800&q=75" alt="Sanayi tesisi çatısına kurulmuş güneş enerjisi sistemi" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
         <div class="absolute inset-0 bg-gradient-to-t from-[#101A30] via-[#101A30]/25 to-transparent"></div>
         <span class="absolute top-3 left-3 bg-[#101A30]/85 border border-white/15 text-[11px] font-semibold text-[#FFB050] px-3 py-1 rounded-full">Şirket Elektriği</span>
         <div class="absolute bottom-3 left-3 right-3 text-white text-sm font-semibold">Örnek Proje — İl/İlçe eklenecek</div>
@@ -438,7 +457,7 @@
 </section>
 
 <!-- ===================== REFERANSLAR ===================== -->
-<section id="referanslar" class="relative py-20 md:py-24 bg-[#0B121F]">
+<section id="referanslar" class="relative py-20 md:py-24 bg-[#0B121F] fade-in">
   <div class="relative max-w-[1240px] mx-auto px-6 md:px-8">
     <div class="text-center max-w-3xl mx-auto mb-12 md:mb-14">
       <span class="text-xs font-semibold tracking-[0.3em] text-[#FF6B00]">REFERANSLAR</span>
@@ -460,9 +479,9 @@
           <span class="absolute" style="left:82%;top:38%"><span class="map-ping absolute w-3 h-3 rounded-full bg-[#FFD700]"></span><span class="relative w-3 h-3 rounded-full bg-[#FF6B00] block"></span></span>
         </div>
         <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-white/10">
-          <div><div class="font-display font-bold text-2xl text-[#FFB050]">500+</div><div class="text-xs text-slate-400">Proje</div></div>
-          <div><div class="font-display font-bold text-2xl text-[#FFB050]">48MW</div><div class="text-xs text-slate-400">Kurulu Güç</div></div>
-          <div><div class="font-display font-bold text-2xl text-[#FFB050]">%98</div><div class="text-xs text-slate-400">Memnuniyet</div></div>
+          <div><div class="font-display font-bold text-2xl text-[#FFB050]"><span data-count="500">500</span>+</div><div class="text-xs text-slate-400">Proje</div></div>
+          <div><div class="font-display font-bold text-2xl text-[#FFB050]"><span data-count="48">48</span>MW</div><div class="text-xs text-slate-400">Kurulu Güç</div></div>
+          <div><div class="font-display font-bold text-2xl text-[#FFB050]">%<span data-count="98">98</span></div><div class="text-xs text-slate-400">Memnuniyet</div></div>
         </div>
       </div>
       <!-- Testimonials -->
@@ -507,7 +526,7 @@
 </section>
 
 <!-- ===================== SÜREÇ ===================== -->
-<section id="surec" class="relative py-20 md:py-24">
+<section id="surec" class="relative py-20 md:py-24 fade-in">
   <div class="max-w-[1240px] mx-auto px-6 md:px-8">
     <div class="text-center max-w-3xl mx-auto mb-14 md:mb-16">
       <span class="text-xs font-semibold tracking-[0.3em] text-[#FF6B00]">NASIL ÇALIŞIR</span>
@@ -541,7 +560,7 @@
 
 <!-- ===================== İLETİŞİM / CTA ===================== -->
 <section id="iletisim" class="relative py-20 md:py-24 overflow-hidden">
-  <img src="https://images.unsplash.com/photo-1756913453779-ea366264b54a?auto=format&fit=crop&w=1800&q=75" alt="Geniş güneş enerjisi tarlası, açık mavi gökyüzü" class="absolute inset-0 w-full h-full object-cover">
+  <img loading="lazy" src="https://images.unsplash.com/photo-1756913453779-ea366264b54a?auto=format&fit=crop&w=1800&q=75" alt="Geniş güneş enerjisi tarlası, açık mavi gökyüzü" class="absolute inset-0 w-full h-full object-cover">
   <div class="absolute inset-0 bg-[#101A30]/90"></div>
   <div class="relative max-w-[1240px] mx-auto px-6 md:px-8 text-white">
     <div class="text-center max-w-3xl mx-auto mb-10 md:mb-12">
@@ -553,20 +572,38 @@
         <form id="contactForm" class="space-y-5">
           <div id="formFields" class="space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div><label class="text-xs text-slate-400 mb-2 block">Ad Soyad</label><input required type="text" placeholder="Adınız Soyadınız" class="w-full bg-[#0F1626] border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder:text-slate-500 focus:border-[#FF6B00] outline-none transition-colors"></div>
-              <div><label class="text-xs text-slate-400 mb-2 block">Telefon</label><input required type="tel" placeholder="0(5xx) xxx xx xx" class="w-full bg-[#0F1626] border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder:text-slate-500 focus:border-[#FF6B00] outline-none transition-colors"></div>
+              <div>
+                <label for="f-name" class="text-xs text-slate-400 mb-2 block">Ad Soyad</label>
+                <input id="f-name" name="ad_soyad" required type="text" placeholder="Adınız Soyadınız" class="w-full bg-[#0F1626] border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder:text-slate-500 focus:border-[#FF6B00] outline-none transition-colors">
+              </div>
+              <div>
+                <label for="f-phone" class="text-xs text-slate-400 mb-2 block">Telefon</label>
+                <input id="f-phone" name="telefon" required type="tel" placeholder="05xx xxx xx xx" class="w-full bg-[#0F1626] border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder:text-slate-500 focus:border-[#FF6B00] outline-none transition-colors">
+                <span id="phoneError" class="hidden text-xs text-red-400 mt-1 block">Geçerli bir Türkiye cep numarası girin.</span>
+              </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div><label class="text-xs text-slate-400 mb-2 block">E-posta</label><input required type="email" placeholder="ornek@mail.com" class="w-full bg-[#0F1626] border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder:text-slate-500 focus:border-[#FF6B00] outline-none transition-colors"></div>
-              <div><label class="text-xs text-slate-400 mb-2 block">İl</label><input type="text" placeholder="İstanbul" class="w-full bg-[#0F1626] border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder:text-slate-500 focus:border-[#FF6B00] outline-none transition-colors"></div>
+              <div>
+                <label for="f-email" class="text-xs text-slate-400 mb-2 block">E-posta</label>
+                <input id="f-email" name="email" required type="email" placeholder="ornek@mail.com" class="w-full bg-[#0F1626] border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder:text-slate-500 focus:border-[#FF6B00] outline-none transition-colors">
+              </div>
+              <div>
+                <label for="f-city" class="text-xs text-slate-400 mb-2 block">İl</label>
+                <div class="relative">
+                  <select id="f-city" name="il" class="w-full appearance-none bg-[#0F1626] border border-white/15 rounded-xl px-4 py-3.5 text-white focus:border-[#FF6B00] outline-none transition-colors">
+                    <option value="">İl seçin...</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none text-xs"></i>
+                </div>
+              </div>
             </div>
-            <div><label class="text-xs text-slate-400 mb-2 block">Mesajınız</label><textarea rows="3" placeholder="İhtiyacınızı kısaca anlatın..." class="w-full bg-[#0F1626] border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder:text-slate-500 focus:border-[#FF6B00] outline-none transition-colors resize-none"></textarea></div>
-            <label class="flex items-center gap-3 text-sm text-slate-300 cursor-pointer">
-              <input type="checkbox" checked class="peer sr-only">
-              <span class="w-5 h-5 rounded border border-[#FF6B00] bg-[#FF6B00]/10 flex items-center justify-center shrink-0"><i class="fa-solid fa-check text-[#FF6B00] text-xs"></i></span>
+            <div><label for="f-msg" class="text-xs text-slate-400 mb-2 block">Mesajınız</label><textarea id="f-msg" name="mesaj" rows="3" placeholder="İhtiyacınızı kısaca anlatın..." class="w-full bg-[#0F1626] border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder:text-slate-500 focus:border-[#FF6B00] outline-none transition-colors resize-none"></textarea></div>
+            <label id="kesifLabel" class="flex items-center gap-3 text-sm text-slate-300 cursor-pointer select-none">
+              <input id="f-kesif" name="ucretsiz_kesif" type="checkbox" checked class="sr-only">
+              <span id="kesifBox" class="w-5 h-5 rounded border-2 border-[#FF6B00] bg-[#FF6B00]/20 flex items-center justify-center shrink-0 transition-colors"><i id="kesifCheck" class="fa-solid fa-check text-[#FF6B00] text-xs"></i></span>
               Ücretsiz keşif istiyorum
             </label>
-            <button type="submit" class="w-full bg-[#FF6B00] hover:bg-[#ff7d1f] text-white font-bold text-base py-4 rounded-xl transition-all hover:scale-[1.01]">Ücretsiz Keşif Talebi Gönder</button>
+            <button type="submit" id="submitBtn" class="w-full bg-[#FF6B00] hover:bg-[#ff7d1f] text-white font-bold text-base py-4 rounded-xl transition-all hover:scale-[1.01] disabled:opacity-60 disabled:pointer-events-none">Ücretsiz Keşif Talebi Gönder</button>
           </div>
           <div id="formSuccess" class="hidden text-center py-8">
             <div class="w-14 h-14 rounded-full bg-[#22C55E]/15 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-check text-2xl text-[#22C55E]"></i></div>
@@ -614,7 +651,7 @@
     </div>
     <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10 text-sm text-slate-500">
       <span>© <span id="year"></span> ASIR SOLAR. Tüm hakları saklıdır.</span>
-      <div class="flex gap-6"><a href="#" class="hover:text-white">Gizlilik Politikası</a><a href="#" class="hover:text-white">Kullanım Şartları</a></div>
+      <div class="flex gap-6"><button id="footerPrivacyBtn" class="hover:text-white transition-colors">Gizlilik Politikası</button><button id="footerTermsBtn" class="hover:text-white transition-colors">Kullanım Şartları</button></div>
     </div>
   </div>
 </footer>
@@ -626,6 +663,48 @@
 <a href="tel:08500000000" aria-label="Hemen Ara" class="fixed bottom-6 right-24 z-40 w-14 h-14 rounded-full bg-[#FF6B00] shadow-lg shadow-black/20 flex items-center justify-center text-white text-xl hover:scale-105 transition-transform">
   <i class="fa-solid fa-phone"></i>
 </a>
+
+<!-- ===================== KVKK / GİZLİLİK MODALLARI ===================== -->
+<div id="modalPrivacy" class="fixed inset-0 z-[200] flex items-center justify-center p-4 hidden">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="modalPrivacyBg"></div>
+  <div class="relative bg-[#182238] border border-white/10 rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 shadow-2xl">
+    <button id="modalPrivacyClose" class="absolute top-5 right-5 w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    <h3 class="font-display font-bold text-2xl text-white mb-6">Gizlilik Politikası</h3>
+    <div class="text-sm text-slate-400 space-y-4 leading-relaxed">
+      <p><strong class="text-white">1. Veri Sorumlusu</strong><br>ASIR SOLAR ("Şirket"), 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında veri sorumlusudur.</p>
+      <p><strong class="text-white">2. Toplanan Kişisel Veriler</strong><br>Web sitemiz üzerinden iletişim formunu doldurduğunuzda ad-soyad, telefon numarası, e-posta adresi ve mesaj içeriği toplanmaktadır. Site gezintisine ilişkin teknik veriler (IP, tarayıcı, ziyaret süresi) ise analiz amacıyla işlenmektedir.</p>
+      <p><strong class="text-white">3. İşleme Amaçları</strong><br>Toplanan veriler; müşteri talep ve şikayetlerinin yönetimi, teklife esas olmak üzere iletişim kurulması, yasal yükümlülüklerin yerine getirilmesi ve hizmet kalitesinin iyileştirilmesi amacıyla işlenmektedir.</p>
+      <p><strong class="text-white">4. Aktarım</strong><br>Kişisel verileriniz üçüncü şahıslara, iş ortaklarına veya yurt dışına aktarılmamaktadır. Yalnızca yasal zorunluluk halinde resmi mercilerle paylaşılabilir.</p>
+      <p><strong class="text-white">5. Saklama Süresi</strong><br>Verileriniz, işleme amacının ortadan kalkmasını takiben ya da talep etmeniz halinde 30 gün içinde silinmektedir.</p>
+      <p><strong class="text-white">6. Haklarınız (KVKK Madde 11)</strong><br>Kişisel verilerinize ilişkin bilgi alma, düzeltme, silme, işlemeyi kısıtlama ve itiraz etme haklarına sahipsiniz. Taleplerinizi <strong class="text-white">info@asirsolar.com.tr</strong> adresine iletebilirsiniz.</p>
+      <p><strong class="text-white">7. Çerezler</strong><br>Sitemiz yalnızca zorunlu teknik çerezler kullanmaktadır. Üçüncü taraf reklam çerezi kullanılmamaktadır.</p>
+      <p class="text-slate-500 text-xs">Son güncelleme: Temmuz 2026</p>
+    </div>
+  </div>
+</div>
+
+<div id="modalTerms" class="fixed inset-0 z-[200] flex items-center justify-center p-4 hidden">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="modalTermsBg"></div>
+  <div class="relative bg-[#182238] border border-white/10 rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 shadow-2xl">
+    <button id="modalTermsClose" class="absolute top-5 right-5 w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    <h3 class="font-display font-bold text-2xl text-white mb-6">Kullanım Şartları</h3>
+    <div class="text-sm text-slate-400 space-y-4 leading-relaxed">
+      <p><strong class="text-white">1. Genel</strong><br>Bu web sitesi ASIR SOLAR tarafından işletilmektedir. Siteyi kullanarak aşağıdaki şartları kabul etmiş sayılırsınız.</p>
+      <p><strong class="text-white">2. Bilgilerin Doğruluğu</strong><br>Sitedeki içerikler bilgilendirme amaçlıdır. ROI hesaplayıcısı tahmini değerler üretmekte olup gerçek sistem performansı; çatı yönü, gölgelenme, bölge ve ekipman seçimine göre farklılık gösterebilir. Kesin teklifler yalnızca yerinde keşif sonrasında verilir.</p>
+      <p><strong class="text-white">3. Fikri Mülkiyet</strong><br>Sitedeki tüm içerik, tasarım ve görseller ASIR SOLAR'a aittir. İzinsiz kopyalanamaz veya dağıtılamaz.</p>
+      <p><strong class="text-white">4. Sorumluluk Sınırlaması</strong><br>ASIR SOLAR, sitedeki bilgilerin kullanımından kaynaklanabilecek dolaylı zararlardan sorumlu tutulamaz.</p>
+      <p><strong class="text-white">5. Değişiklikler</strong><br>Bu şartlar önceden bildirim yapılmaksızın güncellenebilir. Güncel versiyonu kontrol etmeniz tavsiye edilir.</p>
+      <p><strong class="text-white">6. Uygulanacak Hukuk</strong><br>Anlaşmazlıklarda Türkiye Cumhuriyeti hukuku uygulanır; yetkili mahkeme İstanbul Mahkemeleridir.</p>
+      <p class="text-slate-500 text-xs">Son güncelleme: Temmuz 2026</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== COOKIE BANNER ===================== -->
+<div id="cookieBanner" class="fixed bottom-0 left-0 right-0 z-[100] bg-[#101A30]/95 border-t border-white/10 backdrop-blur-sm px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-300 hidden">
+  <p class="text-center sm:text-left max-w-xl">Bu site yalnızca zorunlu çerezler kullanır. <button id="cookieKvkkBtn" class="text-[#FF6B00] underline hover:text-[#ff7d1f]">KVKK Aydınlatma Metni</button>'ni inceleyebilirsiniz.</p>
+  <button id="cookieAccept" class="shrink-0 bg-[#FF6B00] text-white font-semibold px-6 py-2.5 rounded-full hover:bg-[#ff7d1f] transition-colors whitespace-nowrap">Kabul Et</button>
+</div>
 
 <script type="module" src="/src/main.js"></script>
 </body>

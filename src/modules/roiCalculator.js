@@ -95,15 +95,22 @@ export function initRoiCalculator() {
   const outBillCoverage = document.getElementById('outBillCoverage');
   const outSellNote = document.getElementById('outSellNote');
 
+  let lastResult = null;
+
   function render() {
     const bill = parseFloat(billRange.value);
     const area = parseFloat(areaRange.value);
     const region = regionSunFactor[cityRegion[regionSelect.value]] || 1;
+    lastResult = { r: calculate(bill, area, region), bill, area };
+    _render(lastResult.r);
+  }
+
+  function _render(r) {
+    const bill = parseFloat(billRange.value);
+    const area = parseFloat(areaRange.value);
 
     billValue.textContent = tl(bill) + (bill === parseFloat(billRange.max) ? '+' : '');
     areaValue.textContent = Math.round(area).toLocaleString('tr-TR') + ' m²';
-
-    const r = calculate(bill, area, region);
 
     outCost.textContent = tl(r.systemCost);
     outMonthly.innerHTML = tl(r.monthlySaving) + '<span class="text-sm font-medium text-slate-400">/ay</span>';
@@ -135,6 +142,30 @@ export function initRoiCalculator() {
         ' kWh/yıl</strong> fazla enerji şebekeye satılarak size <strong class="text-[#FFD700]">aylık ' +
         tl(r.monthlyPassiveIncome) + ' pasif gelir</strong> sağlar.';
     }
+  }
+
+  // WhatsApp paylaşım
+  const calcShareWa = document.getElementById('calcShareWa');
+  if (calcShareWa) {
+    calcShareWa.addEventListener('click', () => {
+      if (!lastResult) return;
+      const { r } = lastResult;
+      const total = r.total25 > 0 ? r.total25 : r.annualGain * 25;
+      const lines = [
+        '🌞 *ASIR SOLAR Hesaplama Sonuçlarım*',
+        '',
+        `📐 Sistem: ${Math.round(r.capacityKw)} kWp`,
+        `💰 Tahmini Maliyet: ${tl(r.systemCost)}`,
+        `⚡ Yıllık Üretim: ${Math.round(r.annualProductionKwh).toLocaleString('tr-TR')} kWh`,
+        `💵 Aylık Kazanç: ${tl(r.monthlySaving)}`,
+        `📅 Geri Dönüş: ${r.paybackYears.toFixed(1).replace('.', ',')} Yıl`,
+        `🏆 25 Yılda Toplam: ${tl(total)}`,
+        '',
+        'Detay için: asirsolar.vercel.app',
+      ];
+      const msg = encodeURIComponent(lines.join('\n'));
+      window.open(`https://wa.me/?text=${msg}`, '_blank');
+    });
   }
 
   [billRange, areaRange, regionSelect].forEach((el) => el.addEventListener('input', render));
