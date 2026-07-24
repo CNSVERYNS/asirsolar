@@ -469,14 +469,82 @@
         <div class="text-sm text-slate-400 mb-1">Aktif Proje Ağı</div>
         <div class="font-display font-extrabold text-3xl mb-6 text-white">Örnek: 81 İlde Hizmet</div>
         <div class="relative flex-1 min-h-[220px]">
-          <svg viewBox="0 0 400 180" class="w-full h-full opacity-90">
-            <path d="M30 90 Q60 40 120 55 Q180 30 250 45 Q320 40 370 70 Q380 100 350 130 Q300 150 220 140 Q140 155 80 135 Q35 120 30 90 Z" fill="rgba(255,107,0,0.06)" stroke="rgba(232,99,10,0.4)" stroke-width="1.5"/>
+          <!-- Türkiye haritası — gerçek koordinatlardan sadeleştirilmiş SVG outline -->
+          <svg viewBox="0 0 400 180" class="w-full h-full" aria-hidden="true">
+            <defs>
+              <linearGradient id="mapGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#FF6B00;stop-opacity:0.12"/>
+                <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.06"/>
+              </linearGradient>
+            </defs>
+            <!-- Anadolu + Trakya ana gövde -->
+            <path d="
+              M 25,82
+              L 28,67 L 36,60 L 48,56 L 58,60
+              L 56,45
+              L 68,40 L 88,36 L 118,33
+              L 155,31 L 192,31 L 228,32
+              L 264,35 L 296,40 L 320,47
+              L 345,55 L 360,66
+              L 366,80 L 367,97 L 362,115
+              L 353,128 L 342,138
+              L 332,146 L 320,150 L 308,145
+              L 296,138 L 278,135
+              L 258,137 L 235,135 L 212,137
+              L 190,135 L 168,138 L 148,134
+              L 130,126 L 112,115
+              L 95,104 L 80,94
+              L 65,88 L 48,84 L 32,82
+              Z"
+              fill="url(#mapGlow)" stroke="rgba(255,107,0,0.55)" stroke-width="1.5" stroke-linejoin="round"/>
+            <!-- Kıbrıs (küçük ada) -->
+            <ellipse cx="230" cy="155" rx="14" ry="6" fill="none" stroke="rgba(255,107,0,0.25)" stroke-width="1" stroke-dasharray="3,2"/>
           </svg>
-          <span class="absolute" style="left:22%;top:32%"><span class="map-ping absolute w-3 h-3 rounded-full bg-[#FFD700]"></span><span class="relative w-3 h-3 rounded-full bg-[#FF6B00] block"></span></span>
-          <span class="absolute" style="left:48%;top:45%"><span class="map-ping absolute w-3 h-3 rounded-full bg-[#FFD700]"></span><span class="relative w-3 h-3 rounded-full bg-[#FF6B00] block"></span></span>
-          <span class="absolute" style="left:15%;top:55%"><span class="map-ping absolute w-3 h-3 rounded-full bg-[#FFD700]"></span><span class="relative w-3 h-3 rounded-full bg-[#FF6B00] block"></span></span>
-          <span class="absolute" style="left:70%;top:60%"><span class="map-ping absolute w-3 h-3 rounded-full bg-[#FFD700]"></span><span class="relative w-3 h-3 rounded-full bg-[#FF6B00] block"></span></span>
-          <span class="absolute" style="left:82%;top:38%"><span class="map-ping absolute w-3 h-3 rounded-full bg-[#FFD700]"></span><span class="relative w-3 h-3 rounded-full bg-[#FF6B00] block"></span></span>
+
+          <!-- İstanbul -->
+          <span class="absolute flex flex-col items-center gap-0.5" style="left:14%;top:22%">
+            <span class="relative w-3 h-3">
+              <span class="map-ping absolute inset-0 rounded-full bg-[#FFD700]"></span>
+              <span class="absolute inset-0 rounded-full bg-[#FF6B00] block"></span>
+            </span>
+            <span class="text-[9px] font-medium text-slate-400 whitespace-nowrap leading-none">İstanbul</span>
+          </span>
+
+          <!-- Ankara -->
+          <span class="absolute flex flex-col items-center gap-0.5" style="left:37%;top:38%">
+            <span class="relative w-3 h-3">
+              <span class="map-ping absolute inset-0 rounded-full bg-[#FFD700]"></span>
+              <span class="absolute inset-0 rounded-full bg-[#FF6B00] block"></span>
+            </span>
+            <span class="text-[9px] font-medium text-slate-400 whitespace-nowrap leading-none">Ankara</span>
+          </span>
+
+          <!-- İzmir -->
+          <span class="absolute flex flex-col items-center gap-0.5" style="left:8%;top:57%">
+            <span class="relative w-3 h-3">
+              <span class="map-ping absolute inset-0 rounded-full bg-[#FFD700]"></span>
+              <span class="absolute inset-0 rounded-full bg-[#FF6B00] block"></span>
+            </span>
+            <span class="text-[9px] font-medium text-slate-400 whitespace-nowrap leading-none">İzmir</span>
+          </span>
+
+          <!-- Antalya -->
+          <span class="absolute flex flex-col items-center gap-0.5" style="left:27%;top:74%">
+            <span class="relative w-3 h-3">
+              <span class="map-ping absolute inset-0 rounded-full bg-[#FFD700]"></span>
+              <span class="absolute inset-0 rounded-full bg-[#FF6B00] block"></span>
+            </span>
+            <span class="text-[9px] font-medium text-slate-400 whitespace-nowrap leading-none">Antalya</span>
+          </span>
+
+          <!-- Gaziantep -->
+          <span class="absolute flex flex-col items-center gap-0.5" style="left:60%;top:72%">
+            <span class="relative w-3 h-3">
+              <span class="map-ping absolute inset-0 rounded-full bg-[#FFD700]"></span>
+              <span class="absolute inset-0 rounded-full bg-[#FF6B00] block"></span>
+            </span>
+            <span class="text-[9px] font-medium text-slate-400 whitespace-nowrap leading-none">Gaziantep</span>
+          </span>
         </div>
         <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-white/10">
           <div><div class="font-display font-bold text-2xl text-[#FFB050]"><span data-count="500">500</span>+</div><div class="text-xs text-slate-400">Proje</div></div>
