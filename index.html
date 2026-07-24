@@ -145,8 +145,8 @@
   <div class="max-w-[1240px] mx-auto px-6 md:px-8">
     <div class="text-center max-w-3xl mx-auto mb-12 md:mb-14">
       <span class="text-xs font-semibold tracking-[0.3em] text-[#FF6B00]">ROI HESAPLAYICI</span>
-      <h2 class="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl mt-4 text-white">Siz Ne Kadar <span class="gold-text">Tasarruf</span> Edersiniz?</h2>
-      <p class="text-slate-400 mt-4">Birkaç bilgiyle potansiyel kazancınızı anında görün.</p>
+      <h2 class="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl mt-4 text-white">Elektriğinizi Sıfırlayın, <span class="gold-text">Pasif Gelir</span> Elde Edin</h2>
+      <p class="text-slate-400 mt-4">Çatınızın büyüklüğünü girin — sisteminiz hem elektriğinizi karşılasın, hem de fazla enerjiyi devlete satarak aylık kazanç sağlasın.</p>
     </div>
     <div class="glass rounded-[2rem] p-3">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
@@ -189,7 +189,7 @@
               <div id="outCost" class="font-display font-extrabold text-xl md:text-2xl text-white">₺390.000</div>
             </div>
             <div class="glass rounded-2xl p-5">
-              <div class="text-xs text-slate-400 mb-2">Aylık Net Kazanç</div>
+              <div class="text-xs text-slate-400 mb-2">Aylık Toplam Kazanç</div>
               <div id="outMonthly" class="font-display font-extrabold text-xl md:text-2xl text-[#FFD700]">₺7.650</div>
             </div>
             <div class="glass rounded-2xl p-5">
@@ -209,25 +209,33 @@
               <div id="outCo2" class="font-display font-extrabold text-xl md:text-2xl text-[#22C55E]">21,8 <span class="text-sm font-semibold">ton/yıl</span></div>
             </div>
           </div>
-          <!-- Mahsuplaşma dökümü: kendi tüketiminden tasarruf vs. şebekeye satılan fazla enerjiden gelir -->
+          <!-- Kazanç dökümü -->
           <div class="relative mt-4 glass rounded-2xl p-5 md:p-6">
-            <div class="flex items-center gap-2 text-xs tracking-widest text-slate-400 mb-4"><i class="fa-solid fa-right-left text-[#FF6B00]"></i>NET KAZANCINIZ NASIL OLUŞUYOR?</div>
+            <div class="flex items-center gap-2 text-xs tracking-widest text-slate-400 mb-4"><i class="fa-solid fa-right-left text-[#FF6B00]"></i>KAZANCIN DÖKÜMÜ</div>
+            <!-- Fatura karşılama durumu -->
+            <div id="outBillBadge" class="mb-4 flex items-center gap-2 bg-[#22C55E]/10 border border-[#22C55E]/30 rounded-xl px-4 py-3">
+              <span id="outBillCoverage" class="text-sm font-semibold text-[#22C55E]"><i class="fa-solid fa-circle-check mr-2"></i>Elektrik faturanız tamamen sıfırlanıyor</span>
+            </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <div class="text-xs text-slate-400 mb-1">Kendi tüketiminizden tasarruf</div>
+                <div class="text-xs text-slate-400 mb-1">Elektrik faturasından tasarruf</div>
                 <div id="outSelfSaving" class="font-display font-bold text-lg md:text-xl text-white">₺54.000<span class="text-xs font-medium text-slate-400">/yıl</span></div>
               </div>
               <div>
-                <div class="text-xs text-slate-400 mb-1"><i class="fa-solid fa-bolt text-[#FFD700] mr-1"></i>Şebekeye sattığınız fazladan gelir</div>
-                <div id="outSellIncome" class="font-display font-bold text-lg md:text-xl text-[#FFD700]">₺37.800<span class="text-xs font-medium text-slate-400">/yıl</span></div>
+                <div class="text-xs text-slate-400 mb-1"><i class="fa-solid fa-coins text-[#FFD700] mr-1"></i>Aylık pasif gelir</div>
+                <div id="outPassive" class="font-display font-bold text-lg md:text-xl text-[#FFD700]">₺3.150<span class="text-xs font-medium text-slate-400">/ay</span></div>
               </div>
             </div>
-            <div id="outSellNote" class="mt-4 pt-4 border-t border-white/10 text-xs text-slate-400 leading-relaxed">Üretiminiz tüketiminizi aşan dönemlerde fazla enerji, EPDK mahsuplaşma mevzuatı kapsamında dağıtım şirketine satılır.</div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 mb-1">Devlete sattığınız fazla enerji</div>
+              <div id="outSellIncome" class="font-display font-bold text-base text-[#FFD700]">₺37.800<span class="text-xs font-medium text-slate-400">/yıl</span></div>
+            </div>
+            <div id="outSellNote" class="mt-4 pt-4 border-t border-white/10 text-xs text-slate-400 leading-relaxed">Faturanız tamamen karşılandıktan sonra kalan fazla enerji şebekeye satılarak size aylık pasif gelir sağlar.</div>
           </div>
           <div class="relative mt-4 glass rounded-2xl p-6 text-center">
             <div class="text-xs tracking-widest text-slate-400 mb-2">25 YILDA TOPLAM NET KAZANÇ</div>
             <div id="outTotal" class="font-display font-black text-3xl md:text-5xl gold-text">₺1.905.000</div>
-            <div class="flex items-center justify-center gap-2 mt-3 text-xs text-slate-400"><i class="fa-solid fa-circle-info"></i> Tahmini değerdir; satış geliri ve kesin teklif keşif sonrası netleşir.</div>
+            <div class="flex items-center justify-center gap-2 mt-3 text-xs text-slate-400"><i class="fa-solid fa-circle-info"></i> Tahmini değerdir; kesin teklif ücretsiz keşif sonrası netleşir.</div>
           </div>
         </div>
       </div>

@@ -21,13 +21,13 @@ import { regionSunFactor, cityRegion } from '../data/regions.js';
  * EPDK/dağıtım şirketi tarifeleri ve gerçek ekipman fiyatlarınızla güncelleyin.
  */
 
-const PRICE_PER_KWH = 3.8; // ₺/kWh örnek ortalama mesken/ticarethane birim fiyatı — güncelleyin
-const SELL_BACK_RATIO = 0.7; // Şebekeye satılan fazla enerjinin tüketim fiyatına oranı — dağıtım şirketinizden teyit edin
-const COST_PER_KW = 13000; // ₺/kWp örnek birim fiyat
-const AREA_PER_KW = 6; // ~6 m² başına 1 kWp varsayımı
+const PRICE_PER_KWH = 3.8;
+const SELL_BACK_RATIO = 0.7;
+const COST_PER_KW = 13000;
+const AREA_PER_KW = 6;
 const MAX_CAPACITY_KW = 500;
-const PRODUCTION_PER_KW_YEAR = 1450; // ~1450 kWh/kWp/yıl Türkiye ortalaması
-const CO2_KG_PER_KWH = 0.5; // ~0.5 kg CO2/kWh şebeke ortalaması
+const PRODUCTION_PER_KW_YEAR = 1450;
+const CO2_KG_PER_KWH = 0.5;
 
 function tl(n) {
   return '₺' + Math.round(n).toLocaleString('tr-TR');
@@ -48,23 +48,28 @@ function calculate(bill, area, region) {
   const co2SavedTons = (annualProductionKwh * CO2_KG_PER_KWH) / 1000;
 
   const annualConsumptionKwh = Math.max((bill * 12) / PRICE_PER_KWH, 1);
-  const payableLimitKwh = annualConsumptionKwh * 2; // bedelli üretim limiti: tüketimin 2 katı
-  const payableProductionKwh = Math.min(annualProductionKwh, payableLimitKwh);
-  const selfConsumedKwh = Math.min(payableProductionKwh, annualConsumptionKwh);
-  const soldToGridKwh = Math.max(0, payableProductionKwh - selfConsumedKwh);
-  const overLimitKwh = Math.max(0, annualProductionKwh - payableLimitKwh);
+
+  // Önce kendi tüketiminize ayır, kalanı şebekeye sat
+  const selfConsumedKwh = Math.min(annualProductionKwh, annualConsumptionKwh);
+  const soldToGridKwh = Math.max(0, annualProductionKwh - selfConsumedKwh);
+
+  const billCoveragePercent = Math.min(100, Math.round((selfConsumedKwh / annualConsumptionKwh) * 100));
+  const billFullyCovered = billCoveragePercent >= 100;
 
   const selfSavingTl = selfConsumedKwh * PRICE_PER_KWH;
   const sellIncomeTl = soldToGridKwh * PRICE_PER_KWH * SELL_BACK_RATIO;
   const annualGain = selfSavingTl + sellIncomeTl;
   const monthlySaving = annualGain / 12;
+  const monthlyPassiveIncome = sellIncomeTl / 12;
   const paybackYears = systemCost / annualGain;
   const total25 = annualGain * 25 - systemCost;
 
   return {
     capacityKw, systemCost, annualProductionKwh, co2SavedTons,
-    annualConsumptionKwh, soldToGridKwh, overLimitKwh,
-    selfSavingTl, sellIncomeTl, annualGain, monthlySaving, paybackYears, total25
+    annualConsumptionKwh, soldToGridKwh,
+    billCoveragePercent, billFullyCovered,
+    selfSavingTl, sellIncomeTl, annualGain, monthlySaving,
+    monthlyPassiveIncome, paybackYears, total25
   };
 }
 
@@ -85,6 +90,9 @@ export function initRoiCalculator() {
   const outCo2 = document.getElementById('outCo2');
   const outSelfSaving = document.getElementById('outSelfSaving');
   const outSellIncome = document.getElementById('outSellIncome');
+  const outPassive = document.getElementById('outPassive');
+  const outBillBadge = document.getElementById('outBillBadge');
+  const outBillCoverage = document.getElementById('outBillCoverage');
   const outSellNote = document.getElementById('outSellNote');
 
   function render() {
@@ -98,24 +106,34 @@ export function initRoiCalculator() {
     const r = calculate(bill, area, region);
 
     outCost.textContent = tl(r.systemCost);
-    outMonthly.textContent = tl(r.monthlySaving);
+    outMonthly.innerHTML = tl(r.monthlySaving) + '<span class="text-sm font-medium text-slate-400">/ay</span>';
     outPayback.innerHTML = r.paybackYears.toFixed(1).replace('.', ',') + ' <span class="text-base">Yıl</span>';
     outGain.innerHTML = formatGain(r.annualGain);
-    outTotal.textContent = tl(r.total25);
+    outTotal.innerHTML = formatGain(r.total25 > 0 ? r.total25 : r.annualGain * 25);
     outProduction.innerHTML = Math.round(r.annualProductionKwh).toLocaleString('tr-TR') + ' <span class="text-sm font-semibold">kWh</span>';
     outCo2.innerHTML = r.co2SavedTons.toFixed(1).replace('.', ',') + ' <span class="text-sm font-semibold">ton/yıl</span>';
     outSelfSaving.innerHTML = tl(r.selfSavingTl) + '<span class="text-xs font-medium text-slate-400">/yıl</span>';
     outSellIncome.innerHTML = tl(r.sellIncomeTl) + '<span class="text-xs font-medium text-slate-400">/yıl</span>';
+    outPassive.innerHTML = tl(r.monthlyPassiveIncome) + '<span class="text-xs font-medium text-slate-400">/ay</span>';
+
+    if (r.billFullyCovered) {
+      outBillBadge.className = 'mb-4 flex items-center gap-2 bg-[#22C55E]/10 border border-[#22C55E]/30 rounded-xl px-4 py-3';
+      outBillCoverage.className = 'text-sm font-semibold text-[#22C55E]';
+      outBillCoverage.innerHTML = '<i class="fa-solid fa-circle-check mr-2"></i>Elektrik faturanız tamamen sıfırlanıyor';
+    } else {
+      outBillBadge.className = 'mb-4 flex items-center gap-2 bg-[#FF6B00]/10 border border-[#FF6B00]/30 rounded-xl px-4 py-3';
+      outBillCoverage.className = 'text-sm font-semibold text-[#FF6B00]';
+      outBillCoverage.innerHTML = '<i class="fa-solid fa-bolt mr-2"></i>Faturanızın %' + r.billCoveragePercent + '\'ini karşılıyor';
+    }
 
     if (r.soldToGridKwh < 1) {
-      outSellNote.textContent = 'Üretiminiz yıllık tüketiminizi aşmıyor, bu senaryoda şebekeye satılacak fazla enerji oluşmuyor.';
-    } else if (r.overLimitKwh > 1) {
-      outSellNote.textContent =
-        'Şebekeye satış, EPDK\'nın "bedelli üretim limiti" (tüketiminizin 2 katı) ile sınırlıdır. Bu boyuttaki bir sistemde ' +
-        Math.round(r.overLimitKwh).toLocaleString('tr-TR') +
-        ' kWh/yıl bu limitin üzerinde kalıp bedelsiz kabul edilebilir — sistem boyutunu ihtiyacınıza göre optimize etmenizi öneririz.';
+      outSellNote.textContent = 'Sistem tüm elektrik ihtiyacınızı karşılıyor; faturanız sıfırlanıyor. Daha büyük bir sistem fazla enerji satışıyla ek pasif gelir sağlar.';
     } else {
-      outSellNote.textContent = 'Üretiminiz tüketiminizi aşan dönemlerde fazla enerji, EPDK mahsuplaşma mevzuatı kapsamında dağıtım şirketine satılır.';
+      outSellNote.innerHTML =
+        'Faturanız tamamen karşılandıktan sonra kalan <strong class="text-white">' +
+        Math.round(r.soldToGridKwh).toLocaleString('tr-TR') +
+        ' kWh/yıl</strong> fazla enerji şebekeye satılarak size <strong class="text-[#FFD700]">aylık ' +
+        tl(r.monthlyPassiveIncome) + ' pasif gelir</strong> sağlar.';
     }
   }
 
