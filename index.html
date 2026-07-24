@@ -214,8 +214,8 @@
               <div id="outPayback" class="font-display font-extrabold text-xl md:text-2xl text-white">4,2 <span class="text-base">Yıl</span></div>
             </div>
             <div class="glass rounded-2xl p-5">
-              <div class="text-xs text-slate-400 mb-2">25 Yıllık Kazanç</div>
-              <div id="outGain" class="font-display font-extrabold text-xl md:text-2xl text-[#FFD700]">1,22 <span class="text-base">Milyon ₺</span></div>
+              <div class="text-xs text-slate-400 mb-2">Yıllık Kazanç</div>
+              <div id="outGain" class="font-display font-extrabold text-xl md:text-2xl text-[#FFD700]">₺48.960</div>
             </div>
             <div class="glass rounded-2xl p-5">
               <div class="text-xs text-slate-400 mb-2"><i class="fa-solid fa-bolt text-[#FF6B00] mr-1"></i>Yıllık Üretim</div>
@@ -690,6 +690,7 @@
     const systemCost = capacityKw * costPerKw;
     const monthlySaving = Math.min(bill * 0.85, capacityKw * region * 380);
     const paybackYears = systemCost / (monthlySaving * 12);
+    const annualGain = monthlySaving * 12;
     const total25 = (monthlySaving * 12 * 25) - systemCost;
 
     // Enerji üretimi ve çevresel etki (örnek/tahmini — gerçek ölçüm verisi değildir):
@@ -699,7 +700,7 @@
     outCost.textContent = tl(systemCost);
     outMonthly.textContent = tl(monthlySaving);
     outPayback.innerHTML = paybackYears.toFixed(1).replace('.', ',') + ' <span class="text-base">Yıl</span>';
-    outGain.innerHTML = formatGain(total25);
+    outGain.innerHTML = formatGain(annualGain);
     outTotal.textContent = tl(total25);
     outProduction.innerHTML = Math.round(annualProductionKwh).toLocaleString('tr-TR') + ' <span class="text-sm font-semibold">kWh</span>';
     outCo2.innerHTML = co2SavedTons.toFixed(1).replace('.', ',') + ' <span class="text-sm font-semibold">ton/yıl</span>';
