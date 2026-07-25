@@ -101,19 +101,20 @@
       </button>
     </div>
   </nav>
-  <!-- Mobile menu -->
-  <div id="mobileMenu" class="lg:hidden fixed inset-0 z-50 bg-[#101A30] flex flex-col items-center justify-center gap-8 text-lg font-medium text-slate-100 opacity-0 pointer-events-none -translate-y-2">
-    <button id="menuClose" aria-label="Kapat" class="absolute top-6 right-6 w-11 h-11 rounded-xl border border-white/15 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
-    <a href="#hesaplayici" class="mobile-link hover:text-[#FF6B00]">Hesaplayıcı</a>
-    <a href="#neden-solar" class="mobile-link hover:text-[#FF6B00]">Neden Solar</a>
-    <a href="#cozumler" class="mobile-link hover:text-[#FF6B00]">Çözümler</a>
-    <a href="#galeri" class="mobile-link hover:text-[#FF6B00]">Galeri</a>
-    <a href="#referanslar" class="mobile-link hover:text-[#FF6B00]">Referanslar</a>
-    <a href="#sss" class="mobile-link hover:text-[#FF6B00]">SSS</a>
-    <a href="#iletisim" class="mobile-link hover:text-[#FF6B00]">İletişim</a>
-    <a href="#iletisim" class="mobile-link bg-[#FF6B00] px-8 py-3 rounded-full text-white font-semibold text-base">Ücretsiz Keşif</a>
-  </div>
 </header>
+
+<!-- Mobile menu — header'ın backdrop-blur'u fixed elementleri kısıtladığından dışarıda tutulur -->
+<div id="mobileMenu" class="fixed inset-0 z-[60] bg-[#101A30] flex flex-col items-center justify-center gap-8 text-lg font-medium text-slate-100 opacity-0 pointer-events-none -translate-y-2">
+  <button id="menuClose" aria-label="Kapat" class="absolute top-6 right-6 w-11 h-11 rounded-xl border border-white/15 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
+  <a href="#hesaplayici" class="mobile-link hover:text-[#FF6B00]">Hesaplayıcı</a>
+  <a href="#neden-solar" class="mobile-link hover:text-[#FF6B00]">Neden Solar</a>
+  <a href="#cozumler" class="mobile-link hover:text-[#FF6B00]">Çözümler</a>
+  <a href="#galeri" class="mobile-link hover:text-[#FF6B00]">Galeri</a>
+  <a href="#referanslar" class="mobile-link hover:text-[#FF6B00]">Referanslar</a>
+  <a href="#sss" class="mobile-link hover:text-[#FF6B00]">SSS</a>
+  <a href="#iletisim" class="mobile-link hover:text-[#FF6B00]">İletişim</a>
+  <a href="#iletisim" class="mobile-link bg-[#FF6B00] px-8 py-3 rounded-full text-white font-semibold text-base">Ücretsiz Keşif</a>
+</div>
 
 <main id="top" class="pb-[72px] lg:pb-0">
 
