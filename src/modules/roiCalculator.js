@@ -25,7 +25,8 @@ const PRICE_PER_KWH = 3.8;
 const SELL_BACK_RATIO = 0.7;
 const COST_PER_KW = 13000;
 const AREA_PER_KW = 6;
-const MAX_CAPACITY_KW = 500;
+const AREA_MAX_M2 = 5000; // areaRange input[max] ile eşit tutun
+const MAX_CAPACITY_KW = AREA_MAX_M2 / AREA_PER_KW;
 const PRODUCTION_PER_KW_YEAR = 1450;
 const CO2_KG_PER_KWH = 0.5;
 
@@ -75,11 +76,11 @@ function calculate(bill, area, region) {
 
 export function initRoiCalculator() {
   const billRange = document.getElementById('billRange');
+  const billInput = document.getElementById('billInput');
   const areaRange = document.getElementById('areaRange');
   const regionSelect = document.getElementById('regionSelect');
   if (!billRange || !areaRange || !regionSelect) return;
 
-  const billValue = document.getElementById('billValue');
   const areaValue = document.getElementById('areaValue');
   const outCost = document.getElementById('outCost');
   const outMonthly = document.getElementById('outMonthly');
@@ -108,10 +109,8 @@ export function initRoiCalculator() {
   }
 
   function _render(r) {
-    const bill = parseFloat(billRange.value);
     const area = parseFloat(areaRange.value);
 
-    billValue.textContent = tl(bill) + (bill === parseFloat(billRange.max) ? '+' : '');
     areaValue.textContent = Math.round(area).toLocaleString('tr-TR') + ' m²';
 
     outCost.textContent = tl(r.systemCost);
@@ -173,6 +172,33 @@ export function initRoiCalculator() {
     });
   }
 
-  [billRange, areaRange, regionSelect].forEach((el) => el.addEventListener('input', render));
+  function clamp(val, min, max) {
+    return Math.min(Math.max(val, min), max);
+  }
+
+  const billMin = parseFloat(billRange.min);
+  const billMax = parseFloat(billRange.max);
+
+  billRange.addEventListener('input', () => {
+    billInput.value = billRange.value;
+    render();
+  });
+
+  billInput.addEventListener('input', () => {
+    const raw = parseFloat(billInput.value);
+    if (isNaN(raw)) return;
+    billRange.value = clamp(raw, billMin, billMax);
+    render();
+  });
+
+  billInput.addEventListener('change', () => {
+    const raw = parseFloat(billInput.value);
+    const clamped = clamp(isNaN(raw) ? billMin : raw, billMin, billMax);
+    billInput.value = clamped;
+    billRange.value = clamped;
+    render();
+  });
+
+  [areaRange, regionSelect].forEach((el) => el.addEventListener('input', render));
   render();
 }

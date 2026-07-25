@@ -171,12 +171,15 @@
         <div class="bg-[#182238] border border-white/10 rounded-3xl p-6 md:p-9">
           <div class="space-y-9">
             <div>
-              <div class="flex justify-between items-center mb-4">
+              <div class="flex justify-between items-center mb-4 gap-3">
                 <label for="billRange" class="text-sm font-medium text-slate-300">Aylık elektrik faturanız</label>
-                <span id="billValue" class="font-display font-bold text-lg text-[#FFD700]">₺4.500</span>
+                <div class="flex items-center gap-1 bg-[#0F1526] border border-white/10 rounded-lg pl-3 pr-2 py-1.5 focus-within:border-[#FF6B00] shrink-0">
+                  <span class="font-display font-bold text-lg text-[#FFD700]">₺</span>
+                  <input id="billInput" type="number" min="500" max="30000" step="50" value="1500" inputmode="numeric" class="w-20 bg-transparent font-display font-bold text-lg text-[#FFD700] outline-none text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                </div>
               </div>
-              <input id="billRange" type="range" min="500" max="10000" step="50" value="1500" class="w-full">
-              <div class="flex justify-between text-xs text-slate-500 mt-2"><span>₺500</span><span>₺10.000</span></div>
+              <input id="billRange" type="range" min="500" max="30000" step="50" value="1500" class="w-full">
+              <div class="flex justify-between text-xs text-slate-500 mt-2"><span>₺500</span><span>₺30.000</span></div>
             </div>
             <div>
               <div class="flex justify-between items-center mb-4">
