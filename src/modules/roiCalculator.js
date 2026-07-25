@@ -94,6 +94,8 @@ export function initRoiCalculator() {
   const outBillBadge = document.getElementById('outBillBadge');
   const outBillCoverage = document.getElementById('outBillCoverage');
   const outSellNote = document.getElementById('outSellNote');
+  const paybackBar = document.getElementById('paybackBar');
+  const paybackLabel = document.getElementById('paybackLabel');
 
   let lastResult = null;
 
@@ -132,6 +134,9 @@ export function initRoiCalculator() {
       outBillCoverage.className = 'text-sm font-semibold text-[#FF6B00]';
       outBillCoverage.innerHTML = '<i class="fa-solid fa-bolt mr-2"></i>Faturanızın %' + r.billCoveragePercent + '\'ini karşılıyor';
     }
+
+    if (paybackBar) paybackBar.style.width = Math.min((r.paybackYears / 25) * 100, 100) + '%';
+    if (paybackLabel) paybackLabel.textContent = r.paybackYears.toFixed(1).replace('.', ',') + ' yıl geri dönüş';
 
     if (r.soldToGridKwh < 1) {
       outSellNote.textContent = 'Sistem tüm elektrik ihtiyacınızı karşılıyor; faturanız sıfırlanıyor. Daha büyük bir sistem fazla enerji satışıyla ek pasif gelir sağlar.';

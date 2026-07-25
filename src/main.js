@@ -83,3 +83,23 @@ const footerPrivacy = document.getElementById('footerPrivacyBtn');
 const footerTerms = document.getElementById('footerTermsBtn');
 if (footerPrivacy) footerPrivacy.addEventListener('click', () => openModal('modalPrivacy'));
 if (footerTerms) footerTerms.addEventListener('click', () => openModal('modalTerms'));
+
+// ── Scroll progress bar ──
+const scrollBar = document.getElementById('scrollProgress');
+if (scrollBar) {
+  window.addEventListener('scroll', () => {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    scrollBar.style.width = (docH > 0 ? (window.scrollY / docH) * 100 : 0) + '%';
+  }, { passive: true });
+}
+
+// ── Elektrik fiyat grafik animasyonu ──
+const priceChart = document.getElementById('priceChart');
+if (priceChart) {
+  new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('animated'); }
+    }),
+    { threshold: 0.35 }
+  ).observe(priceChart);
+}

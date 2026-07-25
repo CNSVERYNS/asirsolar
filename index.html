@@ -55,6 +55,9 @@
 </head>
 <body class="text-slate-200 bg-[#0F1626] antialiased overflow-x-hidden">
 
+<!-- Scroll progress bar -->
+<div id="scrollProgress" class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-[#FF6B00] to-[#FFD700] z-[999] pointer-events-none" style="width:0%"></div>
+
 <!-- ===================== TOP BAR ===================== -->
 <div class="topbar hidden md:block bg-[#101A30] text-slate-300 text-xs">
   <div class="max-w-[1240px] mx-auto px-6 md:px-8 py-2.5 flex items-center justify-between">
@@ -88,6 +91,7 @@
       <a href="#cozumler" class="hover:text-[#FF6B00] transition-colors">Çözümler</a>
       <a href="#galeri" class="hover:text-[#FF6B00] transition-colors">Galeri</a>
       <a href="#referanslar" class="hover:text-[#FF6B00] transition-colors">Referanslar</a>
+      <a href="#sss" class="hover:text-[#FF6B00] transition-colors">SSS</a>
       <a href="#iletisim" class="hover:text-[#FF6B00] transition-colors">İletişim</a>
     </div>
     <div class="flex items-center gap-3">
@@ -105,12 +109,13 @@
     <a href="#cozumler" class="mobile-link hover:text-[#FF6B00]">Çözümler</a>
     <a href="#galeri" class="mobile-link hover:text-[#FF6B00]">Galeri</a>
     <a href="#referanslar" class="mobile-link hover:text-[#FF6B00]">Referanslar</a>
+    <a href="#sss" class="mobile-link hover:text-[#FF6B00]">SSS</a>
     <a href="#iletisim" class="mobile-link hover:text-[#FF6B00]">İletişim</a>
     <a href="#iletisim" class="mobile-link bg-[#FF6B00] px-8 py-3 rounded-full text-white font-semibold text-base">Ücretsiz Keşif</a>
   </div>
 </header>
 
-<main id="top">
+<main id="top" class="pb-[72px] lg:pb-0">
 
 <!-- ===================== HERO ===================== -->
 <section class="relative min-h-[640px] md:min-h-[720px] flex items-center overflow-hidden">
@@ -248,6 +253,23 @@
             </div>
             <div id="outSellNote" class="mt-4 pt-4 border-t border-white/10 text-xs text-slate-400 leading-relaxed">Faturanız tamamen karşılandıktan sonra kalan fazla enerji şebekeye satılarak size aylık pasif gelir sağlar.</div>
           </div>
+          <!-- Geri dönüş zaman çizelgesi -->
+          <div class="relative mt-4 glass rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-xs tracking-widest text-slate-400"><i class="fa-solid fa-chart-line text-[#FF6B00] mr-2"></i>25 YILLIK GERİ DÖNÜŞ ÇİZELGESİ</div>
+              <div id="paybackLabel" class="text-xs font-semibold text-[#FFD700]">4,2 yıl geri dönüş</div>
+            </div>
+            <div class="relative h-8 bg-white/5 rounded-full overflow-hidden">
+              <div id="paybackBar" class="h-full bg-gradient-to-r from-[#FF6B00] to-[#FFD700] rounded-full transition-all duration-700" style="width:17%"></div>
+              <div class="absolute inset-0 flex items-center justify-between px-3 pointer-events-none">
+                <span class="text-[10px] font-semibold text-white/60">Yatırım Dönemi</span>
+                <span class="text-[10px] font-semibold text-[#22C55E]">Kâr Dönemi</span>
+              </div>
+            </div>
+            <div class="flex justify-between text-[10px] text-slate-600 mt-1.5">
+              <span>0</span><span>5 yıl</span><span>10 yıl</span><span>15 yıl</span><span>20 yıl</span><span>25 yıl</span>
+            </div>
+          </div>
           <div class="relative mt-4 glass rounded-2xl p-6 text-center">
             <div class="text-xs tracking-widest text-slate-400 mb-2">25 YILDA TOPLAM NET KAZANÇ</div>
             <div id="outTotal" class="font-display font-black text-3xl md:text-5xl gold-text">₺1.905.000</div>
@@ -339,6 +361,36 @@
         </div>
       </div>
       <div class="mt-5 text-xs text-slate-500">Rakamlar illüstratif örnektir; gerçek üretim çatı yönü, gölgelenme ve bölgeye göre değişir.</div>
+    </div>
+    <!-- Elektrik fiyat artış grafiği -->
+    <div class="mt-12 pt-10 border-t border-white/10">
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
+        <div>
+          <div class="text-xs tracking-widest text-slate-500 mb-1">TÜRKİYE MESKEN ELEKTRİK TARİFESİ (₺/kWh)</div>
+          <div class="text-xs text-slate-600">* 2025–2026 tahmini projeksiyon</div>
+        </div>
+        <div class="text-right">
+          <div class="font-display font-black text-3xl text-[#FF6B00]">+1.200%</div>
+          <div class="text-xs text-slate-500">2019'dan bu yana artış</div>
+        </div>
+      </div>
+      <div class="flex items-end gap-1.5 sm:gap-2.5 h-28" id="priceChart">
+        <div class="price-bar bg-[#FF6B00]/20 relative group" data-price="₺0,40" style="height:8%"><span class="price-bar-tip">2019<br>₺0,40</span></div>
+        <div class="price-bar bg-[#FF6B00]/30 relative group" data-price="₺0,55" style="height:11%"><span class="price-bar-tip">2020<br>₺0,55</span></div>
+        <div class="price-bar bg-[#FF6B00]/42 relative group" data-price="₺0,78" style="height:15%"><span class="price-bar-tip">2021<br>₺0,78</span></div>
+        <div class="price-bar bg-[#FF6B00]/58 relative group" data-price="₺2,08" style="height:40%"><span class="price-bar-tip">2022<br>₺2,08</span></div>
+        <div class="price-bar bg-[#FF6B00]/75 relative group" data-price="₺3,10" style="height:60%"><span class="price-bar-tip">2023<br>₺3,10</span></div>
+        <div class="price-bar bg-[#FF6B00] relative group" data-price="₺3,80" style="height:73%"><span class="price-bar-tip">2024<br>₺3,80</span></div>
+        <div class="price-bar relative group" style="height:92%;background:linear-gradient(to top,#FF6B00,#FFD700);--delay:0.08s"><span class="price-bar-tip text-[#FFD700]">2025*<br>~₺4,80</span></div>
+        <div class="price-bar relative group" style="height:100%;background:linear-gradient(to top,#FF6B00,#FFD700);--delay:0.16s"><span class="price-bar-tip text-[#FFD700]">2026*<br>~₺5,20</span></div>
+      </div>
+      <div class="flex justify-between text-[10px] text-slate-600 mt-2 px-0.5">
+        <span>2019</span><span>2020</span><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span class="text-[#FFD700]/60">2025*</span><span class="text-[#FFD700]/60">2026*</span>
+      </div>
+      <div class="mt-5 flex items-start gap-3 bg-[#FF6B00]/8 border border-[#FF6B00]/25 rounded-2xl px-5 py-4">
+        <i class="fa-solid fa-shield-halved text-[#FF6B00] text-lg mt-0.5 shrink-0"></i>
+        <p class="text-sm text-slate-400 leading-relaxed"><span class="text-white font-semibold">Güneş enerjisiyle 25 yıl boyunca fiyat artışına karşı korunun.</span> Sistem kurulum maliyeti tek seferdir; sonraki 20+ yıl boyunca elektrik zamlarından tamamen bağımsız olursunuz.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -626,6 +678,79 @@
   </div>
 </section>
 
+<!-- ===================== SSS ===================== -->
+<section id="sss" class="relative py-20 md:py-24 bg-[#0B121F] fade-in">
+  <div class="max-w-[1240px] mx-auto px-6 md:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-xs font-semibold tracking-[0.3em] text-[#FF6B00]">MERAK EDİLENLER</span>
+      <h2 class="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl mt-4 text-white">Sıkça Sorulan <span class="gold-text">Sorular</span></h2>
+    </div>
+    <div class="max-w-3xl mx-auto space-y-3">
+
+      <details class="faq-item glass rounded-2xl overflow-hidden group">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer select-none list-none">
+          <span class="font-display font-semibold text-white pr-4 text-[15px]">Güneş paneli sistemi nasıl çalışır?</span>
+          <i class="fa-solid fa-chevron-down text-[#FF6B00] faq-chevron shrink-0 transition-transform duration-300"></i>
+        </summary>
+        <div class="faq-content px-6 pb-6 text-sm text-slate-400 leading-relaxed">
+          Çatınıza kurulan paneller güneş ışığını doğru akıma (DC) dönüştürür. İnverter bu akımı evinizde kullanabileceğiniz alternatif akıma (AC) çevirir. Ürettiğiniz enerji öncelikle kendi ihtiyacınızı karşılar; fazlası EPDK'nın "bedelli üretim" sistemi kapsamında elektrik dağıtım şirketine satılır. Akşam veya bulutlu günlerde şebeke elektriğini kullanmaya devam edersiniz.
+        </div>
+      </details>
+
+      <details class="faq-item glass rounded-2xl overflow-hidden group">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer select-none list-none">
+          <span class="font-display font-semibold text-white pr-4 text-[15px]">Şebeke kesilirse sistemim çalışmaya devam eder mi?</span>
+          <i class="fa-solid fa-chevron-down text-[#FF6B00] faq-chevron shrink-0 transition-transform duration-300"></i>
+        </summary>
+        <div class="faq-content px-6 pb-6 text-sm text-slate-400 leading-relaxed">
+          Standart şebekeye bağlı (on-grid) sistemler, şebeke kesintisinde güvenlik nedeniyle otomatik olarak kapanır. Kesintilerde çalışmaya devam etmek isterseniz hibrit inverter + akü (enerji depolama) sistemi tercih etmenizi öneririz. ASIR SOLAR, her iki sistem tipini de anahtar teslim kurmaktadır.
+        </div>
+      </details>
+
+      <details class="faq-item glass rounded-2xl overflow-hidden group">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer select-none list-none">
+          <span class="font-display font-semibold text-white pr-4 text-[15px]">Yatırımın geri dönüşü gerçekten 4–6 yıl mı?</span>
+          <i class="fa-solid fa-chevron-down text-[#FF6B00] faq-chevron shrink-0 transition-transform duration-300"></i>
+        </summary>
+        <div class="faq-content px-6 pb-6 text-sm text-slate-400 leading-relaxed">
+          Hesaplayıcımızdaki tahminler, güncel EPDK tarifeleri ve ortalama güneşlenme sürelerine dayanmaktadır. Gerçek geri dönüş süresi; çatınızın yönü, gölgelenme durumu, bölgenizin güneş radyasyonu ve seçtiğiniz ekipman kalitesine göre değişir. Ücretsiz keşif sırasında sahaya özgü kesin hesap yapılır.
+        </div>
+      </details>
+
+      <details class="faq-item glass rounded-2xl overflow-hidden group">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer select-none list-none">
+          <span class="font-display font-semibold text-white pr-4 text-[15px]">Panel ömrü ve garanti süresi nedir?</span>
+          <i class="fa-solid fa-chevron-down text-[#FF6B00] faq-chevron shrink-0 transition-transform duration-300"></i>
+        </summary>
+        <div class="faq-content px-6 pb-6 text-sm text-slate-400 leading-relaxed">
+          Kullandığımız paneller <strong class="text-white">25 yıl güç garantisi</strong> ile gelir (25. yılda %80+ verim korunumu). İnverterlerde 5–10 yıl üretici garantisi verilmektedir. Kurulum işçiliği ve montaj malzemeleri için ASIR SOLAR ek hizmet garantisi sağlar. Ortalama panel fiziksel ömrü 30+ yıldır.
+        </div>
+      </details>
+
+      <details class="faq-item glass rounded-2xl overflow-hidden group">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer select-none list-none">
+          <span class="font-display font-semibold text-white pr-4 text-[15px]">Bakım ve temizlik gerektirir mi?</span>
+          <i class="fa-solid fa-chevron-down text-[#FF6B00] faq-chevron shrink-0 transition-transform duration-300"></i>
+        </summary>
+        <div class="faq-content px-6 pb-6 text-sm text-slate-400 leading-relaxed">
+          Güneş panelleri büyük ölçüde bakım gerektirmez. Yılda 1–2 kez yüzey temizliği (yağmur suyu veya basit yıkama) yeterlidir. Hareketli parça bulunmadığından mekanik arıza riski minimumdur. İzleme uygulaması aracılığıyla üretim verilerinizi uzaktan takip edebilir, olası bir sorunu hızla tespit edebilirsiniz.
+        </div>
+      </details>
+
+      <details class="faq-item glass rounded-2xl overflow-hidden group">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer select-none list-none">
+          <span class="font-display font-semibold text-white pr-4 text-[15px]">Devlet teşviki veya kredi imkânı var mı?</span>
+          <i class="fa-solid fa-chevron-down text-[#FF6B00] faq-chevron shrink-0 transition-transform duration-300"></i>
+        </summary>
+        <div class="faq-content px-6 pb-6 text-sm text-slate-400 leading-relaxed">
+          KOSGEB ve çeşitli bankalar, güneş enerjisi yatırımları için avantajlı kredi seçenekleri sunmaktadır. Bunun yanı sıra, EPDK lisanssız üretim mevzuatı kapsamında şebekeye enerji satışından gelir elde edebilirsiniz. Güncel teşvik programları sık değiştiğinden, ücretsiz keşif görüşmemizde size özel en uygun finansman modelini birlikte değerlendirelim.
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
 <!-- ===================== İLETİŞİM / CTA ===================== -->
 <section id="iletisim" class="relative py-20 md:py-24 overflow-hidden">
   <img loading="lazy" src="https://images.unsplash.com/photo-1756913453779-ea366264b54a?auto=format&fit=crop&w=1800&q=75" alt="Geniş güneş enerjisi tarlası, açık mavi gökyüzü" class="absolute inset-0 w-full h-full object-cover">
@@ -724,11 +849,24 @@
   </div>
 </footer>
 
-<!-- ===================== FLOATING BUTTONS ===================== -->
-<a href="https://wa.me/905000000000?text=Merhaba%2C%20bilgi%20almak%20istiyorum." target="_blank" aria-label="WhatsApp" class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#25D366] shadow-lg shadow-black/20 flex items-center justify-center text-white text-2xl hover:scale-105 transition-transform">
+<!-- Mobile sticky CTA bar (mobile only) -->
+<div class="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-[#101A30]/97 border-t border-white/10 backdrop-blur-sm px-3 py-2.5 flex gap-2.5">
+  <a href="tel:08500000000" class="flex-1 inline-flex items-center justify-center gap-1.5 bg-[#FF6B00] hover:bg-[#ff7d1f] text-white font-bold text-sm py-3 rounded-xl transition-colors">
+    <i class="fa-solid fa-phone text-xs"></i> Ara
+  </a>
+  <a href="https://wa.me/905000000000?text=Merhaba%2C%20bilgi%20almak%20istiyorum." target="_blank" class="flex-1 inline-flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#1db954] text-white font-bold text-sm py-3 rounded-xl transition-colors">
+    <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+  </a>
+  <a href="#iletisim" class="flex-1 inline-flex items-center justify-center gap-1.5 border border-[#FF6B00]/60 hover:bg-[#FF6B00]/10 text-[#FF6B00] font-bold text-sm py-3 rounded-xl transition-colors">
+    <i class="fa-solid fa-calendar-check text-xs"></i> Ücretsiz Keşif
+  </a>
+</div>
+
+<!-- ===================== FLOATING BUTTONS (desktop) ===================== -->
+<a href="https://wa.me/905000000000?text=Merhaba%2C%20bilgi%20almak%20istiyorum." target="_blank" aria-label="WhatsApp" class="hidden lg:flex fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#25D366] shadow-lg shadow-black/20 items-center justify-center text-white text-2xl hover:scale-105 transition-transform">
   <i class="fa-brands fa-whatsapp"></i>
 </a>
-<a href="tel:08500000000" aria-label="Hemen Ara" class="fixed bottom-6 right-24 z-40 w-14 h-14 rounded-full bg-[#FF6B00] shadow-lg shadow-black/20 flex items-center justify-center text-white text-xl hover:scale-105 transition-transform">
+<a href="tel:08500000000" aria-label="Hemen Ara" class="hidden lg:flex fixed bottom-6 right-24 z-40 w-14 h-14 rounded-full bg-[#FF6B00] shadow-lg shadow-black/20 items-center justify-center text-white text-xl hover:scale-105 transition-transform">
   <i class="fa-solid fa-phone"></i>
 </a>
 
