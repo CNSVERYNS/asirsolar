@@ -1,0 +1,17 @@
+"use client";
+import { useState, type FormEvent } from "react";
+import type { AdminUser } from "@/lib/crm/types";
+import { apiRequest } from "./client";
+
+export function AccountSettings({ user, mailReady }: { user: AdminUser; mailReady: boolean }) {
+  const [busy, setBusy] = useState(false); const [error, setError] = useState(""); const [message, setMessage] = useState("");
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); const form = event.currentTarget; const data = new FormData(form);
+    setError(""); setMessage("");
+    if (data.get("newPassword") !== data.get("confirmPassword")) { setError("Yeni parolalar eşleşmiyor."); return; }
+    setBusy(true);
+    try { await apiRequest("/api/admin/parola", { method: "POST", body: JSON.stringify({ currentPassword: data.get("currentPassword"), newPassword: data.get("newPassword") }) }); form.reset(); setMessage("Parolanız değiştirildi. Diğer cihazlardaki oturumlar kapatıldı."); }
+    catch (error) { setError(error instanceof Error ? error.message : "Parola değiştirilemedi."); } finally { setBusy(false); }
+  }
+  return <><div className="crm-page-heading"><div><span className="crm-overline">ÇALIŞMA ALANINIZ</span><h1>Hesabım ve bağlantılar</h1><p className="crm-muted">Hesap bilgilerinizi ve talep akışının durumunu kontrol edin.</p></div></div><div className="crm-settings-grid"><section className="crm-panel crm-settings-card"><h2>{user.name}</h2><p className="crm-muted">{user.email}</p><form onSubmit={submit}><label className="crm-field">Mevcut parola<input name="currentPassword" type="password" autoComplete="current-password" maxLength={128} required /></label><label className="crm-field">Yeni parola<input name="newPassword" type="password" autoComplete="new-password" minLength={12} maxLength={128} required /></label><label className="crm-field">Yeni parola tekrar<input name="confirmPassword" type="password" autoComplete="new-password" minLength={12} maxLength={128} required /></label><p className="crm-field-help">En az 12 karakterlik, bu hesaba özel bir parola kullanın.</p>{error && <p className="crm-error" role="alert">{error}</p>}{message && <p className="crm-success" role="status">{message}</p>}<button className="crm-button" disabled={busy}>{busy ? "Güncelleniyor…" : "Parolayı güncelle"}</button></form></section><section className="crm-panel crm-settings-card"><h2>Talep akışının durumu</h2><div className="crm-connection"><span>Web formu → Müşteri paneli</span><strong>Etkin</strong><p>Form gönderildiğinde müşteri kaydı ve geliş kaynağı otomatik oluşturulur.</p></div><div className="crm-connection"><span>Ekibe e-posta bildirimi</span><strong data-pending={!mailReady}>{mailReady ? "Bağlantı bilgileri tanımlı" : "Bağlantı bekliyor"}</strong><p>{mailReady ? "Teslim durumunu müşteri kaydındaki bildirim bölümünden görebilirsiniz." : "E-posta sağlayıcınızın bağlantısı tamamlanmalı. Bekleyen talepler panelde korunur."}</p></div><div className="crm-connection"><span>Telefon / WhatsApp / E-posta</span><strong>Manuel kayıt etkin</strong><p>Bu kanallardan gelen müşteriler, Müşteri ekle düğmesiyle kaydedilir. Gelen kutunuz ve WhatsApp hesabınız otomatik okunmaz.</p></div><div className="crm-connection"><span>Ekip erişimi</span><strong>Ortak</strong><p>Onur Durak ve Furkan Cansever tüm kayıtları yönetebilir. İşlem geçmişi kullanıcı bazında tutulur.</p></div></section></div></>;
+}

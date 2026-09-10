@@ -1,0 +1,69 @@
+# Asır Solar
+
+> Asır Solar; Gebze / Kocaeli merkezli, güneş enerjisi sistemlerinin
+> projelendirmesini, kurulumunu ve devreye alınmasını kendi mühendislik ve
+> saha ekibiyle yürüten bir enerji ve elektrik mühendisliği şirketidir.
+> Çatı ve cephe tipi fotovoltaik sistemler; keşiften devreye almaya kadar
+> tek elden, taşerona devredilmeden uygulanır.
+
+Kurumsal unvan: Asır Solar Enerji Sistemleri Taahhüt Danışmanlık Sanayi
+Ticaret Ltd. Şti. İkincil marka: Asır Mekanik Solar. Hizmet bölgesi: Gebze
+ve Kocaeli. Bu site yalnızca doğrulanmış bilgiler içerir — kaynağı
+belirsiz istatistik, sertifika iddiası veya müşteri yorumu yayınlanmaz.
+
+## Hizmetler
+
+- [Güneş Enerjisi Sistemleri](https://www.asirsolar.com/hizmetler/gunes-enerjisi-sistemleri): Çatı, cephe ve arazi tipi fotovoltaik sistemlerin tasarımı ve kurulumu.
+- [Çatı ve Cephe Tipi Uygulamalar](https://www.asirsolar.com/hizmetler/cephe-tipi-uygulamalar): Standart çatı kurulumlarının yanı sıra bina cephesine entegre panel sistemleri.
+- [Projelendirme ve Mühendislik](https://www.asirsolar.com/hizmetler/projelendirme-ve-muhendislik): Ücretsiz keşifle başlayan, tek hat şeması ve teknik hesaplarla ilerleyen süreç.
+- [Elektrik Altyapısı ve Pano Sistemleri](https://www.asirsolar.com/hizmetler/elektrik-altyapisi): Pano revizyonu, koruma ve topraklama tesisatı.
+- [Kurulum ve Devreye Alma](https://www.asirsolar.com/hizmetler/kurulum-ve-devreye-alma): Taşıyıcı sistem ve panel montajından elektriksel testlere kadar saha uygulaması.
+- [Bakım ve Teknik Destek](https://www.asirsolar.com/hizmetler/bakim-ve-teknik-destek): Kurulum sonrası periyodik kontrol ve arıza müdahalesi.
+
+## Kurumsal
+
+- [Kurumsal](https://www.asirsolar.com/kurumsal): Çalışma yaklaşımı ve mühendislik kültürü.
+- [Ekibimiz](https://www.asirsolar.com/ekibimiz): Mühendislik ekibi ve iletişim bilgileri.
+- [Projeler](https://www.asirsolar.com/projeler): Uygulanan güneş enerjisi projeleri.
+- [İletişim](https://www.asirsolar.com/iletisim): Adres, telefon, e-posta ve ücretsiz keşif talep formu.
+
+## Sıkça Sorulan Sorular
+
+Ana sayfadaki SSS bölümü; kurulum süresi, gerekli izinler, sistem
+büyüklüğü belirleme, çatı/cephe tipi farkı, bakım, geri ödeme süresi,
+hizmet bölgesi ve keşif talebi gibi konuları yanıtlar:
+https://www.asirsolar.com/#sikca-sorulan-sorular
+
+## Rehber
+
+Güneş enerjisi hakkında en çok sorulan 30 soruya, her biri kendi
+sayfasında, dürüst ve doğrulanabilir cevaplarla: https://www.asirsolar.com/rehber
+
+Temel Bilgiler: [Güneş enerjisi sistemi nasıl çalışır?](https://www.asirsolar.com/rehber/gunes-enerjisi-sistemi-nasil-calisir), [Güneş paneli nedir, nelerden oluşur?](https://www.asirsolar.com/rehber/gunes-paneli-nedir-nelerden-olusur), [Çatı tipi güneş paneli sistemi nedir?](https://www.asirsolar.com/rehber/cati-tipi-gunes-paneli-sistemi-nedir), [Cephe tipi güneş paneli sistemi nedir?](https://www.asirsolar.com/rehber/cephe-tipi-gunes-paneli-sistemi-nedir), [Arazi tipi güneş enerji santrali (GES) nedir?](https://www.asirsolar.com/rehber/arazi-tipi-ges-nedir)
+
+Teknik: [Monokristal ve polikristal panel farkı nedir?](https://www.asirsolar.com/rehber/monokristal-polikristal-panel-farki), [İnverter nedir, neden gereklidir?](https://www.asirsolar.com/rehber/inverter-nedir-neden-gereklidir), [Panel verimini hangi faktörler etkiler?](https://www.asirsolar.com/rehber/gunes-paneli-verimini-neler-etkiler), [Paneller bulutlu havada/kışın çalışır mı?](https://www.asirsolar.com/rehber/gunes-panelleri-bulutlu-havada-calisir-mi), [Panel garanti süresi ne kadardır?](https://www.asirsolar.com/rehber/gunes-paneli-garanti-suresi)
+
+Planlama ve Kurulum: [Kaç kW'lık sistem gerekir?](https://www.asirsolar.com/rehber/kac-kw-sistem-gerekir), [Kurulum süreci adım adım nasıl işler?](https://www.asirsolar.com/rehber/gunes-paneli-kurulum-sureci-adim-adim), [Kurulum ne kadar sürer?](https://www.asirsolar.com/rehber/gunes-paneli-kurulumu-ne-kadar-surer), [Çatım uygun mu, nasıl anlarım?](https://www.asirsolar.com/rehber/catim-gunes-paneline-uygun-mu), [Kurulum çatının statiğini etkiler mi?](https://www.asirsolar.com/rehber/gunes-paneli-catinin-statigini-etkiler-mi)
+
+Mevzuat ve Şebeke Bağlantısı: [İzin gerekir mi?](https://www.asirsolar.com/rehber/gunes-paneli-icin-izin-gerekir-mi), [Lisanssız elektrik üretimi nedir?](https://www.asirsolar.com/rehber/lisanssiz-elektrik-uretimi-nedir), [EDAŞ bağlantı başvurusu nasıl yapılır?](https://www.asirsolar.com/rehber/edas-baglanti-basvurusu-nasil-yapilir), [Mahsuplaşma (net metering) nedir?](https://www.asirsolar.com/rehber/mahsuplasma-net-metering-nedir), [Şebekeye verilen fazla enerjiye ne oluyor?](https://www.asirsolar.com/rehber/sebekeye-verilen-fazla-enerji-ne-oluyor)
+
+Maliyet ve Bakım: [Fiyatı hangi faktörler belirler?](https://www.asirsolar.com/rehber/gunes-paneli-fiyatini-neler-belirler), [Yatırımın geri dönüşü nasıl hesaplanır?](https://www.asirsolar.com/rehber/yatirimin-geri-donusu-nasil-hesaplanir), [Düzenli bakım gerekir mi?](https://www.asirsolar.com/rehber/gunes-panelleri-bakim-gerektirir-mi), [Kar/dolu/fırtına zarar verir mi?](https://www.asirsolar.com/rehber/kar-dolu-firtina-panellere-zarar-verir-mi), [Kaçak akım koruması ve topraklama neden önemli?](https://www.asirsolar.com/rehber/kacak-akim-korumasi-topraklama-neden-onemli)
+
+Karar ve Genel: [Elektrik kesintisinde çalışır mı?](https://www.asirsolar.com/rehber/elektrik-kesintisinde-sistem-calisir-mi), [Panel/inverter markası nasıl seçilir?](https://www.asirsolar.com/rehber/panel-inverter-markasi-nasil-secilir), [Firma seçerken nelere dikkat edilmeli?](https://www.asirsolar.com/rehber/gunes-paneli-firmasi-secerken-nelere-dikkat-edilmeli), [Çevresel faydaları nelerdir?](https://www.asirsolar.com/rehber/gunes-enerjisinin-cevresel-faydalari), [Konut ile ticari sistem farkı nedir?](https://www.asirsolar.com/rehber/konut-ticari-sistem-farki), [Gayrimenkul değerine etki eder mi?](https://www.asirsolar.com/rehber/gunes-enerjisi-sistemi-gayrimenkul-degerini-etkiler-mi), [Kocaeli / Marmara Bölgesi uygun mu?](https://www.asirsolar.com/rehber/kocaeli-marmara-bolgesi-gunes-enerjisi-icin-uygun-mu)
+
+Ekipman ve Teknoloji: [Half-cell panel nedir?](https://www.asirsolar.com/rehber/half-cell-panel-nedir), [Bifacial panel nedir?](https://www.asirsolar.com/rehber/bifacial-panel-nedir), [String inverter ile mikroinverter farkı nedir?](https://www.asirsolar.com/rehber/string-inverter-mikroinverter-farki), [Optimizer ne işe yarar?](https://www.asirsolar.com/rehber/optimizer-nedir-ne-ise-yarar), [Panel gücü (Wp) ne anlama gelir?](https://www.asirsolar.com/rehber/panel-gucu-wp-peak-watt-ne-anlama-gelir)
+
+Depolama ve Şebeke Bağımsızlığı: [Batarya sistemi ne zaman gerekir?](https://www.asirsolar.com/rehber/batarya-depolama-sistemi-ne-zaman-gerekir), [Off-grid sistem nedir?](https://www.asirsolar.com/rehber/off-grid-sistem-nedir), [Akıllı sayaç nedir?](https://www.asirsolar.com/rehber/akilli-sayac-nedir)
+
+İzleme ve Performans: [Panel verimi zamanla ne kadar düşer?](https://www.asirsolar.com/rehber/panel-verimi-zamanla-ne-kadar-duser), [Performans nasıl izlenir?](https://www.asirsolar.com/rehber/sistem-performansi-nasil-izlenir), [İnverter arızası belirtileri nelerdir?](https://www.asirsolar.com/rehber/inverter-arizasi-belirtileri), [Panelleri kendim temizleyebilir miyim?](https://www.asirsolar.com/rehber/panelleri-kendim-temizleyebilir-miyim), [İnverter kaç yılda bir değişir?](https://www.asirsolar.com/rehber/inverter-kac-yilda-bir-degisir)
+
+İleri Projelendirme: [Panel açısı/yönü nasıl optimize edilir?](https://www.asirsolar.com/rehber/panel-acisi-yonu-nasil-optimize-edilir), [Gölgeleme analizi nasıl yapılır?](https://www.asirsolar.com/rehber/golgeleme-analizi-nasil-yapilir), [String tasarımı nedir?](https://www.asirsolar.com/rehber/string-tasarimi-nedir)
+
+Ticari ve Endüstriyel Uygulamalar: [Fabrika/depo çatısında nelere dikkat edilir?](https://www.asirsolar.com/rehber/fabrika-depo-catisina-kurulumda-nelere-dikkat-edilir), [Soğuk hava deposu gibi özel çatılarda GES farklı mıdır?](https://www.asirsolar.com/rehber/sogutmali-depo-ozel-catida-ges-kurulumu)
+
+## Notlar
+
+- Fiyat, kapasite, referans sayısı gibi doğrulanamayan hiçbir rakam bu
+  sitede veya bu dosyada yer almaz; somut teklif için iletişim
+  sayfasındaki keşif formu kullanılır.
+- Site içeriği Türkçedir ve Türkiye pazarına (Gebze / Kocaeli) özeldir.

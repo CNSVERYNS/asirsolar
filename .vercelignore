@@ -1,0 +1,12 @@
+.git
+.local-tools
+.local-backups
+.data
+.claude
+.supabase
+.env*
+tests
+1.jpeg
+2.jpeg
+3.png
+logo.jpeg
