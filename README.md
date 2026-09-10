@@ -1,74 +1,65 @@
-# ASIR SOLAR — Kurumsal Web Sitesi
+﻿# Asır Solar — Kurumsal Web Sitesi
 
-Vite + vanilla JS ile yapılandırılmış statik site projesi.
+Next.js 16 App Router, TypeScript ve React ile hazırlanmıştır. Şirketin mevcut hizmet, ekip ve rehber içerikleri korunmuştur.
 
-## Proje Yapısı
-
-```
-asirSolar/
-├── index.html              # Ana sayfa (tüm bölümler)
-├── public/
-│   └── favicon.svg         # Site ikonu
-├── src/
-│   ├── main.js              # Giriş noktası — tüm modülleri başlatır
-│   ├── style.css            # Tailwind + özel stiller
-│   ├── data/
-│   │   └── regions.js       # 81 il → bölge güneş katsayısı verisi
-│   └── modules/
-│       ├── mobileMenu.js    # Mobil menü aç/kapat
-│       ├── roiCalculator.js # ROI hesaplayıcı (mahsuplaşma mantığı)
-│       ├── gallery.js       # Galeri filtre + kaydırma
-│       └── contactForm.js   # İletişim formu (demo)
-├── package.json
-├── vite.config.js
-├── tailwind.config.js
-└── postcss.config.js
-```
-
-## Kurulum
+## Yerelde çalıştırma
 
 ```bash
 npm install
-```
-
-## Geliştirme
-
-Yerel geliştirme sunucusunu başlatır (canlı yenileme ile):
-
-```bash
-npm run dev
-```
-
-Terminalde çıkan adresi (genelde `http://localhost:5173`) tarayıcıda açın.
-
-## Derleme (Production Build)
-
-```bash
+npm run dev       # http://localhost:3000
+npm run lint
+npm test
 npm run build
+npm run start
 ```
 
-Optimize edilmiş, yayına hazır dosyaları `dist/` klasörüne üretir.
+Node.js 24 kullanılır. İlk panel hesapları için geliştirme sunucusu kapalıyken `npm run crm:setup` çalıştırın.
 
-Derlenmiş halini yerelde kontrol etmek için:
+## Marka ve tasarım
 
-```bash
-npm run preview
-```
+- `app/brand.css`: marka renkleri, yeni ana sayfa, responsive düzen ve ortak sayfa görünümü.
+- `app/globals.css`: ortak tasarım değişkenleri ve mevcut alt sayfa bileşenleri.
+- `public/images/brand/asir-logo.jpeg`: kullanıcı tarafından sağlanan orijinal logo. Üst menü, alt bölüm ve site simgesinde kullanılır.
+- `components/SolutionFinder.tsx`: konut, işletme ve arazi seçenekleri. Seçim, keşif formunun proje türüne aktarılır.
+- `components/MobileMenu.tsx`: yerel HTML dialog; klavye odağı, Escape ile kapatma ve arka plan kaydırma kilidi.
+- Mobil ekranlarda sabit arama / ücretsiz keşif bağlantıları bulunur.
 
-## Yayına Alma (Deploy)
+## Arka plan videosu
 
-`npm run build` sonrası oluşan `dist/` klasörünü şu yollardan biriyle yayınlayabilirsiniz:
+Kaynak: [Aerial Shot of Solar Panels — Braeson Holland / Pexels](https://www.pexels.com/video/aerial-shot-of-solar-panels-8851164/).
+Lisans: [Pexels License](https://www.pexels.com/license/).
 
-- **Vercel (sürükle-bırak):** [vercel.com/new](https://vercel.com/new) adresinden "Deploy" ekranına `dist/` klasörünü sürükleyin.
-- **Netlify Drop:** [app.netlify.com/drop](https://app.netlify.com/drop) adresine `dist/` klasörünü sürükleyin.
-- **GitHub + Vercel (otomatik deploy):** Bu projeyi bir GitHub reposuna push edin, ardından Vercel'de "Import Git Repository" ile bağlayın. Vercel `npm run build` komutunu ve `dist/` çıktı klasörünü otomatik algılar. Bundan sonra her push'ta site otomatik güncellenir.
+Bu video temsili stok görüntüdür; Asır Solar'ın tamamladığı bir proje olarak sunulmaz.
 
-## Yayına Almadan Önce Yapılması Gerekenler
+- `public/videos/solar-desktop.mp4`: 1600 × 900, 24 fps, 14 saniye; yaklaşık 5,2 MB.
+- `public/videos/solar-mobile.mp4`: 768 × 432, 24 fps, 14 saniye; yaklaşık 0,83 MB.
+- İki video da sessiz H.264 / yuv420p formatında, progressive playback için faststart ile hazırlanmıştır.
+- `public/images/solar-poster.webp`: videonun ilk karesi; ilk açılışta ve video yüklenemezse gösterilir.
+- Video, ilk render sonrasında ekran boyutuna uygun dosyayla otomatik ve sessiz olarak başlar; döngü halinde oynar. Görünür oynatma/duraklatma düğmesi yoktur. Hareket azaltma tercihi açık olduğunda fotoğraf gösterilir.
+- Sayfa arka plana geçtiğinde veya video görünür alandan çıktığında oynatma durur.
+- Tarayıcı otomatik oynatmayı engellerse fotoğraf görünür; sayfadaki ilk dokunma/tıklama ile oynatma yeniden denenir.
+- Video dosyaları siteden sunulur; üçüncü taraf oynatıcı veya video izleme çerezi yoktur.
 
-`index.html` dosyasının en üstündeki HTML yorum bloğunda detaylı bir kontrol listesi var. Özet:
+## Şirket ve içerik verileri
 
-1. **İletişim bilgileri** — telefon, e-posta, adres yer tutucularını gerçek bilgilerle değiştirin (`index.html` içinde `0850 000 00 00` ve `info@asirsolar.com.tr` aratın).
-2. **ROI hesaplayıcı sabitleri** — `src/modules/roiCalculator.js` dosyasındaki `PRICE_PER_KWH`, `SELL_BACK_RATIO`, `COST_PER_KW` değerlerini güncel EPDK/dağıtım şirketi tarifeleri ve gerçek ekipman fiyatlarınızla güncelleyin.
-3. **Galeri fotoğrafları** — `index.html` içindeki `#galeri` bölümünde şu an Unsplash'ten gerçek ama şirkete ait olmayan yer tutucu fotoğraflar var; gerçek proje fotoğraflarınızla değiştirin.
-4. **İstatistik ve müşteri yorumları** — "Referanslar" ve "Neden Solar" bölümlerindeki örnek rakam/yorumları gerçek verilerle değiştirin.
-5. **İletişim formu** — şu an sadece arayüzde "başarılı" mesajı gösteriyor (`src/modules/contactForm.js`); gerçek gönderim için bir form servisi (Formspree, Netlify Forms, kendi backend'iniz vb.) bağlayın.
+`data/company.ts`, `data/team.ts` ve `data/services.ts` şirketin mevcut doğrulanmış bilgilerini içerir. Şirket bilgileri başlangıç projesindeki `1.jpeg`, `2.jpeg`, `3.png` kaynaklarından alınmıştır. Bu kaynak belgeler public klasöründe değildir.
+
+Mevcut stok fotoğraflar `public/images/stock/` klasöründedir. Proje kayıtları `data/projects.ts` üzerinden yönetilir. Doğrulanmış saha fotoğrafı, konum ve kapasite sağlanmadığı için proje, referans, sertifika veya kurulu güç sayısı üretilmemiştir.
+
+## Keşif talebi
+
+Web formu talepleri doğrudan veritabanına kaydeder ve takip numarası gösterir. `/admin` üzerinden Onur Durak ve Furkan Cansever ortak müşteri listesine, aşama panosuna, görüşme notlarına ve teklif takibine erişir. Telefon / WhatsApp müşterileri elle eklenebilir.
+
+Üretimde Supabase PostgreSQL, yerelde PGlite kullanılır. E-posta bildirimleri kalıcı kuyrukta tutulur; SMTP bağlantısı ayrıca yapılandırılır.
+
+Kurulum, güvenlik, Vercel ortam değişkenleri, domain geçişi ve testler: [CRM_SETUP.md](CRM_SETUP.md).
+
+`lib/enquiry.ts` talep doğrulamasını, izin verilen proje türlerini ve e-posta URL kodlamasını yönetir. `tests/enquiry.test.mjs` eksik/geçersiz alanları, URL parametrelerini ve özel karakterli metinlerin korunmasını doğrular.
+
+## Yerel depolama ve yasal içerik
+
+Reklam veya analiz izleyicisi eklenmemiştir. Bildirimin 'Anladım' tercihi yerel depolamada hatırlanır; 'Tercihi saklama' seçeneği kayıt oluşturmaz. Yerel depolamanın kapalı olması siteyi bozmaz. Mevcut KVKK, gizlilik ve çerez sayfaları taslak olarak işaretlidir.
+
+## Yedek
+
+Değişiklik öncesi kaynakların yedeği `.local-backups/before-brand-refresh.zip` içindedir. `.local-tools` medya araçlarını, test verilerini ve özel ilk giriş dosyalarını içerir; uygulamanın çalışma bağımlılığı değildir. Her iki klasör sürüm kontrolünden hariçtir.

@@ -1,0 +1,2235 @@
+/* ==========================================================================
+   ASIR SOLAR — Design tokens & global styles
+   Tek grotesk aile, sınırlı radius/renk sistemi, çizgi tabanlı hiyerarşi.
+   ========================================================================== */
+
+:root {
+  /* Colors */
+  --paper: #fafbf7;
+  --surface: #f0f3ec;
+  --ink: #172b24;
+  --muted: #626e65;
+  --accent: #def37c;
+  --accent-ink: #172b24;
+  --brand-purple: #54228b;
+  --brand-green: #2d713f;
+  /* --accent as foreground text/icon color only has ~1.6:1 contrast on
+     --paper/--surface (fails WCAG's 3:1 non-text minimum) — it only reads
+     against dark backgrounds. This deepened amber is for accent-as-text
+     or accent-as-icon on light backgrounds; --accent itself stays
+     reserved for dark backgrounds and as a fill (buttons, borders, dots)
+     where contrast is checked against what's behind it, not the accent
+     color needing to stand out as text on paper. */
+  --accent-deep: #426c31;
+  --secondary: #a8aea4;
+  --line: rgba(21, 25, 23, 0.14);
+  --line-strong: rgba(21, 25, 23, 0.28);
+  --on-dark: #f4f2ec;
+  --on-dark-muted: rgba(244, 242, 236, 0.76);
+  --on-dark-line: rgba(244, 242, 236, 0.18);
+
+  /* Radius — max three values, used sparingly */
+  --radius-xs: 2px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+
+  /* Layout */
+  --container: 1480px;
+  --gutter: 64px;
+  --header-h: 88px;
+
+  /* Spacing (4/8px base) */
+  --sp-1: 8px;
+  --sp-2: 12px;
+  --sp-3: 16px;
+  --sp-4: 24px;
+  --sp-5: 32px;
+  --sp-6: 48px;
+  --sp-7: 64px;
+  --sp-8: 96px;
+  --sp-9: 128px;
+  --sp-10: 160px;
+
+  --section-pad: 112px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 200ms;
+  --dur-base: 320ms;
+  --dur-slow: 700ms;
+
+  /* Type scale */
+  --h1: clamp(3.25rem, 6vw, 6.75rem);
+  --h2: clamp(2rem, 1.1vw + 1.7rem, 3.4rem);
+  --h3: clamp(1.375rem, 0.5vw + 1.2rem, 1.75rem);
+  --body-lg: clamp(1.0625rem, 0.2vw + 1rem, 1.1875rem);
+  --body: 1rem;
+  --label: 0.8125rem;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --gutter: 36px;
+    --section-pad: 100px;
+    --header-h: 76px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 20px;
+    --section-pad: 80px;
+    --h1: clamp(2.625rem, 9.5vw, 3.625rem);
+    --h2: clamp(1.75rem, 6vw, 2.375rem);
+  }
+}
+
+/* ---- Reset ---------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  /* THE frame: a Grid or Flexbox item's "automatic minimum size" defaults
+     to auto — its content's natural, unshrunk width — not 0. That's what
+     kept forcing individual rows/columns (and the whole page with them)
+     wider than the viewport: one long link/word inside any of the site's
+     many grid/flex layouts was enough. This removes that floor
+     everywhere, so every layout always yields to the space actually
+     available; text then wraps normally (overflow-wrap below still
+     handles the rare single string too long to fit at all). Harmless
+     on non-grid/flex elements — min-width:auto already behaves as 0
+     there, so this changes nothing for them. */
+  min-width: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Safety net: clips any stray horizontal overflow at the document root
+     instead of letting it widen the page (which, on a phone, was showing
+     as a raw strip of the body's own background photo down the right
+     edge — visible once zoomed out enough to see the full, wider-than-
+     the-screen canvas). overflow-x only, never overflow-y, so this can't
+     break position: sticky for anything anchored to the viewport. */
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  /* The actual root cause of the overflow overflow-x:hidden above was
+     masking (clipping real content instead of just a stray background) —
+     an unbroken string (an email address, in a CSS Grid column) with no
+     way to break. A grid/flex item's *automatic minimum size* is based
+     on its content's min-content width, and per spec only
+     overflow-wrap: anywhere (not the older break-word) counts toward
+     shrinking that minimum — so a long unbroken string was forcing its
+     whole grid track, and with it the page, wider than the viewport.
+     Inherited from here, this covers every text element site-wide.
+     word-break is the older, more universally-supported sibling
+     property — some embedded WebViews (in-app browsers) lag behind
+     full browsers on newer CSS, so it's set alongside as a fallback
+     that does the same job through an older code path. */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  /* Faint panel-texture watermark behind the page — a near-opaque
+     paper-colored wash keeps it barely visible. Sections with their own
+     background (surface/dark) simply paint over it. Plain rgba, not
+     color-mix() — color-mix() support is inconsistent enough on mobile
+     browsers/WebViews that on an unsupporting one the *entire*
+     background-image list (wash + photo together, since they're one
+     comma-separated value) was likely being dropped as invalid, which
+     would explain the photo rendering with no wash at all. */
+  background-color: var(--paper);
+  background-image: linear-gradient(
+      rgba(238, 231, 214, 0.94),
+      rgba(238, 231, 214, 0.94)
+    ),
+    url("/images/stock/panel-closeup.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-body), "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  position: relative;
+}
+
+/* Barely-there film grain over the whole page — adds material depth
+   without reading as "texture" on its own. Non-interactive. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Mobile scroll smoothness — two decorative effects fight touch scrolling
+   here: `background-attachment: fixed` forces the browser to repaint the
+   body background every scroll frame instead of compositing it (and
+   doesn't even render "fixed" on iOS Safari — pure cost, no payoff), and
+   a full-viewport `mix-blend-mode` layer forces a blend recompute on every
+   frame something moves under it. Both are cheap on desktop, expensive on
+   phones. Neither is visible enough to be missed once removed. */
+@media (max-width: 900px) {
+  body {
+    /* Drop the decorative photo watermark entirely on mobile, rather than
+       just switching its attachment — removes every possible variant of
+       the "stray strip of unwashed photo" rendering bug at the source,
+       regardless of which exact quirk was causing it on a given device. */
+    background-image: none;
+  }
+  body::after {
+    content: none;
+  }
+}
+
+img,
+picture,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Typography ------------------------------------------------------ */
+
+h1,
+.h1 {
+  font-size: var(--h1);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+
+h2,
+.h2 {
+  font-size: var(--h2);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+h3,
+.h3 {
+  font-size: var(--h3);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+.text-lg {
+  font-size: var(--body-lg);
+  line-height: 1.6;
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.label {
+  font-size: var(--label);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.label--on-dark {
+  color: var(--on-dark-muted);
+}
+
+.numeral {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ---- Layout ------------------------------------------------------------ */
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+main {
+  display: block;
+}
+
+.section {
+  padding-block: var(--section-pad);
+  border-bottom: 1px solid var(--line);
+}
+
+.section:last-of-type {
+  border-bottom: none;
+}
+
+.section--compact {
+  /* Fixed, not scaled off --section-pad — the CTA block is short, it
+     shouldn't carry the same generous padding as a full content section. */
+  padding-block: var(--sp-5);
+}
+
+/* Faint diagonal cell-grid, evoking a panel array without a photo. */
+.section--grid-motif {
+  background-image: repeating-linear-gradient(
+      45deg,
+      rgba(233, 184, 36, 0.07) 0px,
+      rgba(233, 184, 36, 0.07) 1px,
+      transparent 1px,
+      transparent 44px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(233, 184, 36, 0.07) 0px,
+      rgba(233, 184, 36, 0.07) 1px,
+      transparent 1px,
+      transparent 44px
+    );
+}
+
+.section--tight {
+  padding-block: calc(var(--section-pad) * 0.62);
+}
+
+.section--dark {
+  /* background-color, not the `background` shorthand — the shorthand
+     resets background-image to none, which was silently erasing
+     .section--grid-motif's pattern since this rule comes later in the
+     cascade at equal specificity. */
+  background-color: var(--ink);
+  color: var(--on-dark);
+  border-bottom-color: var(--on-dark-line);
+}
+
+.section--dark .label {
+  color: var(--on-dark-muted);
+}
+
+.section--surface {
+  background: var(--surface);
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--sp-4);
+}
+
+.divider {
+  height: 1px;
+  background: var(--line);
+  border: none;
+  width: 100%;
+}
+
+.section--dark .divider {
+  background: var(--on-dark-line);
+}
+
+/* ---- Section heading pattern ------------------------------------------ */
+
+.section-head {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-8);
+  align-items: end;
+}
+
+.section-head__label {
+  grid-column: 1 / span 12;
+  margin-bottom: var(--sp-3);
+}
+
+.section-head__title {
+  grid-column: 1 / span 8;
+}
+
+.section-head__support {
+  grid-column: 9 / span 4;
+  align-self: end;
+}
+
+@media (max-width: 900px) {
+  .section-head__title,
+  .section-head__support {
+    grid-column: 1 / span 12;
+  }
+  .section-head__support {
+    margin-top: var(--sp-3);
+  }
+}
+
+/* ---- Buttons ------------------------------------------------------------ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 15px 21px;
+  border-radius: var(--radius-xs);
+  transition: background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+  /* No white-space: nowrap — on a narrow phone a longer label (e.g.
+     "Çalışmalarımızı İncele") couldn't wrap and forced the button wider
+     than the viewport, pushing the whole page into horizontal scroll.
+     There's always enough room on desktop for these labels to stay on
+     one line anyway, so wrapping only ever engages where it's needed. */
+  max-width: 100%;
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -10px rgba(233, 184, 36, 0.55);
+}
+
+.section--dark .btn--primary:hover {
+  box-shadow: 0 10px 24px -10px rgba(233, 184, 36, 0.4);
+}
+
+.btn__arrow {
+  display: inline-block;
+  transition: transform var(--dur-fast) var(--ease);
+  line-height: 1;
+}
+
+.btn:hover .btn__arrow {
+  transform: translate(2px, -2px);
+}
+
+.btn--primary {
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+}
+
+.btn--primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.section--dark .btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.section--dark .btn--primary:hover {
+  background: var(--paper);
+  border-color: var(--paper);
+  color: var(--ink);
+}
+
+.btn--outline {
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+
+.btn--outline:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.section--dark .btn--outline {
+  border-color: var(--on-dark-line);
+  color: var(--on-dark);
+}
+
+.section--dark .btn--outline:hover {
+  background: var(--on-dark);
+  color: var(--ink);
+}
+
+.btn:focus-visible,
+.text-link:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  /* --ink, not --accent — the bright gold outline only has ~1.6:1 contrast
+     against --paper/--surface (fails the 3:1 focus-indicator minimum).
+     Dark-background containers (header, footer, dark sections, cookie
+     banner) override back to accent below, where it has plenty of
+     contrast. */
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.section--dark :focus-visible,
+.site-header :focus-visible,
+.site-footer :focus-visible,
+.cookie-banner :focus-visible {
+  outline-color: var(--accent);
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 2px;
+  position: relative;
+  /* Flex items don't wrap text by default (min-width:auto) — without
+     this, a long unbroken string (an email address) forces the flex box
+     past its container on narrow screens instead of wrapping. */
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.text-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 0;
+  background: var(--ink);
+  transition: width var(--dur-base) var(--ease);
+}
+
+.text-link:hover::after {
+  width: 100%;
+}
+
+.section--dark .text-link {
+  border-color: var(--on-dark-line);
+}
+
+.section--dark .text-link::after {
+  background: var(--on-dark);
+}
+
+/* ---- Header -------------------------------------------------------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  background: rgba(21, 25, 23, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  color: var(--on-dark);
+  /* Re-scope the neutral tokens to their dark equivalents for anything
+     inside the header that reads them (muted text, hairline borders) —
+     --ink itself is left alone since .btn reads it for its own bg/text
+     logic and is patched explicitly below. */
+  --muted: var(--on-dark-muted);
+  --line: var(--on-dark-line);
+  --line-strong: var(--on-dark-line);
+  transition: border-color var(--dur-base) var(--ease), background var(--dur-base) var(--ease);
+}
+
+.site-header[data-scrolled="true"] {
+  border-bottom-color: var(--on-dark-line);
+}
+
+.site-header .main-nav__link[aria-current="page"] {
+  border-color: var(--on-dark);
+}
+
+.site-header .header-phone:hover {
+  border-color: var(--on-dark);
+}
+
+.site-header .menu-toggle__bars span {
+  background: var(--on-dark);
+}
+
+.site-header .btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.site-header .btn--primary:hover {
+  background: var(--on-dark);
+  border-color: var(--on-dark);
+  color: var(--ink);
+}
+
+.site-header__inner {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wordmark {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  line-height: 1;
+}
+
+.wordmark__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.wordmark__text span:last-child {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.main-nav__list {
+  display: flex;
+  gap: var(--sp-4);
+}
+
+.main-nav__link {
+  font-size: 14.5px;
+  font-weight: 500;
+  padding-bottom: 3px;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
+}
+
+.main-nav__link:hover {
+  border-color: var(--line-strong);
+}
+
+.main-nav__link[aria-current="page"] {
+  border-color: var(--ink);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.header-phone {
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 2px;
+}
+
+.header-phone:hover {
+  border-color: var(--ink);
+}
+
+.menu-toggle {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  /* Padding + negative margin: grows the tap target to a thumb-friendly
+     size (was icon+text with zero padding, well under the ~44px minimum)
+     without shifting where it visually sits in the header. */
+  padding: 14px 6px;
+  margin: -14px -6px;
+}
+
+.menu-toggle__bars {
+  width: 22px;
+  height: 14px;
+  position: relative;
+}
+
+.menu-toggle__bars span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: var(--ink);
+  transition: transform var(--dur-base) var(--ease), opacity var(--dur-base) var(--ease);
+}
+
+.menu-toggle__bars span:nth-child(1) {
+  top: 0;
+}
+.menu-toggle__bars span:nth-child(2) {
+  top: 6px;
+}
+.menu-toggle__bars span:nth-child(3) {
+  top: 12px;
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle__bars span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.menu-toggle[aria-expanded="true"] .menu-toggle__bars span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle[aria-expanded="true"] .menu-toggle__bars span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (max-width: 900px) {
+  .main-nav__list,
+  .header-phone {
+    display: none;
+  }
+  /* Hide the whole box, not just its children — .header-actions .btn and
+     .header-phone were hidden but .header-actions itself stayed in the
+     flex row as an empty item, so .site-header__inner's
+     justify-content: space-between was splitting its gap across three
+     slots (wordmark / nav / empty box) instead of two, pushing the
+     hamburger toward the middle instead of flush against the right edge
+     — and at some widths sitting close enough to overlap the wordmark's
+     second line. */
+  .header-actions {
+    display: none;
+  }
+  .menu-toggle {
+    display: inline-flex;
+  }
+  .main-nav {
+    width: auto;
+    justify-content: flex-end;
+  }
+  .site-header {
+    /* backdrop-filter recomputes every scroll frame under a sticky
+       element — a common source of janky mobile scrolling. Traded for a
+       near-solid background instead; visually almost identical, costs
+       nothing to composite. */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(21, 25, 23, 0.97);
+  }
+}
+
+/* ---- Mobile menu overlay -------------------------------------------- */
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-100%);
+  transition: transform 520ms var(--ease);
+  visibility: hidden;
+  /* Without this, a short viewport (landscape phone, older/small device)
+     with all nav links present has no way to reach whatever doesn't fit —
+     the overlay just clips it. */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-menu[data-open="true"] {
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.mobile-menu__top {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--gutter);
+  border-bottom: 1px solid var(--line);
+}
+
+.mobile-menu__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--sp-6) var(--gutter);
+}
+
+.mobile-menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.mobile-menu__link {
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  padding-block: 6px;
+}
+
+.mobile-menu__footer {
+  padding: var(--sp-6) var(--gutter);
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ---- Hero -------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  padding-block: var(--sp-7);
+  background: var(--paper);
+}
+
+/* Sized down from the shared --h1 token: this heading is a full sentence,
+   not a short page title, so at full size it wraps to 3 lines and pushes
+   the CTA buttons below the fold on first load. */
+.hero h1 {
+  font-size: clamp(2.5rem, 4.4vw, 4.25rem);
+}
+
+.hero__text {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+}
+
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: var(--sp-4);
+}
+
+.hero__eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hero__desc {
+  color: var(--muted);
+  margin-bottom: var(--sp-5);
+  max-width: 46ch;
+}
+
+.section--dark .hero__desc {
+  color: var(--on-dark-muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+
+@media (max-width: 480px) {
+  /* Side by side even on a narrow phone, not stacked — each button
+     shares the row equally and shrinks together; its own label wraps
+     to a second line first (min-width:0 site-wide already allows this)
+     rather than the button dropping to a row of its own. */
+  .hero__actions {
+    flex-wrap: nowrap;
+  }
+  .hero__actions .btn {
+    flex: 1 1 0;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* The house photo bleeds all the way to the right edge of the viewport —
+   pinned absolute against the section rather than boxed inside the
+   container — with a soft fade on its left edge into the page background. */
+.hero__house {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  width: min(46vw, 680px);
+  overflow: hidden;
+}
+
+.hero__house img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__house::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, var(--paper) 0%, rgba(238, 231, 214, 0) 26%);
+}
+
+/* The split layout above (text in a fixed-max-width column, photo pinned
+   to the viewport edge by vw units) only actually clears at very wide
+   viewports — hero__text's box is sized against the *container* (which
+   has gutter padding subtracted) while hero__house is sized against the
+   *viewport*, and those two don't reliably add up to fit until the
+   viewport is genuinely wide. Below that, they overlap: the photo shows
+   up "behind" the heading/buttons instead of beside them. Stacking
+   (photo on top, full width, text below) is the only configuration that
+   is correct at every width in between, so it now covers the entire
+   tablet/laptop-window range too, not just phone widths. */
+@media (max-width: 1280px) {
+  .hero {
+    display: block;
+    min-height: 0;
+    padding-block: var(--sp-6);
+  }
+  .hero__text {
+    max-width: none;
+  }
+  .hero__house {
+    position: static;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--sp-5);
+  }
+  .hero__house::before {
+    display: none;
+  }
+}
+
+/* ---- Marquee (kayan görsel şeridi) -------------------------------------- */
+
+.marquee {
+  overflow: hidden;
+  width: 100%;
+}
+
+.marquee__track {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-4);
+  width: max-content;
+  padding-inline: var(--gutter);
+  animation: marquee-scroll 52s linear infinite;
+  /* Promotes the track to its own GPU layer up front so the continuous
+     transform animation is composited, not repainted, on lower-end
+     mobile GPUs. */
+  will-change: transform;
+}
+
+.marquee:hover .marquee__track,
+.marquee:focus-within .marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee__item {
+  position: relative;
+  flex: 0 0 auto;
+  width: 300px;
+  height: 380px;
+  overflow: hidden;
+  border-radius: var(--radius-xs);
+}
+
+.marquee__item:nth-child(4n + 2) {
+  width: 210px;
+}
+
+.marquee__item:nth-child(4n + 3) {
+  width: 380px;
+}
+
+.marquee__item img {
+  z-index: 0;
+}
+
+.marquee__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(21, 25, 23, 0) 58%, rgba(21, 25, 23, 0.62) 100%);
+  pointer-events: none;
+}
+
+.marquee__label {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 2;
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+@media (max-width: 640px) {
+  .marquee__item,
+  .marquee__item:nth-child(4n + 2),
+  .marquee__item:nth-child(4n + 3) {
+    width: 240px;
+    height: 280px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+  }
+  .marquee__item {
+    scroll-snap-align: start;
+  }
+}
+
+/* ---- Full-bleed image background section (dark, with photo) ------------- */
+
+.section--photo {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  isolation: isolate;
+}
+
+.section--photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(21, 25, 23, 0.86) 0%, rgba(21, 25, 23, 0.93) 100%);
+}
+
+/* ---- About section photo ------------------------------------------------- */
+
+.about__photo {
+  margin-top: var(--sp-7);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  aspect-ratio: 21 / 8;
+}
+
+.about__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about__photo-caption {
+  position: absolute;
+  left: 20px;
+  bottom: 18px;
+  z-index: 1;
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.about__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(21, 25, 23, 0) 60%, rgba(21, 25, 23, 0.58) 100%);
+}
+
+@media (max-width: 700px) {
+  .about__photo {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* ---- Service / project detail banner image ------------------------------- */
+
+.detail-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  aspect-ratio: 21 / 9;
+  margin-bottom: var(--sp-8);
+}
+
+.detail-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 700px) {
+  .detail-banner {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ---- Expertise strip --------------------------------------------------- */
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.strip__item {
+  padding: var(--sp-5) var(--sp-4);
+  border-right: 1px solid var(--line);
+}
+
+.strip__item:last-child {
+  border-right: none;
+}
+
+.strip__icon {
+  display: block;
+  color: var(--accent-deep);
+  margin-bottom: var(--sp-3);
+}
+
+@media (max-width: 900px) {
+  .strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .strip__item:nth-child(2) {
+    border-right: none;
+  }
+  .strip__item:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+}
+
+/* ---- About / positioning ------------------------------------------------ */
+
+.about__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--sp-6);
+  /* Direct, local containment — belt-and-suspenders on top of the
+     site-wide overflow-x:hidden/min-width:0/overflow-wrap rules, right
+     around the exact content that kept clipping on mobile despite those. */
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.about__statement h2,
+.about__body p {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 480px) {
+  /* One size down from the site --h2 clamp — extra headroom on a narrow
+     phone specifically for this heading, since it's a full sentence
+     rather than the short titles --h2 is otherwise used for. */
+  .about__statement h2 {
+    font-size: clamp(1.5rem, 6vw, 1.875rem);
+  }
+}
+
+.about__statement {
+  grid-column: 1 / span 7;
+}
+
+.about__body {
+  grid-column: 8 / span 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+@media (max-width: 900px) {
+  .about__statement,
+  .about__body {
+    grid-column: 1 / span 12;
+  }
+  .about__body {
+    margin-top: var(--sp-5);
+  }
+}
+
+.about__statement strong {
+  font-weight: 600;
+}
+
+/* ---- Service rows ------------------------------------------------------- */
+
+.service-row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: var(--sp-5);
+  padding-block: var(--sp-5);
+  border-top: 1px solid var(--line);
+  transition: background var(--dur-base) var(--ease), padding-left var(--dur-base) var(--ease);
+}
+
+.section--dark .service-row {
+  border-color: var(--on-dark-line);
+}
+
+.service-list {
+  border-bottom: 1px solid var(--line);
+}
+
+.section--dark .service-list {
+  border-bottom-color: var(--on-dark-line);
+}
+
+.service-row:hover {
+  background: rgba(21, 25, 23, 0.035);
+  padding-left: var(--sp-2);
+}
+
+.section--dark .service-row:hover {
+  background: rgba(244, 242, 236, 0.045);
+}
+
+.service-row__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-xs);
+  color: var(--ink);
+  transition: border-color var(--dur-base) var(--ease), color var(--dur-base) var(--ease);
+}
+
+.section--dark .service-row__icon {
+  border-color: var(--on-dark-line);
+  color: var(--on-dark);
+}
+
+.service-row:hover .service-row__icon {
+  border-color: var(--accent-deep);
+  color: var(--accent-deep);
+}
+
+/* On a dark section the bright accent has plenty of contrast — only the
+   light-background hover state needs the deepened variant above. */
+.section--dark .service-row:hover .service-row__icon {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.service-row__title {
+  display: block;
+  font-size: clamp(1.25rem, 1vw + 1rem, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+
+.service-row__summary {
+  display: block;
+  color: var(--muted);
+  max-width: 46ch;
+  font-size: 15px;
+}
+
+.section--dark .service-row__summary {
+  color: var(--on-dark-muted);
+}
+
+.service-row__arrow {
+  font-size: 22px;
+  transition: transform var(--dur-base) var(--ease);
+  justify-self: end;
+}
+
+.service-row:hover .service-row__arrow {
+  transform: translate(4px, -4px);
+}
+
+@media (max-width: 700px) {
+  .service-row {
+    grid-template-columns: 44px 1fr;
+    row-gap: var(--sp-2);
+  }
+  .service-row__icon {
+    width: 38px;
+    height: 38px;
+  }
+  .service-row__arrow {
+    display: none;
+  }
+}
+
+/* ---- Engineering / technical section ------------------------------------ */
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--sp-6);
+  /* Direct, local containment — belt-and-suspenders on top of the
+     site-wide overflow-x:hidden/min-width:0/overflow-wrap rules, right
+     around the exact content that kept clipping on mobile despite those. */
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.tech-grid__lead {
+  grid-column: 1 / span 6;
+}
+
+.tech-grid__lead h2,
+.tech-grid__lead p {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 480px) {
+  .tech-grid__lead h2 {
+    font-size: clamp(1.5rem, 6vw, 1.875rem);
+  }
+}
+
+.tech-grid__list {
+  grid-column: 8 / span 5;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--on-dark-line);
+  max-width: 100%;
+}
+
+.tech-item {
+  padding-block: var(--sp-4);
+  border-top: 1px solid var(--on-dark-line);
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: var(--sp-3);
+  max-width: 100%;
+}
+
+.tech-item__desc {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.tech-item__num {
+  font-size: var(--label);
+  color: var(--on-dark-muted);
+}
+
+.tech-item__title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.tech-item__desc {
+  color: var(--on-dark-muted);
+  font-size: 14.5px;
+}
+
+@media (max-width: 900px) {
+  .tech-grid__lead,
+  .tech-grid__list {
+    grid-column: 1 / span 12;
+  }
+  .tech-grid__list {
+    margin-top: var(--sp-5);
+  }
+}
+
+/* ---- Projects ------------------------------------------------------------ */
+
+.project-masonry {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--sp-5);
+}
+
+.project-card {
+  display: block;
+  grid-column: span 12;
+}
+
+.project-card--wide {
+  grid-column: span 8;
+}
+
+.project-card--tall {
+  grid-column: span 4;
+}
+
+@media (max-width: 900px) {
+  .project-card,
+  .project-card--wide,
+  .project-card--tall {
+    grid-column: span 12;
+  }
+}
+
+.project-card__frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xs);
+  aspect-ratio: 16 / 10;
+  margin-bottom: var(--sp-3);
+}
+
+.project-card--tall .project-card__frame {
+  aspect-ratio: 4 / 5;
+}
+
+.project-card__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms var(--ease);
+}
+
+.project-card:hover .project-card__frame img {
+  transform: scale(1.035);
+}
+
+.project-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px solid var(--line);
+  padding-top: var(--sp-3);
+  gap: var(--sp-3);
+}
+
+.project-card__name {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.project-card__sub {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.project-card__arrow {
+  font-size: 18px;
+  transition: transform var(--dur-base) var(--ease);
+}
+
+.project-card:hover .project-card__arrow {
+  transform: translate(3px, -3px);
+}
+
+.empty-state {
+  padding: var(--sp-8) 0;
+  border-top: 1px solid var(--line);
+  text-align: left;
+}
+
+.empty-state p {
+  max-width: 52ch;
+  color: var(--muted);
+  margin-top: var(--sp-2);
+}
+
+/* ---- Process ------------------------------------------------------------- */
+
+.process-list {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--line);
+}
+
+.process-item {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: var(--sp-5);
+  padding-block: var(--sp-5);
+  border-top: 1px solid var(--line);
+  align-items: baseline;
+}
+
+.process-item__num {
+  font-size: clamp(1.5rem, 2vw, 2.25rem);
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.process-item__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.process-item__desc {
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+@media (max-width: 640px) {
+  .process-item {
+    grid-template-columns: 1fr;
+    gap: var(--sp-2);
+  }
+}
+
+/* ---- FAQ ------------------------------------------------------------------ */
+
+.faq-list {
+  max-width: 860px;
+  border-top: 1px solid var(--line);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-item__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-block: var(--sp-4);
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq-item__q::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item__icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.faq-item__icon::before,
+.faq-item__icon::after {
+  content: "";
+  position: absolute;
+  background: var(--ink);
+  transition: transform var(--dur-base) var(--ease), opacity var(--dur-base) var(--ease);
+}
+
+.faq-item__icon::before {
+  left: 0;
+  top: 7px;
+  width: 16px;
+  height: 1.5px;
+}
+
+.faq-item__icon::after {
+  left: 7px;
+  top: 0;
+  width: 1.5px;
+  height: 16px;
+}
+
+.faq-item[open] .faq-item__icon::after {
+  opacity: 0;
+  transform: rotate(90deg);
+}
+
+.faq-item__a {
+  color: var(--muted);
+  max-width: 68ch;
+  padding-bottom: var(--sp-3);
+}
+
+.faq-item__more {
+  display: inline-flex;
+  margin-bottom: var(--sp-4);
+  font-size: 14px;
+}
+
+/* ---- Guide (Rehber) list --------------------------------------------------- */
+
+.guide-list {
+  border-top: 1px solid var(--line);
+  margin-top: var(--sp-4);
+}
+
+.guide-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-block: var(--sp-3);
+  border-bottom: 1px solid var(--line);
+  transition: padding-left var(--dur-base) var(--ease), color var(--dur-base) var(--ease);
+}
+
+.guide-row:hover {
+  padding-left: var(--sp-2);
+  color: var(--accent-deep);
+}
+
+.guide-row__q {
+  font-weight: 500;
+  font-size: 0.98rem;
+}
+
+.guide-row__arrow {
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: transform var(--dur-base) var(--ease);
+}
+
+.guide-row:hover .guide-row__arrow {
+  transform: translate(3px, -3px);
+}
+
+.guide-cta {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-5);
+}
+
+.guide-cta__title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+
+.guide-cta__desc {
+  color: var(--muted);
+  font-size: 14.5px;
+  margin-bottom: var(--sp-4);
+}
+
+/* ---- Team ---------------------------------------------------------------- */
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.team-card {
+  padding: var(--sp-6) var(--sp-5);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.team-card__role {
+  margin-bottom: var(--sp-4);
+}
+
+.team-card__name {
+  font-size: clamp(1.5rem, 1.5vw + 1rem, 2rem);
+  font-weight: 600;
+  margin-bottom: var(--sp-3);
+  letter-spacing: -0.01em;
+}
+
+.team-card__email {
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 2px;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- CTA ------------------------------------------------------------------ */
+
+.cta {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--sp-4);
+  align-items: end;
+}
+
+.cta__title {
+  grid-column: 1 / span 8;
+}
+
+.cta__side {
+  grid-column: 9 / span 4;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.cta__desc {
+  color: var(--on-dark-muted);
+}
+
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+
+@media (max-width: 900px) {
+  .cta__title,
+  .cta__side {
+    grid-column: 1 / span 12;
+  }
+  .cta__side {
+    margin-top: var(--sp-5);
+  }
+}
+
+/* ---- Forms ----------------------------------------------------------------- */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-field--full {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-field input:not([type="checkbox"]),
+.form-field select,
+.form-field textarea {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-xs);
+  padding: 0 16px;
+  height: 54px;
+  font-size: 16px;
+  width: 100%;
+}
+
+.form-field textarea {
+  height: auto;
+  padding-block: 14px;
+  resize: vertical;
+  min-height: 140px;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+.form-field--error input,
+.form-field--error textarea {
+  border-color: #b3402c;
+}
+
+.form-error {
+  font-size: 13px;
+  color: #b3402c;
+}
+
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.form-check input {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  accent-color: var(--ink);
+}
+
+.form-status {
+  padding: var(--sp-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-xs);
+  font-size: 15px;
+}
+
+.form-status--success {
+  border-color: var(--ink);
+  background: rgba(233, 184, 36, 0.12);
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Contact info block ---------------------------------------------------- */
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--line);
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: var(--sp-4);
+  padding-block: var(--sp-4);
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 560px) {
+  .info-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+/* ---- Footer ------------------------------------------------------------------ */
+
+.site-footer {
+  background: var(--ink);
+  color: var(--on-dark);
+}
+
+.site-footer__top {
+  padding-block: var(--sp-8);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--sp-6);
+}
+
+.site-footer__brand {
+  grid-column: 1 / span 5;
+}
+
+.site-footer__mark {
+  display: block;
+  margin-bottom: var(--sp-3);
+}
+
+.site-footer__wordmark {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+
+.site-footer__tag {
+  color: var(--on-dark-muted);
+  margin-top: var(--sp-4);
+  max-width: 40ch;
+}
+
+.site-footer__cols {
+  grid-column: 7 / span 6;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-5);
+}
+
+.footer-col h4 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--on-dark-muted);
+  margin-bottom: var(--sp-4);
+  font-weight: 600;
+}
+
+.footer-col ul {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-col a {
+  font-size: 14.5px;
+}
+
+.footer-col a:hover {
+  color: var(--accent);
+}
+
+.site-footer__bottom {
+  border-top: 1px solid var(--on-dark-line);
+  padding-block: var(--sp-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  font-size: 13px;
+  color: var(--on-dark-muted);
+}
+
+.site-footer__legal {
+  display: flex;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.site-footer__legal a:hover {
+  color: var(--on-dark);
+}
+
+/* Keep brand + link columns side by side as long as there's room —
+   only stack once the row genuinely can't fit, so the footer stays wide
+   and short instead of narrow and tall. */
+@media (max-width: 640px) {
+  .site-footer__top {
+    padding-block: var(--sp-6);
+  }
+  .site-footer__brand,
+  .site-footer__cols {
+    grid-column: 1 / span 12;
+  }
+  .site-footer__cols {
+    margin-top: var(--sp-5);
+    /* Three columns still fit at 640px, but not at typical phone widths
+       (~360-430px) — the İletişim column specifically ends up ~100px
+       wide, forcing the email/address into several cramped, near-
+       unreadable wrapped lines even though nothing technically overflows
+       any more. One column at true phone widths reads far better. */
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-4);
+  }
+}
+
+@media (max-width: 520px) {
+  .site-footer__cols {
+    /* Navigasyon + Hizmetler side by side. Not an even split — Navigasyon
+       is single short words ("Rehber", "Kurumsal"); Hizmetler has real
+       phrases ("Projelendirme ve Mühendislik") that need more room, so
+       its column starts further left and runs wider. İletişim gets its
+       own full-width row below since it carries the longer email/address
+       lines. */
+    grid-template-columns: 0.6fr 1.4fr;
+    gap: var(--sp-5) var(--sp-4);
+  }
+  .footer-col:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---- Cookie banner ------------------------------------------------------------- */
+
+.cookie-banner {
+  position: fixed;
+  left: var(--sp-4);
+  right: var(--sp-4);
+  /* max() keeps the normal gap on most devices, but grows it on notched
+     iPhones so the banner clears the home-indicator gesture area instead
+     of sitting under it. */
+  bottom: max(var(--sp-4), env(safe-area-inset-bottom));
+  z-index: 70;
+  max-width: 560px;
+  background: var(--ink);
+  color: var(--on-dark);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-4) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  transform: translateY(140%);
+  transition: transform var(--dur-slow) var(--ease);
+}
+
+.cookie-banner[data-visible="true"] {
+  transform: translateY(0);
+}
+
+.cookie-banner p {
+  font-size: 14px;
+  color: var(--on-dark-muted);
+}
+
+.cookie-banner__actions {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+/* ---- Reveal on scroll ------------------------------------------------------------ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+}
+
+.reveal[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Shorter and shallower on mobile — fast flick-scrolling outruns a
+   700ms/18px reveal, so content reads as "catching up" instead of
+   settling in. A quicker, smaller move resolves before the next section
+   arrives. */
+@media (max-width: 900px) {
+  .reveal {
+    transform: translateY(10px);
+    transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---- Utility ---------------------------------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: -60px;
+  left: var(--sp-4);
+  z-index: 100;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 18px;
+  border-radius: var(--radius-xs);
+  transition: top var(--dur-fast) var(--ease);
+}
+
+.skip-link:focus {
+  top: var(--sp-4);
+}
+
+.page-hero {
+  padding-top: var(--sp-8);
+  padding-bottom: var(--sp-7);
+}
+
+.page-hero__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--sp-4);
+}
+
+.page-hero__title {
+  grid-column: 1 / span 7;
+}
+
+.page-hero__desc {
+  grid-column: 8 / span 5;
+  color: var(--muted);
+  align-self: end;
+}
+
+@media (max-width: 900px) {
+  .page-hero__title,
+  .page-hero__desc {
+    grid-column: 1 / span 12;
+  }
+  .page-hero__desc {
+    margin-top: var(--sp-4);
+  }
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--sp-6);
+}
+
+.two-col__main {
+  min-width: 0;
+  grid-column: 1 / span 7;
+}
+
+.two-col__side {
+  min-width: 0;
+  grid-column: 9 / span 4;
+}
+
+@media (max-width: 900px) {
+  .two-col { grid-template-columns: minmax(0, 1fr); }
+  .two-col__main,
+  .two-col__side {
+    grid-column: 1;
+  }
+  .two-col__side {
+    margin-top: var(--sp-6);
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: var(--sp-5);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--sp-6);
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  padding-block: var(--sp-3);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+
+.tabs button[aria-selected="true"] {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.detail-table tr {
+  border-top: 1px solid var(--line);
+}
+
+.detail-table tr:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.detail-table th,
+.detail-table td {
+  text-align: left;
+  padding: 14px 0;
+  font-weight: 400;
+}
+
+.detail-table th {
+  color: var(--muted);
+  width: 40%;
+  font-size: 14px;
+}
+
+.prose {
+  max-width: 72ch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  color: var(--ink);
+}
+
+.prose h2 {
+  margin-top: var(--sp-5);
+}
+
+.prose p {
+  color: var(--muted);
+}
+
+.not-found {
+  min-height: calc(100vh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-block: var(--sp-8);
+}

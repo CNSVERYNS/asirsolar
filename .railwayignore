@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+.git
+.local-tools
+.local-backups
+.data
+.env
+.env.*
+.vercel
+.supabase
