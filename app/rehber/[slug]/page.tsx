@@ -7,6 +7,10 @@ import { TextLink, PrimaryButton } from "@/components/Button";
 import { getGuideBySlug, guideItems } from "@/data/guides";
 import { getServiceBySlug } from "@/data/services";
 import { pageMetadata, siteConfig } from "@/lib/site";
+import { guideDetails } from "@/data/guide-details";
+import { JsonLd } from "@/components/JsonLd";
+import { PaybackCalculator } from "@/components/PaybackCalculator";
+import { organizationId } from "@/lib/structured-data";
 
 export function generateStaticParams() {
   return guideItems.map((g) => ({ slug: g.slug }));
@@ -35,6 +39,7 @@ export default async function GuideDetailPage({
   const { slug } = await params;
   const guide = getGuideBySlug(slug);
   if (!guide) notFound();
+  const detail = guideDetails[guide.slug];
 
   const relatedService = getServiceBySlug(guide.relatedServiceSlug);
   const otherInCategory = guideItems
@@ -49,11 +54,10 @@ export default async function GuideDetailPage({
     articleSection: guide.category,
     inLanguage: "tr-TR",
     url: `${siteConfig.url}/rehber/${guide.slug}`,
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
+    mainEntityOfPage: `${siteConfig.url}/rehber/${guide.slug}`,
+    publisher: { "@id": organizationId },
+    author: { "@id": organizationId },
+    ...(detail ? { dateModified: detail.updatedAt, citation: detail.sources.map(source => source.href) } : {}),
   };
 
   const breadcrumbJsonLd = {
@@ -73,14 +77,8 @@ export default async function GuideDetailPage({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      <JsonLd data={articleJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
 
       <section className="page-hero">
         <Container>
@@ -103,13 +101,25 @@ export default async function GuideDetailPage({
       <section className="section" style={{ paddingTop: 0 }}>
         <Container>
           <div className="two-col">
-            <Reveal className="two-col__main" as="div">
-              <div className="prose">
+            <div className="two-col__main">
+              <article className="prose">
+                <p className="guide-byline"><Link href="/kurumsal">Asır Solar</Link>{detail && <> · Güncelleme: <time dateTime={detail.updatedAt}>{new Intl.DateTimeFormat("tr-TR", { dateStyle: "long", timeZone: "UTC" }).format(new Date(detail.updatedAt))}</time></>}</p>
                 {guide.body.map((paragraph, i) => (
                   <p key={i}>{paragraph}</p>
                 ))}
-              </div>
-            </Reveal>
+                {detail?.sections.map(section => <section className="content-section" key={section.title}>
+                  <h2>{section.title}</h2>
+                  {section.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+                  {section.items && <ul className="content-checklist">{section.items.map(item => <li key={item}>{item}</li>)}</ul>}
+                </section>)}
+                {detail?.calculator && <PaybackCalculator />}
+                {detail && <section className="guide-sources" aria-labelledby="sources-title">
+                  <h2 id="sources-title">Kaynaklar ve devamı</h2>
+                  <ul>{detail.sources.map(source => <li key={source.href}><a href={source.href} target="_blank" rel="noopener noreferrer">{source.label} <span aria-hidden="true">↗</span></a></li>)}</ul>
+                  <p>Başvuru koşulları için işlem tarihindeki resmî belgeleri esas alın.</p>
+                </section>}
+              </article>
+            </div>
 
             <Reveal className="two-col__side" delay={80} as="div">
               {relatedService && (

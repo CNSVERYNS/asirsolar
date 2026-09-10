@@ -1,5 +1,5 @@
 export const siteConfig = {
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.asirsolar.com",
+  url: new URL(process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://asirsolar.vercel.app").origin,
   name: "Asır Solar",
   titleTemplate: "%s | Asır Solar",
   defaultTitle: "Asır Solar | Güneş Enerjisi Sistemleri Kurulumu — Gebze, Kocaeli",
@@ -14,7 +14,7 @@ export const siteConfig = {
 // all. This helper keeps title/description/OG/canonical in sync from one
 // call per page. See node_modules/next/dist/docs/.../generate-metadata.md
 // ("Merging" section) — this is Next 16 behavior, not the old default.
-const defaultOgImage = { url: "/images/stock/hero-farm.jpg", width: 2400, height: 1350 };
+export const defaultOgImage = { url: "/images/stock/hero-farm.jpg", width: 2400, height: 1350, alt: "Güneş paneli sahası — temsili görsel, Asır Solar" };
 
 export function pageMetadata({
   title,
@@ -43,6 +43,7 @@ export function pageMetadata({
       card: "summary_large_image" as const,
       title,
       description,
+      images: [defaultOgImage.url],
     },
   };
 }

@@ -40,16 +40,16 @@ export function Footer() {
               <h4>Hizmetler</h4>
               <ul>
                 <li>
-                  <Link href="/hizmetler">Güneş Enerjisi Sistemleri</Link>
+                  <Link href="/hizmetler/gunes-enerjisi-sistemleri">Güneş Enerjisi Sistemleri</Link>
                 </li>
                 <li>
-                  <Link href="/hizmetler">Projelendirme ve Mühendislik</Link>
+                  <Link href="/hizmetler/projelendirme-ve-muhendislik">Projelendirme ve Mühendislik</Link>
                 </li>
                 <li>
-                  <Link href="/hizmetler">Kurulum ve Devreye Alma</Link>
+                  <Link href="/hizmetler/kurulum-ve-devreye-alma">Kurulum ve Devreye Alma</Link>
                 </li>
                 <li>
-                  <Link href="/hizmetler">Bakım ve Teknik Destek</Link>
+                  <Link href="/hizmetler/bakim-ve-teknik-destek">Bakım ve Teknik Destek</Link>
                 </li>
               </ul>
             </div>

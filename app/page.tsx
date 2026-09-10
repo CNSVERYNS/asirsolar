@@ -9,6 +9,7 @@ import { FAQ } from "@/components/FAQ";
 import { CTASection } from "@/components/CTASection";
 import { CompassIcon, PanelIcon, PowerIcon, BoltIcon } from "@/components/Icons";
 import { services } from "@/data/services";
+import { company } from "@/data/company";
 
 const featuredServices = [services[0], services[2], services[3]];
 const steps = [
@@ -105,6 +106,28 @@ export default function HomePage() {
         <Container>
           <div className="editorial-heading"><Reveal><p className="eyebrow"><span className="section-index">04 /</span> NASIL ÇALIŞIYORUZ?</p><h2>İlk görüşmeden<br /><span className="text-soft">ilk üretime.</span></h2></Reveal><p className="text-muted">Her aşaması planlı.<br />Her adımında yanınızdayız.</p></div>
           <ol className="journey-grid">{steps.map((step, i) => <li key={step.title}><span className="journey-number">0{i + 1}<span aria-hidden="true">↗</span></span><p className="eyebrow">{step.detail}</p><h3>{step.title}</h3><p className="text-muted">{step.description}</p></li>)}</ol>
+        </Container>
+      </section>
+      <section className="section local-planning">
+        <Container>
+          <div className="two-col">
+            <Reveal className="two-col__main">
+              <p className="eyebrow">GEBZE VE KOCAELİ’DE GÜNEŞ ENERJİSİ</p>
+              <h2>Çatınızı ve tüketiminizi<br /><span className="text-soft">birlikte değerlendirelim.</span></h2>
+              <p className="text-lg">Konut, iş yeri ve sanayi yapılarında doğru başlangıç; kullanılabilir alanı, gündüz tüketimini ve mevcut elektrik bağlantısını tanımaktır.</p>
+              <p>Gebze’deki ekibimize saha adresinizi, son 12 aylık tüketiminizi ve varsa çatı planınızı iletin. Keşif ve projelendirme için gereken hazırlığı birlikte netleştirelim.</p>
+              <a href={company.address.mapsHref} target="_blank" rel="noopener noreferrer" className="text-link">{company.address.full} <span aria-hidden="true">↗</span></a>
+            </Reveal>
+            <Reveal className="two-col__side" delay={80}>
+              <p className="eyebrow">KARAR ÖNCESİ ÜÇ ADIM</p>
+              <div className="local-guide-links">
+                <Link href="/rehber/catim-gunes-paneline-uygun-mu"><span>01</span>Çatınızın uygunluğunu değerlendirin <span aria-hidden="true">↗</span></Link>
+                <Link href="/rehber/gunes-paneli-icin-izin-gerekir-mi"><span>02</span>Bağlantı ve izin sürecini inceleyin <span aria-hidden="true">↗</span></Link>
+                <Link href="/rehber/yatirimin-geri-donusu-nasil-hesaplanir#hesaplama"><span>03</span>Geri ödeme senaryonuzu hesaplayın <span aria-hidden="true">↗</span></Link>
+              </div>
+              <TextLink href="/iletisim">Keşif için görüşelim</TextLink>
+            </Reveal>
+          </div>
         </Container>
       </section>
       <FAQ index="05" />

@@ -9,7 +9,7 @@ import { pageMetadata } from "@/lib/site";
 export const metadata: Metadata = pageMetadata({
   title: "Rehber — Güneş Enerjisi Hakkında Sık Sorulan Sorular",
   description:
-    "Güneş paneli kurulumu, maliyeti, mevzuatı ve bakımı hakkında en çok sorulan 30 soruya dürüst, doğrulanabilir cevaplar.",
+    "Güneş paneli kurulumu, çatı uygunluğu, bağlantı başvurusu ve bakım rehberi. Kendi varsayımlarınızla basit geri ödeme süresini hesaplayın.",
   path: "/rehber",
 });
 
@@ -42,9 +42,8 @@ export default function RehberPage() {
             <Reveal className="page-hero__desc" delay={100}>
               <p className="text-lg">
                 Kurulum sürecinden mevzuata, maliyeti belirleyen etkenlerden
-                bakıma kadar; karar vermeden önce sorulan 30 soruya net ve
-                dürüst cevaplar. Uydurma rakam veya vaat yok — değişken
-                kalemler, nelere bağlı olduğu anlatılarak yanıtlanır.
+                bakıma kadar {guideItems.length} soruya yanıt bulun. Çatı uygunluğunu değerlendirin,
+                bağlantı sürecini inceleyin ve kendi değerlerinizle geri ödeme hesabı yapın.
               </p>
             </Reveal>
           </div>

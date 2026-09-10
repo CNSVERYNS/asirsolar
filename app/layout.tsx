@@ -6,9 +6,10 @@ import "./brand.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CookieBanner } from "@/components/CookieBanner";
-import { company } from "@/data/company";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, defaultOgImage } from "@/lib/site";
 import { SiteFrame } from "@/components/SiteFrame";
+import { JsonLd } from "@/components/JsonLd";
+import { businessGraph } from "@/lib/structured-data";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
     template: siteConfig.titleTemplate,
   },
   description: siteConfig.defaultDescription,
+  verification: { google: process.env.GOOGLE_SITE_VERIFICATION?.trim() || undefined },
   alternates: { canonical: siteConfig.url },
   openGraph: {
     type: "website",
@@ -31,18 +33,20 @@ export const metadata: Metadata = {
     title: siteConfig.defaultTitle,
     description: siteConfig.defaultDescription,
     url: siteConfig.url,
-    images: [{ url: "/images/stock/hero-farm.jpg", width: 2400, height: 1350 }],
+    images: [defaultOgImage],
   },
   twitter: {
     card: "summary_large_image",
     title: siteConfig.defaultTitle,
     description: siteConfig.defaultDescription,
+    images: [defaultOgImage.url],
   },
   icons: {
     icon: [
-      { url: "/images/brand/asir-logo.jpeg", type: "image/jpeg" },
+      { url: "/icon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
     ],
-    apple: "/images/brand/asir-logo.jpeg",
+    apple: "/apple-touch-icon.png",
   },
 };
 
@@ -54,37 +58,6 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: company.legalName,
-  alternateName: company.brandName,
-  description: siteConfig.defaultDescription,
-  telephone: company.phoneDisplay,
-  email: company.generalEmail,
-  url: siteConfig.url,
-  image: `${siteConfig.url}/images/stock/hero-farm.jpg`,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: company.address.line1,
-    addressLocality: "Gebze",
-    addressRegion: "Kocaeli",
-    addressCountry: "TR",
-  },
-  areaServed: {
-    "@type": "City",
-    name: "Gebze / Kocaeli",
-  },
-  knowsAbout: [
-    "Güneş enerjisi sistemleri",
-    "Çatı tipi güneş paneli kurulumu",
-    "Cephe tipi güneş paneli kurulumu",
-    "Güneş enerjisi projelendirme ve mühendislik",
-    "Elektrik altyapısı ve pano sistemleri",
-    "Güneş enerjisi sistemleri bakım ve teknik destek",
-  ],
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
@@ -94,11 +67,7 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           İçeriğe geç
         </a>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <SiteFrame header={<Header />} footer={<Footer />} notice={<CookieBanner />}>{children}</SiteFrame>
+        <SiteFrame header={<><JsonLd data={businessGraph} /><Header /></>} footer={<Footer />} notice={<CookieBanner />}>{children}</SiteFrame>
       </body>
     </html>
   );

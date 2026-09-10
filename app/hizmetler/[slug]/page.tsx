@@ -7,7 +7,9 @@ import { SectionLabel } from "@/components/SectionLabel";
 import { Reveal } from "@/components/Reveal";
 import { PrimaryButton, TextLink } from "@/components/Button";
 import { getServiceBySlug, services } from "@/data/services";
-import { company } from "@/data/company";
+import { serviceDetails } from "@/data/service-details";
+import { JsonLd } from "@/components/JsonLd";
+import { serviceSchema } from "@/lib/structured-data";
 import { guideItems } from "@/data/guides";
 import { siteConfig, pageMetadata } from "@/lib/site";
 
@@ -38,6 +40,7 @@ export default async function ServiceDetailPage({
   const { slug } = await params;
   const service = getServiceBySlug(slug);
   if (!service) notFound();
+  const detail = serviceDetails[service.slug];
 
   const relatedGuides = guideItems
     .filter((g) => g.relatedServiceSlug === service.slug)
@@ -58,36 +61,10 @@ export default async function ServiceDetailPage({
     ],
   };
 
-  const serviceJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    serviceType: service.title,
-    name: service.title,
-    description: service.summary,
-    url: `${siteConfig.url}/hizmetler/${service.slug}`,
-    areaServed: {
-      "@type": "City",
-      name: "Gebze / Kocaeli",
-    },
-    provider: {
-      "@type": "LocalBusiness",
-      name: company.legalName,
-      alternateName: company.brandName,
-      telephone: company.phoneDisplay,
-      url: siteConfig.url,
-    },
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      <JsonLd data={serviceSchema(service)} />
+      <JsonLd data={breadcrumbJsonLd} />
       <section className="page-hero">
         <Container>
           <Reveal>
@@ -113,7 +90,7 @@ export default async function ServiceDetailPage({
             <div className="detail-banner">
               <Image
                 src={service.image}
-                alt={service.title}
+                alt={`${service.title} — temsili uygulama görseli`}
                 fill
                 sizes="(max-width: 900px) 100vw, 1280px"
                 style={{ objectFit: "cover" }}
@@ -122,15 +99,22 @@ export default async function ServiceDetailPage({
           </Reveal>
 
           <div className="two-col">
-            <Reveal className="two-col__main">
+            <div className="two-col__main">
               <div className="prose">
                 {service.description.map((paragraph) => (
                   <p key={paragraph} className="text-lg">
                     {paragraph}
                   </p>
                 ))}
+                {detail?.sections.map(section => (
+                  <section className="content-section" key={section.title}>
+                    <h2>{section.title}</h2>
+                    {section.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+                    {section.items && <ul className="content-checklist">{section.items.map(item => <li key={item}>{item}</li>)}</ul>}
+                  </section>
+                ))}
               </div>
-            </Reveal>
+            </div>
 
             <Reveal className="two-col__side" delay={80}>
               <p className="label" style={{ marginBottom: "var(--sp-3)" }}>
@@ -150,6 +134,11 @@ export default async function ServiceDetailPage({
                   </li>
                 ))}
               </ul>
+              {detail && <div className="preparation-card">
+                <h2>Görüşme öncesi hazırlık</h2>
+                <ul className="content-checklist">{detail.preparation.map(item => <li key={item}>{item}</li>)}</ul>
+                <p>Gebze / Kocaeli’deki sahanızın bilgilerini paylaşın; keşif kapsamını birlikte belirleyelim.</p>
+              </div>}
               <div style={{ marginTop: "var(--sp-6)" }}>
                 <PrimaryButton href="/iletisim">Bu Hizmeti Görüşelim</PrimaryButton>
               </div>

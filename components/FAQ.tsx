@@ -3,6 +3,7 @@ import { SectionLabel } from "@/components/SectionLabel";
 import { Reveal } from "@/components/Reveal";
 import { TextLink } from "@/components/Button";
 import { faqItems } from "@/data/faq";
+import { JsonLd } from "@/components/JsonLd";
 
 // Native <details>/<summary> — the Q&A text is real DOM content (not
 // hidden-until-JS), which is what Google's FAQPage rich-result guidelines
@@ -25,10 +26,7 @@ export function FAQ({ index = "07" }: { index?: string }) {
 
   return (
     <section className="section section--surface" id="sikca-sorulan-sorular">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
+      <JsonLd data={faqJsonLd} />
       <Container>
         <Reveal>
           <SectionLabel index={index} text="SIKÇA SORULAN SORULAR" />

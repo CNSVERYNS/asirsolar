@@ -3,8 +3,8 @@
 // eşiği gibi zamanla değişen veya doğrulanamayan rakamlar somut sayı
 // yerine "hangi faktörlere bağlı olduğu" anlatılarak yanıtlanır — hiçbir
 // TL tutarı, kW eşiği veya yıl vaadi uydurulmaz. Genel, yerleşik
-// mühendislik/mevzuat bilgisi (ör. panel garantisi, EDAŞ bağlantı süreci)
-// bu kuralın dışındadır çünkü sektör geneli için doğru ve dönemsel değildir.
+// mühendislik bilgisi sahaya göre değerlendirilir. Mevzuat, bağlantı süreçleri
+// ve üretici garantileri değişebilir; ilgili resmî kaynak veya belge kontrol edilir.
 //
 // İlk 30 soru: temel/orta seviye karar öncesi sorular. Sonraki 20 (ikinci
 // tur): ekipman/teknoloji derinliği, depolama, performans izleme ve sanayi
@@ -242,11 +242,10 @@ export const guideItems: GuideItem[] = [
     question: "Güneş paneli kurmak için izin gerekir mi?",
     category: "Mevzuat ve Şebeke Bağlantısı",
     summary:
-      "Evet — çatı ve cephe tipi sistemler, ilgili elektrik dağıtım şirketine (EDAŞ) yapılan bağlantı başvurusu ve lisanssız üretim mevzuatına tabidir.",
+      "Şebekeye bağlı çatı ve cephe sistemlerinde bağlantı, proje onayı ve kabul işlemleri gerekir. Başvuru yolu tesisin türüne ve ilgili şebeke işletmecisine göre belirlenir.",
     body: [
-      "Türkiye'de çatı ve cephe tipi güneş enerjisi sistemleri, bulunduğunuz bölgedeki elektrik dağıtım şirketine (EDAŞ) yapılan bir bağlantı başvurusu ve lisanssız elektrik üretimi mevzuatı çerçevesinde kurulur.",
-      "Bu süreç; başvuru, teknik değerlendirme, sayaç değişimi ve bağlantı onayı gibi adımlardan oluşur. Uygulama, resmi başvuru tamamlanmadan devreye alınamaz.",
-      "Bu koordinasyon süreci, sistemin fiziksel kurulumu kadar teknik bir konudur; bu yüzden projelendirme aşamasının ayrılmaz bir parçası olarak yürütülür.",
+      "Türkiye’de şebekeye bağlı bir çatı veya cephe güneş enerjisi sistemi için bağlantı ve teknik onay süreçleri bulunur. Lisanssız üretim kapsamındaki işlemler, ilgili mevzuat ve yetkili şebeke işletmecisinin güncel başvuru koşullarıyla yürütülür.",
+      "Başvurunun yapılması tek başına sistemi işletmeye alma izni değildir. Proje onayı, anlaşmalar, kabul ve bağlantıya ilişkin gereklilikler tesisin kapsamına göre tamamlanır.",
     ],
     relatedServiceSlug: "projelendirme-ve-muhendislik",
   },

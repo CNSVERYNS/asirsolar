@@ -5,8 +5,12 @@ import { Reveal } from "@/components/Reveal";
 import { ContactForm } from "@/components/ContactForm";
 import { databaseConfigured } from "@/lib/crm/config";
 import { company } from "@/data/company";
-import { pageMetadata } from "@/lib/site";
+import { pageMetadata, siteConfig } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
+import { organizationId, websiteId } from "@/lib/structured-data";
 import { resolveProjectType } from "@/lib/enquiry";
+import { WhatsAppLink } from "@/components/WhatsAppLink";
+import { whatsappContact } from "@/lib/whatsapp";
 
 export const metadata: Metadata = pageMetadata({
   title: "İletişim — Ücretsiz Keşif Talep Edin",
@@ -19,6 +23,7 @@ export default async function IletisimPage({ searchParams }: { searchParams: Pro
   const initialProjectType = resolveProjectType((await searchParams).proje);
   return (
     <>
+      <JsonLd data={{ "@context": "https://schema.org", "@type": "ContactPage", "@id": `${siteConfig.url}/iletisim#page`, url: `${siteConfig.url}/iletisim`, name: "Asır Solar iletişim ve keşif", mainEntity: { "@id": organizationId }, isPartOf: { "@id": websiteId } }} />
       <section className="page-hero">
         <Container>
           <div className="page-hero__grid">
@@ -41,7 +46,7 @@ export default async function IletisimPage({ searchParams }: { searchParams: Pro
         <Container>
           <div className="two-col">
             <Reveal className="two-col__main">
-              <ContactForm key={initialProjectType} initialProjectType={initialProjectType} available={databaseConfigured()} />
+              <div id="contact-form"><ContactForm key={initialProjectType} initialProjectType={initialProjectType} available={databaseConfigured()} /></div>
             </Reveal>
 
             <Reveal className="two-col__side" delay={80}>
@@ -80,6 +85,7 @@ export default async function IletisimPage({ searchParams }: { searchParams: Pro
                     ))}
                   </div>
                 </div>
+                {whatsappContact && <div className="info-row"><span className="label" style={{ marginBottom: 0 }}>WhatsApp</span><WhatsAppLink variant="inline" /></div>}
               </div>
             </Reveal>
           </div>

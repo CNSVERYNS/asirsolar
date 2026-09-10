@@ -8,12 +8,12 @@ import { projects } from "@/data/projects";
 import { galleryImages } from "@/data/gallery";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = { ...pageMetadata({
   title: "Projeler — Güneş Enerjisi Sistemleri Uygulamaları",
   description:
-    "Asır Solar'ın Gebze / Kocaeli'de uyguladığı çatı ve cephe tipi güneş enerjisi sistemleri projeleri.",
+    projects.length > 0 ? "Asır Solar güneş enerjisi projeleri: sistem tipi, konum ve uygulama kapsamı." : "Asır Solar proje arşivi hazırlık aşamasında. Çatı, cephe ve arazi uygulamalarımız hakkında bilgi alın.",
   path: "/projeler",
-});
+}), ...(projects.length === 0 ? { robots: { index: false, follow: true } } : {}) };
 
 export default function ProjelerPage() {
   return (
@@ -27,8 +27,7 @@ export default function ProjelerPage() {
             </Reveal>
             <Reveal className="page-hero__desc" delay={100}>
               <p className="text-lg">
-                Uyguladığımız projeler; konum, sistem tipi ve kapsam
-                bilgileriyle birlikte burada yer alır.
+                {projects.length > 0 ? "Uyguladığımız projeler; konum, sistem tipi ve kapsam bilgileriyle birlikte burada yer alır." : "Proje arşivimizi hazırlıyoruz. Doğrulanan uygulama bilgileri ve saha fotoğrafları burada paylaşılacak."}
               </p>
             </Reveal>
           </div>
@@ -62,8 +61,8 @@ export default function ProjelerPage() {
                   Belgelenmiş proje kaydı yakında eklenecektir
                 </p>
                 <p>
-                  Yukarıdaki görseller çalıştığımız sistem tiplerini
-                  göstermektedir. Tamamlanan projelerimiz; konum, sistem
+                  Yukarıdaki stok görseller sistem tiplerini anlatmak için kullanılan temsili görsellerdir.
+                  Tamamlanan projelerimiz; konum, sistem
                   tipi, kapasite ve hizmet kapsamı bilgileriyle birlikte
                   doğrulandıkça bu sayfaya eklenecektir.
                 </p>
