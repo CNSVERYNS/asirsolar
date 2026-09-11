@@ -2,6 +2,8 @@
 
 Next.js 16 App Router, TypeScript ve React ile hazırlanmıştır. Şirketin mevcut hizmet, ekip ve rehber içerikleri korunmuştur.
 
+**Resmi yayın öncesi:** [Zorunlu kontrol listesi](YAYIN_ONCESI_KONTROL_LISTESI.md). Yeni form taleplerinde Onur ve Furkan’a ayrı ayrı e-posta ve SMS teslimatı tamamlanmadan gerçek domainle açılış yapılmaz. Mevcut WhatsApp alıcısı yalnızca Onur Durak’tır.
+
 ## Yerelde çalıştırma
 
 ```bash

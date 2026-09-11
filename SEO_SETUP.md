@@ -2,6 +2,8 @@
 
 10 Eylül 2026 tarihli öneri ekran görüntülerine göre uygulandı.
 
+**Resmi yayın için ana kontrol listesi:** [YAYIN_ONCESI_KONTROL_LISTESI.md](YAYIN_ONCESI_KONTROL_LISTESI.md). Kullanıcı, Search Console ve diğer hazırlıkların gerçek domainle açılış öncesinde tamamlanmasını istedi. Her yeni form için iki mühendise de e-posta ve SMS teslimatı zorunlu yayın koşuludur; henüz tamamlanmadı.
+
 ## Sitede tamamlanan işler
 
 - Tek merkezden kanonik adres: `NEXT_PUBLIC_SITE_URL`. Mevcut adres `https://asirsolar.vercel.app`; gerçek domain bağlanınca bu değer değiştirilip yeniden dağıtılır.
@@ -13,7 +15,7 @@
 - Kullanıcının kendi değerleriyle çalışan, varsayımları açıklanan geri ödeme hesaplayıcısı.
 - Gebze / Kocaeli yerel içeriği, tutarlı adres/telefon ve harita bağlantısı; önemli rehberlere iç bağlantılar.
 - Boş proje arşivi noindex ve sitemap dışında; gerçek proje girilince otomatik olarak açılır. Stok görseller temsili olarak etiketlidir.
-- Masaüstü, mobil ve iletişim sayfası için WhatsApp bağlantısı hazır; aşağıdaki doğrulanmış numara ayarına bağlıdır.
+- Masaüstü, mobil ve iletişim sayfası için WhatsApp bağlantısı hazır; kullanıcı tarafından doğrulanan alıcı Onur Durak, `+905419243545`.
 
 ## Google Search Console
 
@@ -25,15 +27,16 @@ Vercel adresi bir **URL ön eki mülkü** olarak kullanılabilir; özel domain �
 4. `https://asirsolar.vercel.app/sitemap.xml` gönderin. URL Denetimi üzerinden ana sayfa, hizmetler ve üç ayrıntılı rehber için canlı URL testi çalıştırın; gerekiyorsa indeksleme isteyin.
 5. Google’ın taraması/indekslemesi ve rapor oluşturması zaman alabilir. Site haritasının gönderilmesi indeks veya sıralama garantisi değildir.
 
-Mevcut engel: Açılan Google sekmesindeki hesapların oturumu kapalı. Doğrulama kodu henüz alınmadı ve sitemap Google’a gönderilmedi.
+Durum: Kullanıcının isteğiyle resmi yayın öncesi yapılacak işler arasına alındı. Doğrulama kodu henüz alınmadı ve sitemap Google’a gönderilmedi. Ayrıntılı kabul maddeleri ana kontrol listesinde.
 
 ## WhatsApp’ı etkinleştirme
 
-Mühendisin WhatsApp kullandığı doğrulanmış numara ve adı gerekir. Mevcut sabit hat WhatsApp hattı kabul edilmemiştir.
+10 Eylül 2026’da kullanıcı tarafından alıcı doğrulandı: **Onur Durak, +905419243545**. Furkan Cansever’in numarası WhatsApp için kullanılmayacak; yalnızca sunucu tarafındaki SMS bildirimleri için ana kontrol listesine kaydedildi.
 
 - `NEXT_PUBLIC_WHATSAPP_PHONE`: ülke koduyla telefon, yalnızca rakamlar (Türkiye: `90` + 10 haneli numara).
 - `NEXT_PUBLIC_WHATSAPP_NAME`: yönlendirilen mühendisin adı.
 - İki değer Vercel production ortamında tanımlanıp yeniden dağıtılmalıdır. Bunlar web sayfasında yayımlanan bilgilerdir.
+- Mevcut Vercel ayarları: `NEXT_PUBLIC_WHATSAPP_PHONE=905419243545`, `NEXT_PUBLIC_WHATSAPP_NAME=Onur Durak`.
 - Yerel çalışma için `.env.local` kullanılabilir. Testlerde kullanılan örnek numaralar üretim ortamına taşınmamalıdır.
 - Bağlantı WhatsApp konuşmasını ve hazır mesaj taslağını açar; kendiliğinden mesaj göndermez. Formdaki müşteri bilgileri bağlantıya eklenmez.
 
