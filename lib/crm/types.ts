@@ -27,8 +27,9 @@ export type Lead = {
   createdAt: string; updatedAt: string; archivedAt: string | null; version: number;
 };
 export type LeadEvent = { id: string; kind: string; content: string; actorName: string; createdAt: string };
-export type EmailDelivery = { id: string; recipient: string; status: "pending" | "sending" | "sent" | "failed"; attempts: number; sentAt: string | null; errorCode: string | null };
-export type LeadDetail = { lead: Lead; events: LeadEvent[]; deliveries: EmailDelivery[] };
+export type EmailDelivery = { id: string; recipient: string; status: "held" | "pending" | "sending" | "sent" | "failed" | "unknown" | "cancelled"; attempts: number; sentAt: string | null; errorCode: string | null; retryable: boolean };
+export type SmsDelivery = Omit<EmailDelivery, "status"> & { status: "held" | "pending" | "sending" | "accepted" | "delivered" | "failed" | "unknown" | "cancelled"; deliveredAt: string | null; providerId: string | null };
+export type LeadDetail = { lead: Lead; events: LeadEvent[]; deliveries: EmailDelivery[]; smsDeliveries: SmsDelivery[] };
 export type DashboardData = {
   leads: Lead[]; total: number; page: number; pageSize: number;
   summary: { total: number; new: number; proposals: number; won: number; overdue: number; wonQuoteCents: number };

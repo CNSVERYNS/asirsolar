@@ -2,7 +2,7 @@ import { after } from "next/server";
 import { api, json, limit, readJson, requireAdmin, verifyOrigin } from "@/lib/crm/http";
 import { addLeadNote, archiveLead, getLead, updateLead } from "@/lib/crm/repository";
 import { CrmError, parseLeadInput, parseVersion, record, textField } from "@/lib/crm/validation";
-import { emailConfigured, flushEmailOutbox } from "@/lib/crm/email";
+import { processNotifications, retryNotification } from "@/lib/crm/notifications.server";
 type Context = {
     params: Promise<{
         id: string;
@@ -23,13 +23,12 @@ export async function PATCH(request: Request, context: Context) {
                 throw new CrmError("Arşiv işlemi geçersiz.");
             return json(await archiveLead(id, data.archived, parseVersion(data.version), user));
         }
-        if (data.action === "retry-email") {
-            await getLead(id);
-            if (!emailConfigured())
-                throw new CrmError("E-posta bağlantısı henüz yapılandırılmadı.", 503);
-            await limit(`retry:${id}`, 3, 300);
+        if (data.action === "retry-notification") {
+            if (data.channel !== "email" && data.channel !== "sms") throw new CrmError("Bildirim kanalı geçersiz.");
+            await limit(`retry:${id}`, 8, 300);
+            await retryNotification(id, data.channel, textField(data.deliveryId, "Bildirim", 64, true), user.id, data.confirmedNotSent === true);
             after(async () => { try {
-                await flushEmailOutbox(id, true);
+                await processNotifications(id);
             }
             catch {
                 console.error("CRM notification retry failed.");

@@ -13,6 +13,7 @@ const state = globalDatabase.asirCrmDatabase ??= { context: new AsyncLocalStorag
 types.setTypeParser(20, Number);
 
 export const migrationPath = resolve("supabase/migrations/202609090001_crm.sql");
+export const notificationMigrationPath = resolve("supabase/migrations/202609110001_notifications.sql");
 export async function initializeDatabase() {
   if (!state.ready) state.ready = (async () => {
     if (process.env.DATABASE_URL) {
@@ -32,6 +33,7 @@ export async function initializeDatabase() {
       state.local = new PGlite(localPath);
       await state.local.waitReady;
       await state.local.exec(await readFile(migrationPath, "utf8"));
+      await state.local.exec(await readFile(notificationMigrationPath, "utf8"));
     }
   })().catch((error) => { state.ready = undefined; throw error; });
   await state.ready;
@@ -41,7 +43,7 @@ function sqlForPostgres(sql: string) {
   let parameter = 0;
   // This helper accepts only application SQL. User input is always a bound value.
   return sql.replace(/\?/g, () => `$${++parameter}`)
-    .replace(/\b(FROM|JOIN|INTO|UPDATE)\s+(users|sessions|leads|lead_events|email_outbox|request_limits)\b/gi, "$1 asir_crm.$2")
+    .replace(/\b(FROM|JOIN|INTO|UPDATE)\s+(users|sessions|leads|lead_events|email_outbox|sms_outbox|notification_worker|request_limits)\b/gi, "$1 asir_crm.$2")
     .replace(/\bAS ([a-z]+[A-Z]\w*)/g, 'AS "$1"');
 }
 async function query(sql: string, values: unknown[] = []) {
@@ -72,6 +74,7 @@ export async function transaction<T>(action: (db: ReturnType<typeof getDatabase>
 export async function migrateDatabase() {
   await initializeDatabase();
   if (state.pool) await state.pool.query(await readFile(migrationPath, "utf8"));
+  if (state.pool) await state.pool.query(await readFile(notificationMigrationPath, "utf8"));
 }
 export async function closeDatabase() {
   await state.pool?.end(); await state.local?.close();

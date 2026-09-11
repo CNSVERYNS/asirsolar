@@ -254,3 +254,11 @@
   .crm-login__form { padding: 35px 25px 50px; }.crm-login__card h2 { font-size: 27px; }
   .crm-settings-card { padding: 23px; }
 }
+/* Per-channel delivery state in the shared customer workspace. */
+.crm-notifications { padding: 24px; }
+.crm-notifications h3 { font-size: 15px; margin: 24px 0 12px; }
+.crm-notifications > .crm-muted { font-size: 13px; margin-top: 12px; }
+.crm-notification-row { display: grid; gap: 7px; padding: 16px 0; border-top: 1px solid var(--line, #d9dfd7); overflow-wrap: anywhere; }
+.crm-notification-row strong, .crm-notification-row span { font-size: 13px; }
+.crm-notification-row small { color: #526258; font-size: 12px; }
+.crm-notification-row .crm-inline-button { text-align: left; justify-self: start; }

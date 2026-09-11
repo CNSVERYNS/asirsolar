@@ -7,7 +7,7 @@ import { randomUUID } from 'node:crypto';
 await mkdir('.local-tools',{recursive:true});
 const dataDir=await mkdtemp(resolve('.local-tools/crm-http-'));
 // Explicit empty values override any .env.local deployment settings in the child.
-const isolated={DATABASE_URL:'',VERCEL:'',CRM_SMTP_HOST:'',CRM_LOCAL_DATABASE:'true',CRM_LOCAL_PATH:dataDir,APP_ORIGIN:'http://localhost:3001',CRON_SECRET:'integration-cron-secret',NODE_ENV:'production'};
+const isolated={DATABASE_URL:'',VERCEL:'',CRM_SMTP_HOST:'',CRM_EMAIL_ENABLED:'false',CRM_SMS_ENABLED:'false',CRM_NETGSM_USERCODE:'',CRM_LOCAL_DATABASE:'true',CRM_LOCAL_PATH:dataDir,APP_ORIGIN:'http://localhost:3001',CRON_SECRET:'integration-cron-secret',NODE_ENV:'production'};
 Object.assign(process.env,isolated);
 const {provisionAdmin,adminAccounts}=await import('../lib/crm/auth.ts');
 const {closeDatabase}=await import('../lib/crm/database.ts');
@@ -32,11 +32,12 @@ try {
   assert.equal((await request('/admin/ayarlar')).status,307);
   const login=await request('/admin/giris');assert.equal(login.status,200);assert.match(login.headers.get('x-robots-tag'),/noindex/);
   for(const path of ['/api/admin/talepler','/api/admin/talepler/missing'])assert.equal((await request(path)).status,401);
-  for(const action of ['update','note','archive','retry-email'])assert.equal((await request('/api/admin/talepler/missing',{method:'PATCH',body:{action}})).status,401);
+  for(const action of ['update','note','archive','retry-notification'])assert.equal((await request('/api/admin/talepler/missing',{method:'PATCH',body:{action}})).status,401);
   assert.equal((await request('/api/admin/talepler',{method:'POST',body:{}})).status,401);
   assert.equal((await request('/api/admin/parola',{method:'POST',body:{}})).status,401);
   assert.equal((await request('/api/cron/bildirimler')).status,401);
   const cron=await json(await request('/api/cron/bildirimler',{headers:{Authorization:'Bearer '+isolated.CRON_SECRET}}),200);assert.equal(cron.configured,false);
+  const secondCron=await json(await request('/api/cron/bildirimler',{method:'POST',headers:{Authorization:'Bearer '+isolated.CRON_SECRET}}),200);assert.equal(secondCron.skipped,true);
   assert.equal((await request('/api/admin/giris',{method:'POST',origin:'https://attacker.invalid',body:{}})).status,403);
   assert.equal((await request('/api/admin/giris',{method:'POST',body:{email:adminAccounts[0].email,password:'bad'}})).status,401);
   const signedIn=await request('/api/admin/giris',{method:'POST',body:{email:adminAccounts[0].email,password}});
@@ -44,6 +45,7 @@ try {
   const cookie=signedIn.headers.get('set-cookie');for(const flag of [/HttpOnly/i,/Secure/i,/SameSite=lax/i])assert.match(cookie,flag);
   const auth=cookie.split(';')[0];
   assert.equal((await request('/admin',{auth})).status,200);
+  const settings=await request('/admin/ayarlar',{auth});assert.equal(settings.status,200);assert.match(await settings.text(),/SMS/);
   const enquiry={name:'HTTP Test Müşteri',phone:'05321234567',email:'http@example.invalid',company:'Test <script>alert(1)</script>',projectType:'Çatı Tipi',message:'Bir çatı projesi için keşif istiyoruz.',consent:true,website:''};
   const key=randomUUID();
   assert.equal((await request('/api/talepler',{method:'POST',origin:'https://attacker.invalid',body:enquiry,headers:{'Idempotency-Key':key}})).status,403);
@@ -54,7 +56,9 @@ try {
   const dashboard=await json(await request('/api/admin/talepler',{auth}),200);assert.equal(dashboard.total,1);
   const id=dashboard.leads[0].id;
   const page=await request('/admin/talepler/'+id,{auth});const html=await page.text();assert.equal(page.status,200);assert.ok(!html.includes('<script>alert(1)</script>'));
-  const detail=await json(await request('/api/admin/talepler/'+id,{auth}),200);assert.equal(detail.deliveries.length,2);
+  const detail=await json(await request('/api/admin/talepler/'+id,{auth}),200);assert.equal(detail.deliveries.length,2);assert.equal(detail.smsDeliveries.length,2);
+  assert.ok([...detail.deliveries,...detail.smsDeliveries].every(delivery=>delivery.status==='held'));
+  assert.equal((await request('/api/admin/talepler/'+id,{method:'PATCH',auth,body:{action:'retry-notification',channel:'sms',deliveryId:detail.smsDeliveries[0].id}})).status,503);
   const manualBody={name:'Telefon Test',phone:'05321234567',email:'',company:'',message:'',projectType:'Diğer / Bilmiyorum',source:'phone',stage:'new',priority:'normal',assigneeId:'onur',nextFollowUp:'',quoteAmount:'',rejectionReason:''};
   const manual=await json(await request('/api/admin/talepler',{method:'POST',auth,body:manualBody}),201);
   const url='/api/admin/talepler/'+manual.lead.id;

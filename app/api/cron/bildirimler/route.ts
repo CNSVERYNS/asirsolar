@@ -1,6 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
 import { api, json } from "@/lib/crm/http";
-import { flushEmailOutbox } from "@/lib/crm/email";
+import { processNotifications } from "@/lib/crm/notifications.server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -9,5 +9,6 @@ export async function GET(request: Request) {
   const supplied = Buffer.from(request.headers.get("authorization") || "");
   const expected = Buffer.from(`Bearer ${secret}`);
   if (!secret || supplied.length !== expected.length || !timingSafeEqual(supplied, expected)) return json({ error: "Yetkisiz istek." }, 401);
-  return api(async () => json(await flushEmailOutbox()));
+  return api(async () => json(await processNotifications()));
 }
+export const POST = GET;

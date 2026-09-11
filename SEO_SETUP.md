@@ -27,7 +27,7 @@ Vercel adresi bir **URL ön eki mülkü** olarak kullanılabilir; özel domain �
 4. `https://asirsolar.vercel.app/sitemap.xml` gönderin. URL Denetimi üzerinden ana sayfa, hizmetler ve üç ayrıntılı rehber için canlı URL testi çalıştırın; gerekiyorsa indeksleme isteyin.
 5. Google’ın taraması/indekslemesi ve rapor oluşturması zaman alabilir. Site haritasının gönderilmesi indeks veya sıralama garantisi değildir.
 
-Durum: Kullanıcının isteğiyle resmi yayın öncesi yapılacak işler arasına alındı. Doğrulama kodu henüz alınmadı ve sitemap Google’a gönderilmedi. Ayrıntılı kabul maddeleri ana kontrol listesinde.
+Durum (11 Eylül 2026): Kullanıcı domain öncesinde yapılabilen işlerin tamamlanmasını istedi. Search Console açıldı ancak Google oturumları kapalı. Kullanıcının giriş yapması bekleniyor; doğrulama kodu henüz alınmadı ve sitemap Google’a gönderilmedi. Bu adımlar için domain taşımak gerekmiyor.
 
 ## WhatsApp’ı etkinleştirme
 
@@ -52,7 +52,7 @@ Durum: Kullanıcının isteğiyle resmi yayın öncesi yapılacak işler arasın
 ## Gerçek domain bağlandığında
 
 1. Domainin DNS ve TLS bağlantısını doğrulayın; tek bir tercih edilen ana adres belirleyin.
-2. Vercel’de domaini bağlayın; `NEXT_PUBLIC_SITE_URL` ve `APP_ORIGIN` değerlerini aynı ana adresle güncelleyin, yeniden dağıtın.
+2. Vercel’de domaini bağlayın; `NEXT_PUBLIC_SITE_URL` ve `APP_ORIGIN` değerlerini aynı ana adresle güncelleyin, yeniden dağıtın. Supabase Vault’taki `asir_crm_notification_url` değerini yeni adresin `/api/cron/bildirimler` yolu olarak güncelleyin.
 3. Alternatif www/non-www ve eski yayın adreslerinden kalıcı 301/308 yönlendirmeyi, URL yollarını koruyarak kurun. Domain çalışmadan yönlendirme açmayın.
 4. Kanonik adres, sitemap, robots, yapılandırılmış veri, sosyal paylaşım görseli, form/CRM ve yönlendirmeleri kontrol edin.
 5. Search Console’da yeni domain mülkünü DNS ile doğrulayın; yeni sitemap’i gönderin, Google’ın desteklediği taşıma adımlarını takip edin. İşletme Profili web bağlantısını güncelleyin.

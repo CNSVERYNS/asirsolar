@@ -14,6 +14,7 @@ const db = await import('../lib/crm/database.ts');
 const repo = await import('../lib/crm/repository.ts');
 const validation = await import('../lib/crm/validation.ts');
 const email = await import('../lib/crm/email.ts');
+const notifications = await import('../lib/crm/notifications.ts');
 const types = await import('../lib/crm/types.ts');
 const validEnquiry = { name:'Test Müşteri', phone:'05321234567', email:'customer@example.invalid', company:'Test Firma', projectType:'Çatı Tipi', message:'Çatımız için proje değerlendirmesi istiyoruz.', consent:true };
 const input = (changes={}) => validation.parseLeadInput({ ...validEnquiry, source:'phone', stage:'new', priority:'normal', assigneeId:'onur', nextFollowUp:'', quoteAmount:'', rejectionReason:'', ...changes });
@@ -114,9 +115,10 @@ test('CRM PostgreSQL persistence, authentication and workflow', async t => {
   await t.test('SMTP outage preserves lead; concurrent retries do not resend sent jobs', async () => {
     delete process.env.CRM_SMTP_HOST;
     assert.equal((await email.flushEmailOutbox()).configured,false);
-    Object.assign(process.env,{CRM_SMTP_HOST:'smtp.example.invalid',CRM_SMTP_USER:'test',CRM_SMTP_PASSWORD:'test-only',CRM_EMAIL_FROM:'test@example.invalid',APP_ORIGIN:'https://example.invalid'});
+    Object.assign(process.env,{CRM_EMAIL_ENABLED:'true',CRM_SMTP_HOST:'smtp.example.invalid',CRM_SMTP_USER:'test',CRM_SMTP_PASSWORD:'test-only',CRM_EMAIL_FROM:'test@example.invalid',APP_ORIGIN:'https://example.invalid'});
     const sent=[]; let failing=true;
     mock.method(nodemailer,'createTransport',()=>({close(){},async sendMail(message){if(failing)throw Object.assign(new Error('offline'),{code:'ECONNECTION'});sent.push(message);return {accepted:[message.to],rejected:[]};}}));
+    for(const delivery of website.deliveries) await notifications.retryNotification(website.lead.id,'email',delivery.id,onur.id);
     await email.flushEmailOutbox(website.lead.id);
     assert.equal((await repo.getLead(website.lead.id)).deliveries.filter(row=>row.status==='failed').length,2);
     failing=false;
@@ -130,10 +132,12 @@ test('CRM PostgreSQL persistence, authentication and workflow', async t => {
 
   await t.test('anonymous database roles cannot read the private CRM schema', async () => {
     await db.getDatabase().prepare('CREATE ROLE crm_test_anon').run();
-    await assert.rejects(db.transaction(async connection=>{
-      await connection.prepare('SET LOCAL ROLE crm_test_anon').run();
-      await connection.prepare('SELECT email FROM leads').all();
-    }),error=>error.code==='42501');
+    for (const table of ['leads','email_outbox','sms_outbox','notification_worker']) {
+      await assert.rejects(db.transaction(async connection=>{
+        await connection.prepare('SET LOCAL ROLE crm_test_anon').run();
+        await connection.prepare(`SELECT * FROM ${table}`).all();
+      }),error=>error.code==='42501');
+    }
   });
 
   await t.test('schema owner can initialize and repeat migrations without database CREATE', async () => {
@@ -145,8 +149,11 @@ test('CRM PostgreSQL persistence, authentication and workflow', async t => {
       const migration = await readFile(db.migrationPath, 'utf8');
       await restricted.exec(migration);
       await restricted.exec(migration);
+      const notificationsMigration = await readFile(db.notificationMigrationPath, 'utf8');
+      await restricted.exec(notificationsMigration);
+      await restricted.exec(notificationsMigration);
       const tables = await restricted.query("SELECT count(*)::integer AS total FROM pg_tables WHERE schemaname='asir_crm'");
-      assert.equal(tables.rows[0].total, 6);
+      assert.equal(tables.rows[0].total, 9);
     } finally { await restricted.close(); }
   });
 });

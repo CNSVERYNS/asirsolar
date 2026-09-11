@@ -1,4 +1,5 @@
 import { requireAdminPage } from "@/lib/crm/http";
-import { emailConfigured } from "@/lib/crm/email";
+import { emailEnabled } from "@/lib/crm/notifications.server";
 import { AccountSettings } from "@/components/admin/AccountSettings";
-export default async function SettingsPage() { const user = await requireAdminPage(); return <AccountSettings user={user} mailReady={emailConfigured()}/>; }
+import { NotificationHealth } from "@/components/admin/NotificationHealth";
+export default async function SettingsPage() { const user = await requireAdminPage(); return <><AccountSettings user={user} mailReady={emailEnabled()}/><NotificationHealth /></>; }

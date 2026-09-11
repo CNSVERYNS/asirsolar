@@ -2,7 +2,7 @@ import { after } from "next/server";
 import { api, clientBucket, json, limit, readJson, verifyOrigin } from "@/lib/crm/http";
 import { createWebsiteLead } from "@/lib/crm/repository";
 import { CrmError, parsePublicEnquiry } from "@/lib/crm/validation";
-import { flushEmailOutbox } from "@/lib/crm/email";
+import { processNotifications } from "@/lib/crm/notifications.server";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
     return api(async () => {
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         await limit(`enquiry:${enquiry.email}`, 8, 3600);
         const result = await createWebsiteLead(enquiry, key);
         after(async () => { try {
-            await flushEmailOutbox(result.id);
+            await processNotifications(result.id);
         }
         catch {
             console.error("CRM notification remains queued.");

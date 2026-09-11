@@ -2,7 +2,7 @@
 
 Kullanıcı kararı: 10 Eylül 2026. Mevcut Vercel adresi üzerinde geliştirme ve kontrol devam eder. Gerçek domainle resmi açılış ve müşteri duyurusu, aşağıdaki zorunlu işler tamamlanmadan yapılmaz. Vercel adresinin şu anda internetten erişilebilir olması, bu listenin tamamlandığı anlamına gelmez.
 
-**Şimdiki kapsam:** Onur Durak için WhatsApp’ı etkinleştir. Search Console, işletme profili, domain geçişi ve e-posta/SMS teslimatının tamamlanması resmi yayın öncesinde yapılacak.
+**Güncel kapsam — 11 Eylül 2026:** Kullanıcı domain taşınmadan yapılabilen bütün hazırlıkların tamamlanmasını istedi. Onur’un WhatsApp bağlantısı etkin. Form başına iki e-posta ve iki SMS kuyruğu, gönderim ve teslim raporu altyapısı hazır. Gerçek gönderim için e-posta/SMS sağlayıcı erişimi; Google işlemleri için açık Google oturumu bekleniyor. Kurulum ayrıntıları: [NOTIFICATION_SETUP.md](NOTIFICATION_SETUP.md).
 
 ## 1. Kesinleşen iletişim ve bildirim alıcıları
 
@@ -24,42 +24,42 @@ Kullanıcı kararı: 10 Eylül 2026. Mevcut Vercel adresi üzerinde geliştirme 
 ### Mevcut durum
 
 - [x] Web formu talebi ortak CRM/Supabase veritabanına kaydeder.
-- [x] Her yeni web talebi için iki mühendisin e-posta adresine ayrı kuyruk kaydı oluşturulur.
-- [x] Aynı form gönderiminin tekrarlanması ikinci müşteri kaydı ve ikinci e-posta kuyruk çifti oluşturmaz.
+- [x] Her yeni web talebiyle aynı veritabanı işlemi içinde iki e-posta ve iki SMS kaydı oluşturulur; kısmi kayıt oluşmaz.
+- [x] Aynı form gönderiminin tekrarlanması ikinci müşteri kaydı veya yeni bildirimler oluşturmaz.
 - [x] E-posta gönderim altyapısı, hata kaydı ve tekrar deneme mekanizması mevcut.
 - [ ] SMTP/e-posta sağlayıcısı bağlandı ve iki adrese gerçek teslimat doğrulandı. **Şu anda yapılandırılmadı; e-postalar gönderiliyor sayılmaz.**
-- [ ] SMS sağlayıcısı seçildi, hesap/API erişimi ve gönderici ayarları hazırlandı. **Şu anda SMS entegrasyonu yok.**
-- [ ] İki SMS alıcısı sunucu tarafındaki bildirim yapılandırmasına eklendi.
-- [ ] Form akışına kalıcı SMS kuyruğu ve gönderim işleyicisi eklendi.
+- [ ] SMS sağlayıcı hesabı, API erişimi ve gönderici ayarları hazırlandı. **Netgsm REST v2 bağlantı kodu hazır; hesap seçimi ve gerçek gönderim doğrulanmadı.**
+- [x] İki SMS alıcısı sunucu tarafındaki bildirim yapılandırmasına eklendi.
+- [x] Form akışına kalıcı SMS kuyruğu ve gönderim işleyicisi eklendi.
 
 ### E-posta kurulumu
 
 - [ ] Şirket posta sağlayıcısı ve kullanılacak gönderici adresi kesinleştirildi; iki mühendis posta kutusuna erişebiliyor.
 - [ ] `CRM_SMTP_HOST`, `CRM_SMTP_PORT`, `CRM_SMTP_USER`, `CRM_SMTP_PASSWORD`, `CRM_EMAIL_FROM` Vercel’in gizli sunucu ayarlarına eklendi.
 - [ ] Sağlayıcının istediği gönderici/domain doğrulaması ve SPF, DKIM, DMARC ayarları tamamlandı.
-- [ ] E-postada talep referansı, müşteri adı, telefon/e-posta, proje bilgisi ve giriş gerektiren CRM bağlantısı doğru görünüyor. Müşteriye yanıt adresi formdaki e-posta.
+- [x] E-posta şablonunda talep referansı, müşteri adı, telefon/e-posta, proje bilgisi ve giriş gerektiren CRM bağlantısı var. Yanıt adresi formdaki e-posta; gerçek posta kutusundaki görünüm ayrıca doğrulanacak.
 - [ ] İki ayrı posta kutusunda teslimat ve spam klasörü kontrol edildi; yalnızca SMTP sunucusunun kabul etmesi başarı ölçütü sayılmadı.
 
 ### SMS kurulumu
 
 - [ ] Türkiye numaralarına gönderim yapabilen sağlayıcı ve maliyet/hesap koşulları belirlendi.
 - [ ] Sağlayıcının gerektirdiği gönderici başlığı veya numarası doğrulandı; API anahtarı ve bakiye hazırlandı.
-- [ ] Alıcılar: Onur `+905419243545`, Furkan `+905431185861`. Anahtarlar ve SMS alıcı yapılandırması istemci paketine girmiyor.
-- [ ] Her talep ve alıcı için ayrı SMS işi kaydediliyor; form tekrarı yeni bildirim üretmiyor.
-- [ ] SMS kısa bir yeni talep bildirimi, talep referansı ve giriş gerektiren CRM bağlantısı içeriyor. Serbest metin müşteri mesajı SMS’e taşınmıyor.
-- [ ] Gönderim sağlayıcı mesaj kimliğiyle izleniyor. API kabulü ile telefona teslim ayrılıyor; varsa sağlayıcı teslim raporu güvenilir biçimde işleniyor.
-- [ ] Zaman aşımında teslim durumu belirsiz bir SMS körlemesine tekrar gönderilmiyor; sağlayıcının sorgulama/tekrar önleme imkânı kullanılıyor.
+- [x] Alıcılar: Onur `+905419243545`, Furkan `+905431185861`. SMS alıcı yapılandırması sunucuda; Furkan’ın telefonu genel istemci paketinde yok.
+- [x] Her talep ve alıcı için ayrı SMS işi kaydediliyor; form tekrarı yeni bildirim üretmiyor.
+- [x] SMS talep referansı ve giriş gerektiren CRM bağlantısı içeriyor. Müşteri adı, telefonu ve serbest mesajı SMS’e taşınmıyor.
+- [x] API kabulü ile telefona teslim ayrı durumlar. Netgsm teslim raporu hem mesaj kimliği hem alıcı numarası eşleştiğinde işleniyor; sağlayıcı taklidiyle test edildi.
+- [x] Zaman aşımında belirsiz SMS ve e-posta otomatik tekrar edilmiyor. Mesaj kimliği varsa rapor sorgulanıyor; yeniden gönderim için yönetici teslim edilmediğini doğruluyor.
 
 ### Dayanıklılık ve kabul testi
 
-- [ ] Talep ve dört bildirim işi kayıp yaratmayacak biçimde kalıcı kaydediliyor. Bir kanal veya alıcıdaki hata diğerlerini engellemiyor.
-- [ ] İlk bildirim denemesi form kaydından sonra otomatik başlıyor; manuel panel açılması veya günlük görevin beklenmesi gerekmiyor.
+- [x] Talep ve dört bildirim işi aynı işlemde kalıcı kaydediliyor. Bir kanal veya alıcıdaki hata diğerlerini engellemiyor; otomatik test geçti.
+- [x] Etkin kanallarda ilk deneme form kaydından hemen sonra başlar; kapalı kanallarda kayıt `held` durumunda korunur.
 - [ ] Geçici hatalar için dakika ölçeğinde otomatik tekrar deneme ve kapasite planı var. Mevcut günlük e-posta tekrar görevi tek başına yeterli kabul edilmiyor.
-- [ ] E-posta/SMS ve alıcı bazında durumlar yönetim panelinde görülebiliyor; hata ve yeniden gönderme yönetilebiliyor.
-- [ ] Eski bekleyen e-posta kayıtları gönderim açılmadan önce incelendi; geçmiş taleplere istemeden toplu bildirim gitmeyecek.
+- [x] E-posta/SMS ve alıcı bazında durumlar yönetim panelinde görülebiliyor; her bildirim ayrı yeniden gönderilebiliyor. Ayarlarda bağlantı ve zamanlayıcı durumu var.
+- [x] Geçiş öncesi üretim e-posta kuyruğu boştu. Eski gönderilmemiş kayıtları bir kez bekletmeye alan geçiş ve otomatik toplu gönderimi engelleyen `held` durumu eklendi.
 - [ ] Gerçek bir uçtan uca test yapıldı: tek form → tek CRM kaydı → Onur’un e-posta kutusu + telefonu → Furkan’ın e-posta kutusu + telefonu. Dört teslimat doğrulandı.
-- [ ] Aynı gönderimin tekrarında ikinci CRM kaydı veya mükerrer bildirim oluşmadığı test edildi.
-- [ ] Bir sağlayıcı/alıcının geçici hatasında kayıt korunuyor, diğer teslimatlar tamamlanıyor, başarısız iş daha sonra doğru şekilde yeniden deneniyor.
+- [x] Aynı gönderimin tekrarında ikinci CRM kaydı veya mükerrer bildirim oluşmadığı test edildi.
+- [x] Taklit sağlayıcılarla geçici hata, alıcı hatası, bağlantı kopması, çakışan işleyiciler ve teslim raporu senaryoları geçti. Gerçek sağlayıcı kabul testi bekliyor.
 
 **Yayın kabul ölçütü:** Dört bildirimin gerçek teslimatı ve hata senaryoları doğrulanmadan bu bölüm tamamlandı sayılmaz. WhatsApp butonunun çalışması SMS/e-posta gönderim altyapısının yerini tutmaz.
 
@@ -72,7 +72,7 @@ Kullanıcı kararı: 10 Eylül 2026. Mevcut Vercel adresi üzerinde geliştirme 
 - [ ] Ana sayfa, hizmetler, iletişim ve önemli rehberlerde URL Denetimi/canlı URL testi yapıldı; tarama veya indeksleme engelleri giderildi.
 - [ ] Gerekli sayfalar için indeksleme isteği gönderildi. Google’ın indeksleme ve rapor oluşturma süresinin dış süreç olduğu kaydedildi; sıralama garantisi verilmedi.
 
-İşlemler kullanıcı isteğiyle yayın öncesi aşamaya bırakıldı; şu anda Google mülk doğrulaması ve sitemap gönderimi tamamlanmadı.
+Vercel adresiyle kurulum şimdi yapılabilir. 11 Eylül kontrolünde Google oturumları kapalıydı; kullanıcıdan giriş istendi. Bu nedenle mülk doğrulaması ve sitemap gönderimi henüz tamamlanmadı; teknik meta etiketi desteği hazır.
 
 ## 4. Google İşletme Profili ve güvenilir şirket içeriği
 
@@ -86,7 +86,7 @@ Kullanıcı kararı: 10 Eylül 2026. Mevcut Vercel adresi üzerinde geliştirme 
 ## 5. Gerçek domain ve son yayın kontrolü
 
 - [ ] Domain, DNS ve TLS/HTTPS bağlantısı tamamlandı; tercih edilen www/non-www adresi belirlendi.
-- [ ] Vercel domain ayarı, `NEXT_PUBLIC_SITE_URL` ve `APP_ORIGIN` son adresle güncellendi; yeniden dağıtıldı.
+- [ ] Vercel domain ayarı, `NEXT_PUBLIC_SITE_URL`, `APP_ORIGIN` ve Vault’taki `asir_crm_notification_url` son adresle güncellendi; yeniden dağıtıldı.
 - [ ] Eski/alternatif adreslerden kalıcı yönlendirmeler URL yollarını koruyor ve döngü oluşturmuyor.
 - [ ] Kanonik adresler, sitemap, robots, sosyal paylaşım ve JSON-LD son domaini kullanıyor.
 - [ ] Yönetim/API erişimi korunuyor; yönetim sayfaları noindex; boş veya onaysız içerikler sitemap dışında.
