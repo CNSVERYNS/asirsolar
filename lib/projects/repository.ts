@@ -70,3 +70,6 @@ export async function removeProjectImage(projectId: string, id: string) {
 export async function getProjectImage(id: string, includeDrafts = false) {
   return await getDatabase().prepare(`SELECT i.data FROM project_images i JOIN projects p ON p.id=i.project_id WHERE i.id=? ${includeDrafts ? "" : "AND p.published=true"}`).get(id) as { data: Uint8Array } | undefined;
 }
+export async function projectImageVisibility(id: string) {
+  return await getDatabase().prepare("SELECT p.published FROM project_images i JOIN projects p ON p.id=i.project_id WHERE i.id=?").get(id) as { published: boolean } | undefined;
+}

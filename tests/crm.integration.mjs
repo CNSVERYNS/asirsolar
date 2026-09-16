@@ -59,7 +59,7 @@ try {
   const project=(await json(await request('/api/admin/projeler',{method:'POST',auth,body:projectInput}),201)).project;
   const projectUrl='/api/admin/projeler/'+project.id;
   assert.equal((await json(await request('/api/projeler'),200)).projects.length,0);
-  const png=await sharp({create:{width:32,height:32,channels:3,background:'#54228b'}}).png().toBuffer();
+  const png=await sharp({create:{width:1600,height:1000,channels:3,background:'#54228b'}}).png().toBuffer();
   const upload=async(bytes,origin=base)=>fetch(base+projectUrl+'/gorseller',{method:'POST',headers:{Origin:origin,Cookie:auth,'Content-Type':'image/png'},body:bytes});
   assert.equal((await upload(png,'https://attacker.invalid')).status,403);
   assert.equal((await upload(Buffer.from('not an image'))).status,400);
@@ -69,6 +69,12 @@ try {
   assert.equal((await request(image.url,{auth})).status,200);
   await json(await request(projectUrl,{method:'PATCH',auth,body:{...projectInput,published:true}}),200);
   const publicImage=await request(image.url);assert.equal(publicImage.status,200);assert.equal(publicImage.headers.get('content-type'),'image/webp');
+  const resized=await request(image.url+'?w=640');assert.equal(resized.status,200);
+  assert.equal((await sharp(Buffer.from(await resized.arrayBuffer())).metadata()).width,640);
+  assert.match(resized.headers.get('cache-control'),/private, no-cache/);
+  const etag=resized.headers.get('etag');assert.ok(etag);
+  assert.equal((await request(image.url+'?w=640',{headers:{'If-None-Match':etag}})).status,304);
+  assert.equal((await request(image.url+'?w=960',{headers:{'If-None-Match':etag}})).status,200);
   assert.equal((await json(await request('/api/projeler'),200)).projects[0].images.length,1);
   const projectHtml=await (await request('/projeler')).text();
   assert.ok(projectHtml.includes('HTTP test project &lt;script&gt;'));assert.ok(!projectHtml.includes('<script>alert(1)</script>'));
@@ -76,8 +82,11 @@ try {
   assert.ok((await (await request('/sitemap.xml')).text()).includes('/projeler</loc>'));
   await json(await request(projectUrl,{method:'PATCH',auth,body:projectInput}),200);
   assert.equal((await request(image.url)).status,404);
+  assert.equal((await request(image.url+'?w=640',{headers:{'If-None-Match':etag}})).status,404);
+  const privateVariant=await request(image.url+'?w=640',{auth});assert.equal(privateVariant.status,200);assert.match(privateVariant.headers.get('cache-control'),/no-store/);
   await json(await request(projectUrl,{method:'DELETE',auth}),200);
   assert.equal((await request(image.url,{auth})).status,404);
+  assert.equal((await request(image.url+'?w=640',{auth,headers:{'If-None-Match':etag}})).status,404);
   const settings=await request('/admin/ayarlar',{auth});assert.equal(settings.status,200);assert.match(await settings.text(),/SMS/);
   const enquiry={name:'HTTP Test Müşteri',phone:'05321234567',email:'http@example.invalid',company:'Test <script>alert(1)</script>',projectType:'Çatı Tipi',message:'Bir çatı projesi için keşif istiyoruz.',consent:true,website:''};
   const key=randomUUID();

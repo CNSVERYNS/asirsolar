@@ -18,7 +18,9 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/:path*",
+        // The image route validates visibility before allowing a cached image
+        // to be reused, and must retain its own conditional-response headers.
+        source: "/:path((?!api/projeler/gorseller/).*)",
         headers: [
           {
             key: "Cache-Control",
