@@ -98,7 +98,8 @@ try {
   const dashboard=await json(await request('/api/admin/talepler',{auth}),200);assert.equal(dashboard.total,1);
   const id=dashboard.leads[0].id;
   const page=await request('/admin/talepler/'+id,{auth});const html=await page.text();assert.equal(page.status,200);assert.ok(!html.includes('<script>alert(1)</script>'));
-  const detail=await json(await request('/api/admin/talepler/'+id,{auth}),200);assert.equal(detail.deliveries.length,2);assert.equal(detail.smsDeliveries.length,2);
+  const detail=await json(await request('/api/admin/talepler/'+id,{auth}),200);assert.equal(detail.deliveries.length,3);assert.equal(detail.smsDeliveries.length,2);
+  assert.deepEqual(detail.deliveries.filter(delivery=>delivery.purpose==='customer_receipt').map(delivery=>delivery.recipient),[enquiry.email]);
   assert.ok([...detail.deliveries,...detail.smsDeliveries].every(delivery=>delivery.status==='held'));
   assert.equal((await request('/api/admin/talepler/'+id,{method:'PATCH',auth,body:{action:'retry-notification',channel:'sms',deliveryId:detail.smsDeliveries[0].id}})).status,503);
   const manualBody={name:'Telefon Test',phone:'05321234567',email:'',company:'',message:'',projectType:'Diğer / Bilmiyorum',source:'phone',stage:'new',priority:'normal',assigneeId:'onur',nextFollowUp:'',quoteAmount:'',rejectionReason:''};

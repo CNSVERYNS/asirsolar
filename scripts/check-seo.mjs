@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 
 const target = new URL(process.argv[2] || "http://localhost:3000").origin;
-const canonicalOrigin = new URL(process.argv[3] || "https://asirsolar.vercel.app").origin;
+const canonicalOrigin = new URL(process.argv[3] || "https://www.asirsolar.com").origin;
 const read = async path => {
   const response = await fetch(new URL(path, target), { signal: AbortSignal.timeout(30000) });
   assert.equal(response.status, 200, path);

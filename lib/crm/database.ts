@@ -15,6 +15,7 @@ types.setTypeParser(20, Number);
 export const migrationPath = resolve("supabase/migrations/202609090001_crm.sql");
 export const notificationMigrationPath = resolve("supabase/migrations/202609110001_notifications.sql");
 export const projectsMigrationPath = resolve("supabase/migrations/202609150001_projects.sql");
+export const customerEmailMigrationPath = resolve("supabase/migrations/202609160001_customer_email.sql");
 export async function initializeDatabase() {
   if (!state.ready) state.ready = (async () => {
     if (process.env.DATABASE_URL) {
@@ -36,6 +37,7 @@ export async function initializeDatabase() {
       await state.local.exec(await readFile(migrationPath, "utf8"));
       await state.local.exec(await readFile(notificationMigrationPath, "utf8"));
       await state.local.exec(await readFile(projectsMigrationPath, "utf8"));
+      await state.local.exec(await readFile(customerEmailMigrationPath, "utf8"));
     }
   })().catch((error) => { state.ready = undefined; throw error; });
   await state.ready;
@@ -78,6 +80,7 @@ export async function migrateDatabase() {
   if (state.pool) await state.pool.query(await readFile(migrationPath, "utf8"));
   if (state.pool) await state.pool.query(await readFile(notificationMigrationPath, "utf8"));
   if (state.pool) await state.pool.query(await readFile(projectsMigrationPath, "utf8"));
+  if (state.pool) await state.pool.query(await readFile(customerEmailMigrationPath, "utf8"));
 }
 export async function closeDatabase() {
   await state.pool?.end(); await state.local?.close();

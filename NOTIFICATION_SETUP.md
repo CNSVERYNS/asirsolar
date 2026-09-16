@@ -1,6 +1,6 @@
 # Form bildirimleri kurulumu
 
-11 Eylül 2026. Gerçek domain gerekmez; mevcut `https://asirsolar.vercel.app` adresiyle çalışacak altyapı hazır. Henüz SMTP veya SMS sağlayıcı hesabı bağlanmadı ve gerçek teslimat doğrulanmadı.
+16 Eylül 2026. Canlı site `https://www.asirsolar.com`; kök domain buraya yönlenir. Müşteri teşekkür e-postası ve mühendis bildirimleri için altyapı hazır. Henüz SMTP veya SMS sağlayıcı hesabı bağlanmadı ve gerçek teslimat doğrulanmadı. Hesap ve DNS adımları: [Zoho / Netgsm kurulumu](ZOHO_NETGSM_KURULUM.md).
 
 ## Alıcılar ve akış
 
@@ -11,17 +11,17 @@
 
 WhatsApp yalnızca Onur’a yönlenir. SMS numaraları sunucu yapılandırmasındadır; yönetici oturumu dışında Furkan’ın numarası yayımlanmaz.
 
-Her web formu tek veritabanı işlemiyle talep, geçmiş olayı ve dört bildirim kaydı oluşturur. Aynı gönderim anahtarı tekrar kullanılırsa ikinci kayıt oluşmaz. Etkin kanallarda gönderim, form yanıtının hemen ardından Next.js `after` ile başlar. Bir alıcının hatası diğerlerini engellemez. Telefonla veya panelden elle girilen talep web formu bildirimi oluşturmaz.
+Her web formu tek veritabanı işlemiyle talep, geçmiş olayı ve beş bildirim kaydı oluşturur: müşteriye bir teşekkür e-postası, iki mühendise birer e-posta ve SMS. Aynı gönderim anahtarı tekrar kullanılırsa ikinci kayıt oluşmaz. Etkin kanallarda gönderim, form yanıtının hemen ardından Next.js `after` ile başlar. Bir alıcının hatası diğerlerini engellemez. Telefonla veya panelden elle girilen talep web formu bildirimi oluşturmaz. `email_outbox.purpose` alanı `customer_receipt` ve `team` gönderimlerini ayırır; eski kayıtlar ekip bildirimi olarak kalır, geçmiş müşterilere teşekkür e-postası eklenmez.
 
 ## Sağlayıcıları bağlama
 
-1. Şirket posta sağlayıcısı, gönderici hesabı ve iki posta kutusuna erişim doğrulanır. SMTP değerleri yalnızca Vercel **Production** sunucu ortamına girilir: `CRM_SMTP_HOST`, `CRM_SMTP_PORT` (587 veya 465), `CRM_SMTP_USER`, `CRM_SMTP_PASSWORD`, `CRM_EMAIL_FROM`. SMTP TLS zorunludur.
+1. Şirket posta kutuları için Zoho Mail Lite, form e-postaları için ZeptoMail seçildi. Gönderici domain ve iki posta kutusuna erişim doğrulanır. SMTP değerleri yalnızca Vercel **Production** sunucu ortamına girilir: `CRM_SMTP_HOST`, `CRM_SMTP_PORT` (587 veya 465), `CRM_SMTP_USER`, `CRM_SMTP_PASSWORD`, `CRM_EMAIL_FROM`. `CRM_EMAIL_REPLY_TO` müşteri yanıtlarının gideceği şirket adresidir; boşsa gönderen adresi kullanılır. SMTP TLS zorunludur.
 2. Netgsm için REST v2 gönderim ve rapor bağdaştırıcısı hazırlandı; hesap açılmadı veya paket satın alınmadı. Kullanıcının sağlayıcısı farklıysa bu bağdaştırıcı değiştirilir. Netgsm kullanılacaksa API alt kullanıcı erişimi, gönderici başlığı ve bakiye doğrulanıp `CRM_SMS_PROVIDER=netgsm`, `CRM_NETGSM_USERCODE`, `CRM_NETGSM_PASSWORD`, `CRM_NETGSM_HEADER` girilir.
-3. `APP_ORIGIN=https://asirsolar.vercel.app` olmalıdır. Bildirim bağlantıları HTTPS gerektirir. Parolalar/anahtarlar `NEXT_PUBLIC_` değişkenlerine, kaynak koduna veya bu belgeye yazılmaz.
+3. `APP_ORIGIN=https://www.asirsolar.com` olmalıdır. Bildirim bağlantıları HTTPS gerektirir. Parolalar/anahtarlar `NEXT_PUBLIC_` değişkenlerine, kaynak koduna veya bu belgeye yazılmaz.
 4. Sağlayıcı doğrulamaları bitene kadar `CRM_EMAIL_ENABLED=false`, `CRM_SMS_ENABLED=false` kalır (eksik değer de kapalıdır). Hazır kanallar için değerler ayrı ayrı `true` yapılıp yeniden dağıtılır. Bu değişiklik eski `held` kayıtları topluca göndermez.
-5. Bir kontrollü form ile **iki posta kutusu ve iki telefon** üzerinde gerçek teslimat doğrulanır. SMTP kabulü posta kutusuna teslim kanıtı değildir. SMS’de sağlayıcı kabulü ile telefona teslim ayrı gösterilir.
+5. Bir kontrollü form ile **müşterinin teşekkür e-postası, iki mühendis posta kutusu ve iki telefon** üzerinde gerçek teslimat doğrulanır. SMTP kabulü posta kutusuna teslim kanıtı değildir. SMS’de sağlayıcı kabulü ile telefona teslim ayrı gösterilir.
 
-E-postada talep bilgileri ve müşteriye yanıt adresi bulunur. SMS yalnızca talep referansı ve giriş gerektiren CRM bağlantısını içerir; müşteri serbest metni ve iletişim bilgileri SMS’e aktarılmaz. SMS uzunluğu/Türkçe karakterler nedeniyle ücretlendirilen parça sayısı, seçilen başlık ve gerçek sağlayıcı hesabıyla kabul testinde kontrol edilir.
+Mühendis e-postasında talep bilgileri ve müşteriye yanıt adresi bulunur. Müşteri teşekkür e-postasında referans ve şirket yanıt adresi vardır; form serbest metni, mühendis bilgileri ve özel panel bağlantısı bulunmaz. HTML içerik güvenli biçimde kaçırılır ve alıcı tek adres nesnesi olarak gönderilir. SMS, kullanıcının isteğiyle müşterinin adını, proje türünü ve giriş gerektiren CRM bağlantısını içerir; açıklama, telefon ve e-posta SMS’e aktarılmaz. SMS uzunluğu/Türkçe karakterler nedeniyle ücretlendirilen parça sayısı, seçilen başlık ve gerçek sağlayıcı hesabıyla kabul testinde kontrol edilir.
 
 Netgsm isteği sabit HTTPS API adresine, yönlendirme izlenmeden ve zaman aşımıyla gönderilir. `referansID` kuyruk kaydının kimliğidir; bunun sağlayıcı tarafında mükerrer gönderimi kesin önlediği varsayılmaz. İç operasyon bildirimi için `iysfilter=0` kullanılır; bu uç nokta müşteriye pazarlama SMS’i göndermez.
 
@@ -32,9 +32,9 @@ Netgsm isteği sabit HTTPS API adresine, yönlendirme izlenmeden ve zaman aşım
 Vault’ta iki kayıt gerekir:
 
 - `asir_crm_cron_secret`: Vercel Production `CRON_SECRET` ile aynı, rastgele gizli değer.
-- `asir_crm_notification_url`: `https://asirsolar.vercel.app/api/cron/bildirimler`.
+- `asir_crm_notification_url`: `https://www.asirsolar.com/api/cron/bildirimler`.
 
-Cron SQL’i gizli değeri içermez, çalışma anında Vault’tan okur. HTTP istek kuyruğuna anonim, uygulama ve genel rollerin tablo erişimi kapatılır. Aynı isimle kurulum tekrarlanırsa ikinci görev oluşturulmaz. İstek kimliği alınması HTTP başarısı sayılmaz: Supabase görev geçmişi, `net._http_response` içindeki HTTP sonucu ve paneldeki son çalışma zamanı birlikte kontrol edilir.
+Cron SQL’i gizli değeri içermez, çalışma anında Vault’tan okur. Vault gizli değerleri anonim rollere ve CRM veritabanı rolüne kapalıdır. Supabase’in sahip olduğu `net` tablolarında genel SQL yetkileri vardır; bunlar uygulama göçüyle değiştirilemez. `net` şeması Data API’ye açılmamalı; istek kuyruğunu veya Vault’u okuyan genel API fonksiyonu oluşturulmamalıdır. Aynı isimle kurulum tekrarlanırsa ikinci görev oluşturulmaz. İstek kimliği alınması HTTP başarısı sayılmaz: Supabase görev geçmişi, `net._http_response` içindeki HTTP sonucu ve paneldeki son çalışma zamanı birlikte kontrol edilir.
 
 Her genel çalışma kanalda en fazla dört gönderim ve kırk SMS raporu işler. Başarısız iş başına en fazla altı otomatik deneme; artan bekleme ve iki dakikalık görev aralığı uygulanır. İlk gönderimler talep bazında anında yapılır. Büyük kesinti sonrası kuyruğun boşalma süresi bu kapasiteye bağlıdır; yoğunluk artarsa parti boyutu, sağlayıcı limitleri ve Vercel süreleri birlikte yeniden değerlendirilir.
 
@@ -42,7 +42,7 @@ Görevi durdurmak için Supabase yöneticisi `SELECT cron.unschedule('asir-crm-n
 
 ## Panel ve hata yönetimi
 
-`/admin/ayarlar` sağlayıcıların tanımlı/etkin durumunu ve son beş dakikada zamanlayıcı çalışmasını gösterir. Talep ayrıntısındaki **Ekip bildirimleri** bölümünde dört ayrı satır, deneme sayısı, güvenli hata kodu ve SMS sağlayıcı kimliği bulunur.
+`/admin/ayarlar` sağlayıcıların tanımlı/etkin durumunu ve son beş dakikada zamanlayıcı çalışmasını gösterir. Talep ayrıntısındaki **Talep bildirimleri** bölümünde beş ayrı satır, müşteri/ekip etiketi, deneme sayısı, güvenli hata kodu ve SMS sağlayıcı kimliği bulunur. Eski taleplerde yalnızca o sırada oluşturulan bildirimler görünür.
 
 | Durum | Anlam ve işlem |
 | --- | --- |
@@ -58,9 +58,9 @@ Belirsiz bir bildirimi tekrar göndermeden önce yöneticinin **teslim edilmedi�
 
 ## Yayın kabulü ve domain değişimi
 
-- Yerel otomatik testler: 33 test; dört kalıcı kayıt, atomik geri alma, çift gönderim engeli, eşzamanlılık, SMTP alıcı hatası, zaman aşımı, Netgsm kabul/rapor eşleşmesi ve sınırlı tekrar.
+- Yerel otomatik testler: beş kalıcı kayıt, atomik geri alma, çift gönderim engeli, eşzamanlılık, SMTP alıcı hatası, zaman aşımı, Netgsm kabul/rapor eşleşmesi ve sınırlı tekrar. Müşteri/ekip şablon ayrımı, HTML kaçışları, çoklu alıcı engeli ve müşterinin mühendis adresini kullanması da kontrol edilir.
 - Üretim derlemesi, lint ve HTTP entegrasyonu geçti. 68 site rotası ve yönetici yetkileri kontrol edildi. Gerçek sağlayıcı yerine taklit servislerle yapılan testler teslimat kanıtı değildir.
-- İki posta kutusu + iki telefonda teslimat, spam kontrolü, sağlayıcı hatası sonrası doğru tekrar ve son domain üzerinde aynı test, resmi açılıştan önce zorunludur.
+- Müşteri teşekkür e-postası + iki mühendis posta kutusu + iki telefonda teslimat, spam kontrolü, sağlayıcı hatası sonrası doğru tekrar ve son domain üzerinde aynı test, bildirimlerin kabulü için gerekir.
 - Gerçek domain taşınınca `APP_ORIGIN`, `NEXT_PUBLIC_SITE_URL` ve Vault’taki `asir_crm_notification_url` birlikte güncellenir. HTTP yönlendirmesine güvenilmez. Google, DNS ve içerik maddeleri ana kontrol listesindedir.
 
 Resmî kaynaklar: [Netgsm API dokümanı](https://www.netgsm.com.tr/dokuman/), [Supabase zamanlanmış HTTP çağrıları](https://supabase.com/docs/guides/functions/schedule-functions), [Supabase Vault](https://supabase.com/docs/guides/database/vault), [pg_net](https://supabase.com/docs/guides/database/extensions/pg_net), [Vercel Cron plan sınırları](https://vercel.com/docs/cron-jobs/usage-and-pricing).

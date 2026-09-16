@@ -11,6 +11,11 @@ export type Enquiry = {
 };
 export type EnquiryErrors = Partial<Record<keyof Enquiry, string>>;
 
+// One plain mailbox only; the public form must never expand to multiple recipients.
+export function isValidEmail(value: string) {
+  return /^[^\s@<>,;:"\\\[\]]+@[^\s@<>,;:"\\\[\]]+\.[^\s@<>,;:"\\\[\]]+$/.test(value);
+}
+
 export function resolveProjectType(value: unknown): string {
   return typeof value === "string" && projectTypes.some((type) => type === value) ? value : "Diğer / Bilmiyorum";
 }
@@ -18,7 +23,7 @@ export function resolveProjectType(value: unknown): string {
 export function validateEnquiry(values: Enquiry): EnquiryErrors {
   const errors: EnquiryErrors = {};
   if (values.name.trim().length < 2) errors.name = "Lütfen adınızı ve soyadınızı girin.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) errors.email = "Lütfen geçerli bir e-posta adresi girin.";
+  if (!isValidEmail(values.email.trim())) errors.email = "Lütfen geçerli bir e-posta adresi girin.";
   const digits = values.phone.replace(/\D/g, "");
   if (!/^[+\d\s().-]+$/.test(values.phone) || digits.length < 10 || digits.length > 15) errors.phone = "Lütfen alan koduyla birlikte geçerli bir telefon numarası girin.";
   if (!projectTypes.some((type) => type === values.projectType)) errors.projectType = "Lütfen bir proje türü seçin.";

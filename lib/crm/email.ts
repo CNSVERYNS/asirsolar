@@ -4,6 +4,8 @@ import { getDatabase } from "./database.ts";
 import { getLead } from "./repository.ts";
 import { emailEnabled, validNotificationOrigin } from "./notification-config.ts";
 import { retryAt } from "./notification-errors.ts";
+import { renderNotificationEmail } from "./notification-templates.ts";
+import type { EmailPurpose } from "./types.ts";
 export { emailConfigured } from "./notification-config.ts";
 export async function flushEmailOutbox(leadId?: string, retry = false) {
     if (!emailEnabled())
@@ -28,9 +30,10 @@ export async function flushEmailOutbox(leadId?: string, retry = false) {
     try {
     const results = await Promise.allSettled(candidates.map(async candidate => {
         const claim = randomUUID();
-        const row = await db.prepare("UPDATE email_outbox SET status='sending', attempts=attempts+1, claimed_at=?, claim_token=? WHERE id=? AND status IN ('pending','failed') AND retryable=true AND attempts < 6 AND available_at <= ? RETURNING lead_id, recipient, attempts").get(Date.now(), claim, candidate.id, Date.now()) as {
+        const row = await db.prepare("UPDATE email_outbox SET status='sending', attempts=attempts+1, claimed_at=?, claim_token=? WHERE id=? AND status IN ('pending','failed') AND retryable=true AND attempts < 6 AND available_at <= ? RETURNING lead_id, recipient, purpose, attempts").get(Date.now(), claim, candidate.id, Date.now()) as {
             lead_id: string;
             recipient: string;
+            purpose: EmailPurpose;
             attempts: number;
         } | undefined;
         if (!row)
@@ -40,10 +43,11 @@ export async function flushEmailOutbox(leadId?: string, retry = false) {
             const { lead } = await getLead(row.lead_id);
             const origin = validNotificationOrigin();
             const message = await transport.sendMail({
-                from: process.env.CRM_EMAIL_FROM, to: row.recipient, replyTo: lead.email,
+                from: process.env.CRM_EMAIL_FROM, to: { address: row.recipient, name: "" },
+                replyTo: row.purpose === "customer_receipt" ? process.env.CRM_EMAIL_REPLY_TO?.trim() || process.env.CRM_EMAIL_FROM : { address: lead.email, name: "" },
                 messageId: `<${candidate.id}@${new URL(origin).hostname}>`,
-                subject: `Yeni keşif talebi · ${lead.reference}`,
-                text: `Web sitesinden yeni bir talep geldi.\n\nAd Soyad: ${lead.name}\nFirma: ${lead.company || "—"}\nTelefon: ${lead.phone}\nE-posta: ${lead.email}\nProje: ${lead.projectType}\n\n${lead.message}\n\nPanelde aç: ${origin}/admin/talepler/${lead.id}\n\nTalep e-posta bildirimi öncesinde güvenle kaydedilmiştir.`,
+                headers: { "Auto-Submitted": "auto-generated", "X-Auto-Response-Suppress": "All" },
+                ...renderNotificationEmail(row.purpose, lead, origin),
             });
             if (!message.accepted?.includes(row.recipient) || message.rejected?.length)
                 throw Object.assign(new Error("recipient_rejected"), { code: "EENVELOPE", responseCode: 550 });

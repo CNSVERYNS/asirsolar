@@ -1,5 +1,5 @@
 export const siteConfig = {
-  url: new URL(process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://asirsolar.vercel.app").origin,
+  url: new URL(process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://www.asirsolar.com").origin,
   name: "Asır Solar",
   titleTemplate: "%s | Asır Solar",
   defaultTitle: "Asır Solar | Güneş Enerjisi Sistemleri Kurulumu — Gebze, Kocaeli",

@@ -1,4 +1,4 @@
-import { projectTypes, validateEnquiry, type Enquiry } from "../enquiry.ts";
+import { isValidEmail, projectTypes, validateEnquiry, type Enquiry } from "../enquiry.ts";
 import { sources, stages, type LeadInput } from "./types.ts";
 
 export class CrmError extends Error {
@@ -16,7 +16,6 @@ export function textField(value: unknown, label: string, max: number, required =
   if ((required && !result) || result.length > max || result.includes("\0")) throw new CrmError(`${label} geçersiz veya çok uzun.`);
   return result;
 }
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function parsePublicEnquiry(value: unknown): Enquiry {
   const data = record(value);
   if (data.website) throw new CrmError("Talep doğrulanamadı.");
@@ -37,7 +36,7 @@ export function parseLeadInput(value: unknown): LeadInput {
   const email = textField(data.email, "E-posta", 254).toLowerCase();
   if (!phone && !email) throw new CrmError("Telefon veya e-posta bilgilerinden en az biri gerekli.");
   if (phone && (!/^[+\d\s().-]+$/.test(phone) || phone.replace(/\D/g, "").length < 10 || phone.replace(/\D/g, "").length > 15)) throw new CrmError("Telefon numarası geçersiz.");
-  if (email && !emailPattern.test(email)) throw new CrmError("E-posta adresi geçersiz.");
+  if (email && !isValidEmail(email)) throw new CrmError("E-posta adresi geçersiz.");
   const projectType = textField(data.projectType, "Proje türü", 100, true);
   if (!projectTypes.some((type) => type === projectType)) throw new CrmError("Proje türü geçersiz.");
   const source = sources.find((item) => item.id === data.source)?.id;

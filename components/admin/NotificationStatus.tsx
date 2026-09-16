@@ -34,13 +34,15 @@ export function NotificationStatus({ detail }: { detail: LeadDetail }) {
   }
   if (!detail.deliveries.length && !detail.smsDeliveries.length) return null;
   return <section className="crm-panel crm-notifications">
-    <h2>Ekip bildirimleri</h2>
-    <p className="crm-muted">Her yeni web talebi için iki mühendise de e-posta ve SMS bildirimi hazırlanır. Gönderim bağlantısı bekleyen kayıtlar burada korunur.</p>
+    <h2>Talep bildirimleri</h2>
+    <p className="crm-muted">Müşteriye teşekkür e-postası, Onur ve Furkan’a ayrı ayrı e-posta ve SMS hazırlanır. Her gönderimin durumunu buradan takip edebilirsiniz.</p>
     {feedback && <p role="status" className="crm-success">{feedback}</p>}{error && <p role="alert" className="crm-error">{error}</p>}
     {(["email", "sms"] as const).map(channel => <div key={channel}>
       <h3>{channel === "email" ? "E-posta" : "SMS"}</h3>
       {(channel === "email" ? current.deliveries : current.smsDeliveries).map(delivery => <div className="crm-notification-row" key={delivery.id}>
-        <strong>{delivery.recipient}</strong><span>{labels[delivery.status]}</span>
+        <strong>{delivery.recipient}</strong>
+        <small>{"purpose" in delivery && delivery.purpose === "customer_receipt" ? "Müşteriye teşekkür e-postası" : "Mühendis bildirimi"}</small>
+        <span>{labels[delivery.status]}</span>
         {delivery.status === "failed" && <small>{delivery.retryable ? "Otomatik tekrar denenecek." : "Bağlantı veya teslimat kontrolü gerekli."}</small>}
         {delivery.status === "unknown" && <small>Mükerrer gönderimi önlemek için otomatik tekrar durduruldu.</small>}
         <small>Deneme: {delivery.attempts}{delivery.sentAt ? ` · İletim: ${formatDate(delivery.sentAt, true)}` : ""}</small>

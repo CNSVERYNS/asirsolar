@@ -53,13 +53,13 @@ test('CRM PostgreSQL persistence, authentication and workflow', async t => {
   });
 
   let website;
-  await t.test('concurrent duplicate requests create one lead, one event and two outbox jobs', async () => {
+  await t.test('concurrent duplicate requests create one lead, one event and three email jobs', async () => {
     const key=randomUUID();
     const results=await Promise.all([repo.createWebsiteLead(validEnquiry,key),repo.createWebsiteLead(validEnquiry,key)]);
     assert.equal(results[0].id,results[1].id);
     assert.equal(results.filter(row=>row.duplicate).length,1);
     website=await repo.getLead(results[0].id);
-    assert.equal(website.lead.source,'website'); assert.equal(website.events.length,1); assert.equal(website.deliveries.length,2);
+    assert.equal(website.lead.source,'website'); assert.equal(website.events.length,1); assert.equal(website.deliveries.length,3);
     assert.equal(website.lead.projectType,'Çatı Tipi');
     await assert.rejects(repo.createWebsiteLead({...validEnquiry,message:'Changed project message'},key),status(409));
   });
@@ -117,16 +117,16 @@ test('CRM PostgreSQL persistence, authentication and workflow', async t => {
     assert.equal((await email.flushEmailOutbox()).configured,false);
     Object.assign(process.env,{CRM_EMAIL_ENABLED:'true',CRM_SMTP_HOST:'smtp.example.invalid',CRM_SMTP_USER:'test',CRM_SMTP_PASSWORD:'test-only',CRM_EMAIL_FROM:'test@example.invalid',APP_ORIGIN:'https://example.invalid'});
     const sent=[]; let failing=true;
-    mock.method(nodemailer,'createTransport',()=>({close(){},async sendMail(message){if(failing)throw Object.assign(new Error('offline'),{code:'ECONNECTION'});sent.push(message);return {accepted:[message.to],rejected:[]};}}));
+    mock.method(nodemailer,'createTransport',()=>({close(){},async sendMail(message){if(failing)throw Object.assign(new Error('offline'),{code:'ECONNECTION'});sent.push(message);return {accepted:[message.to.address],rejected:[]};}}));
     for(const delivery of website.deliveries) await notifications.retryNotification(website.lead.id,'email',delivery.id,onur.id);
     await email.flushEmailOutbox(website.lead.id);
-    assert.equal((await repo.getLead(website.lead.id)).deliveries.filter(row=>row.status==='failed').length,2);
+    assert.equal((await repo.getLead(website.lead.id)).deliveries.filter(row=>row.status==='failed').length,3);
     failing=false;
     await Promise.all([email.flushEmailOutbox(website.lead.id,true),email.flushEmailOutbox(website.lead.id,true)]);
-    assert.equal(sent.length,2);
-    assert.ok(sent.every(message=>auth.adminAccounts.some(account=>account.email===message.to)));
-    await email.flushEmailOutbox(website.lead.id,true); assert.equal(sent.length,2);
-    assert.equal((await repo.getLead(website.lead.id)).deliveries.filter(row=>row.status==='sent').length,2);
+    assert.equal(sent.length,3);
+    assert.deepEqual(sent.map(message=>message.to.address).sort(),[validEnquiry.email,...auth.adminAccounts.slice(0,2).map(account=>account.email)].sort());
+    await email.flushEmailOutbox(website.lead.id,true); assert.equal(sent.length,3);
+    assert.equal((await repo.getLead(website.lead.id)).deliveries.filter(row=>row.status==='sent').length,3);
     mock.restoreAll();
   });
 
@@ -155,6 +155,9 @@ test('CRM PostgreSQL persistence, authentication and workflow', async t => {
       const projectsMigration = await readFile(db.projectsMigrationPath, 'utf8');
       await restricted.exec(projectsMigration);
       await restricted.exec(projectsMigration);
+      const customerEmailMigration = await readFile(db.customerEmailMigrationPath, 'utf8');
+      await restricted.exec(customerEmailMigration);
+      await restricted.exec(customerEmailMigration);
       const tables = await restricted.query("SELECT count(*)::integer AS total FROM pg_tables WHERE schemaname='asir_crm'");
       assert.equal(tables.rows[0].total, 11);
     } finally { await restricted.close(); }

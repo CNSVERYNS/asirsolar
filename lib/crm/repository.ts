@@ -43,6 +43,7 @@ export async function createWebsiteLead(enquiry: Enquiry, submissionKey: string)
             return { id: existing.id, reference: existing.reference, duplicate: true };
         }
         const created = await insertLead({ ...enquiry, source: "website", stage: "new", assigneeId: null, priority: "normal", nextFollowUp: null, quoteCents: null, rejectionReason: "" }, null, { key: submissionKey, hash });
+        await db.prepare("INSERT INTO email_outbox (id, lead_id, recipient, purpose, status) VALUES (?, ?, ?, 'customer_receipt', ?)").run(randomUUID(), created.id, enquiry.email, emailEnabled() ? "pending" : "held");
         for (const account of notificationRecipients) {
             await db.prepare("INSERT INTO email_outbox (id, lead_id, recipient, status) VALUES (?, ?, ?, ?)").run(randomUUID(), created.id, account.email, emailEnabled() ? "pending" : "held");
             await db.prepare("INSERT INTO sms_outbox (id, lead_id, recipient, status) VALUES (?, ?, ?, ?)").run(randomUUID(), created.id, account.phone, smsEnabled() ? "pending" : "held");
@@ -62,7 +63,7 @@ export async function getLead(id: string): Promise<LeadDetail> {
     if (!lead)
         throw new CrmError("Müşteri kaydı bulunamadı.", 404);
     const events = await db.prepare("SELECT e.id, e.kind, e.content, COALESCE(u.name, 'Web sitesi') AS actorName, e.created_at AS createdAt FROM lead_events e LEFT JOIN users u ON u.id = e.actor_id WHERE e.lead_id = ? ORDER BY e.created_at DESC, e.sequence DESC").all(id) as LeadEvent[];
-    const deliveries = await db.prepare("SELECT id, recipient, status, attempts, sent_at AS sentAt, error_code AS errorCode, retryable FROM email_outbox WHERE lead_id = ? ORDER BY recipient").all(id) as EmailDelivery[];
+    const deliveries = await db.prepare("SELECT id, recipient, purpose, status, attempts, sent_at AS sentAt, error_code AS errorCode, retryable FROM email_outbox WHERE lead_id = ? ORDER BY purpose, recipient").all(id) as EmailDelivery[];
     const smsDeliveries = await db.prepare("SELECT id, recipient, status, attempts, sent_at AS sentAt, delivered_at AS deliveredAt, error_code AS errorCode, retryable, provider_id AS providerId FROM sms_outbox WHERE lead_id = ? ORDER BY recipient").all(id) as LeadDetail["smsDeliveries"];
     return { lead, events, deliveries, smsDeliveries };
 }

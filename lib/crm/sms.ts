@@ -3,6 +3,7 @@ import { getDatabase } from "./database.ts";
 import { smsEnabled, smsConfigured, validNotificationOrigin } from "./notification-config.ts";
 import { DeliveryError, retryAt } from "./notification-errors.ts";
 import { readNetgsmReports, sendNetgsmSms } from "./netgsm.ts";
+import { renderTeamSms } from "./notification-templates.ts";
 
 export async function flushSmsOutbox(leadId?: string) {
   if (!smsEnabled()) return { configured: false, accepted: 0 };
@@ -15,9 +16,9 @@ export async function flushSmsOutbox(leadId?: string) {
     if (!row) return false;
     let providerId: string | undefined;
     try {
-      const lead = await db.prepare("SELECT reference FROM leads WHERE id=?").get(row.lead_id) as { reference: string };
+      const lead = await db.prepare("SELECT id, name, project_type AS projectType FROM leads WHERE id=?").get(row.lead_id) as { id: string; name: string; projectType: string };
       const origin = validNotificationOrigin();
-      providerId = await sendNetgsmSms(row.recipient, `Asır Solar: Yeni keşif talebi ${lead.reference}. Detay: ${origin}/admin/talepler/${row.lead_id}`, candidate.id);
+      providerId = await sendNetgsmSms(row.recipient, renderTeamSms(lead, origin), candidate.id);
       await db.prepare("UPDATE sms_outbox SET status='accepted', provider_id=?, sent_at=?, error_code=NULL, claim_token=NULL WHERE id=? AND claim_token=?").run(providerId, new Date().toISOString(), candidate.id, claim);
       return true;
     } catch (error) {

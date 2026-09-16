@@ -7,7 +7,7 @@ export async function NotificationHealth() {
   const recent = !!worker?.recent;
   return <section className="crm-panel crm-settings-card" style={{ marginTop: 24 }}>
     <h2>Otomatik bildirim bağlantıları</h2>
-    {[{ name: "İki mühendise e-posta", configured: emailConfigured(), enabled: emailEnabled() }, { name: "İki mühendise SMS", configured: smsConfigured(), enabled: smsEnabled() }].map(channel => <div className="crm-connection" key={channel.name}>
+    {[{ name: "Müşteriye teşekkür ve iki mühendise e-posta", configured: emailConfigured(), enabled: emailEnabled() }, { name: "İki mühendise SMS", configured: smsConfigured(), enabled: smsEnabled() }].map(channel => <div className="crm-connection" key={channel.name}>
       <span>{channel.name}</span><strong data-pending={!channel.enabled}>{channel.enabled ? "Gönderim etkin" : channel.configured ? "Bağlantı tanımlı, gönderim kapalı" : "Sağlayıcı bağlantısı bekliyor"}</strong>
       <p>{channel.enabled ? "Gerçek teslimatı müşteri kaydındaki bildirimlerden ve alıcıdan doğrulayın." : "Talepler kaydedilir. Bekletilen bildirimler bağlantı açılınca topluca gönderilmez; kayıt üzerinden tek tek başlatılabilir."}</p>
     </div>)}
