@@ -4,10 +4,8 @@ import { Container } from "@/components/Container";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Reveal } from "@/components/Reveal";
 import { LiveProjects } from "@/components/LiveProjects";
-import { Marquee } from "@/components/Marquee";
 import { listProjects } from "@/lib/projects/repository";
 import type { ManagedProject } from "@/lib/projects/types";
-import { galleryImages } from "@/data/gallery";
 import { pageMetadata } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -41,7 +39,6 @@ export default async function ProjelerPage() {
       </section>
 
       <section className="section--tight"><Container><LiveProjects initialProjects={projects} unavailable={unavailable} /></Container></section>
-      <section className="section project-inspiration"><Container><div className="project-inspiration__heading"><SectionLabel index="02" text="UYGULAMA ALANLARI" /><p>Çatıdan araziye, güneşin olduğu her yerde.</p><small>Aşağıdaki görseller uygulama alanlarını anlatan temsili görsellerdir.</small></div></Container><Marquee images={galleryImages} /></section>
     </>
   );
 }

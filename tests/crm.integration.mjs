@@ -72,7 +72,7 @@ try {
   assert.equal((await json(await request('/api/projeler'),200)).projects[0].images.length,1);
   const projectHtml=await (await request('/projeler')).text();
   assert.ok(projectHtml.includes('HTTP test project &lt;script&gt;'));assert.ok(!projectHtml.includes('<script>alert(1)</script>'));
-  assert.ok(projectHtml.indexOf('live-projects__heading')<projectHtml.indexOf('marquee__track'));
+  assert.ok(projectHtml.includes('live-projects__heading'));assert.ok(!projectHtml.includes('marquee__track'));
   assert.ok((await (await request('/sitemap.xml')).text()).includes('/projeler</loc>'));
   await json(await request(projectUrl,{method:'PATCH',auth,body:projectInput}),200);
   assert.equal((await request(image.url)).status,404);

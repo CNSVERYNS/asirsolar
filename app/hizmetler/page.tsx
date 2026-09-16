@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { Marquee } from "@/components/Marquee";
 import { Container } from "@/components/Container";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Reveal } from "@/components/Reveal";
 import { ServiceRow } from "@/components/ServiceRow";
 import { services } from "@/data/services";
+import { galleryImages } from "@/data/gallery";
 import { pageMetadata } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
@@ -35,18 +36,11 @@ export default function HizmetlerPage() {
       </section>
 
       <section className="section" style={{ paddingTop: 0 }}>
+        <Reveal>
+          <Marquee images={galleryImages} />
+        </Reveal>
         <Container>
-          <Reveal>
-            <div className="detail-banner">
-              <Image
-                src="/images/stock/industrial-roof.jpg"
-                alt="Endüstriyel bina çatısında güneş paneli kurulumu"
-                fill
-                sizes="(max-width: 900px) 100vw, 1280px"
-                style={{ objectFit: "cover" }}
-              />
-            </div>
-          </Reveal>
+          <p className="services-gallery-caption">Görseller, hizmet ve uygulama alanlarımızı anlatan temsili görsellerdir.</p>
           <div className="service-list">
             {services.map((service, i) => (
               <Reveal key={service.slug} delay={i * 40} as="div">
