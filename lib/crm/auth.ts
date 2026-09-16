@@ -5,8 +5,10 @@ import { CrmError } from "./validation.ts";
 export const SESSION_COOKIE = "asir_admin_session";
 export const SESSION_TTL = 60 * 60 * 12;
 export const adminAccounts = [
-    { id: "onur", name: "Onur Durak", email: "onur.durak@asirsolar.com" },
-    { id: "furkan", name: "Furkan Cansever", email: "furkan.cansever@asirsolar.com" },
+    { id: "onur", name: "Onur Durak", email: "onur.durak@asirsolar.com", username: "onurdurak" },
+    { id: "furkan", name: "Furkan Cansever", email: "furkan.cansever@asirsolar.com", username: "furkancansever" },
+    // Username-only account; .invalid is deliberately not a deliverable email address.
+    { id: "ahmetcansever", name: "Ahmet Cansever", email: "ahmetcansever@accounts.invalid", username: "ahmetcansever" },
 ] as const;
 const dummyHash = `scrypt$32768$8$3$${"00".repeat(16)}$${"00".repeat(64)}`;
 function derive(password: string, salt: Buffer) {
@@ -28,7 +30,7 @@ export async function verifyPassword(password: string, stored = dummyHash) {
     return timingSafeEqual(actual, Buffer.from(parts[5], "hex"));
 }
 export function tokenHash(token: string) { return createHash("sha256").update(token).digest("hex"); }
-export async function listUsers(): Promise<AdminUser[]> { return await getDatabase().prepare("SELECT id, name, email FROM users ORDER BY name").all() as AdminUser[]; }
+export async function listUsers(): Promise<AdminUser[]> { return await getDatabase().prepare("SELECT id, name, email, username FROM users ORDER BY name").all() as AdminUser[]; }
 export async function hasAdminUsers() { return Boolean(await getDatabase().prepare("SELECT id FROM users LIMIT 1").get()); }
 export async function provisionAdmin(email: string, password: string, reset = false) {
     const account = adminAccounts.find((item) => item.email === email.toLowerCase());
@@ -40,11 +42,11 @@ export async function provisionAdmin(email: string, password: string, reset = fa
         if (existing && !reset)
             throw new CrmError("Bu hesap zaten var. Parola sıfırlamak için açıkça --reset kullanın.", 409);
         if (existing) {
-            await db.prepare("UPDATE users SET password_hash = ? WHERE id = ?").run(hash, account.id);
+            await db.prepare("UPDATE users SET password_hash = ?, username = ? WHERE id = ?").run(hash, account.username, account.id);
             await db.prepare("DELETE FROM sessions WHERE user_id = ?").run(account.id);
         }
         else
-            await db.prepare("INSERT INTO users (id, name, email, password_hash, created_at) VALUES (?, ?, ?, ?, ?)").run(account.id, account.name, account.email, hash, new Date().toISOString());
+            await db.prepare("INSERT INTO users (id, name, email, username, password_hash, created_at) VALUES (?, ?, ?, ?, ?, ?)").run(account.id, account.name, account.email, account.username, hash, new Date().toISOString());
     });
     return account;
 }
@@ -54,13 +56,13 @@ export async function authenticate(email: string, password: string): Promise<Adm
         throw new CrmError("Biraz bekleyip tekrar deneyin.", 429);
     activeChecks++;
     try {
-        const user = await getDatabase().prepare("SELECT id, name, email, password_hash FROM users WHERE email = lower(?)").get(email) as (AdminUser & {
+        const user = await getDatabase().prepare("SELECT id, name, email, username, password_hash FROM users WHERE email = lower(?) OR lower(username) = lower(?)").get(email.trim(), email.trim()) as (AdminUser & {
             password_hash: string;
         }) | undefined;
         const valid = await verifyPassword(password, user?.password_hash);
         if (!user || !valid)
             return null;
-        return { id: user.id, name: user.name, email: user.email };
+        return { id: user.id, name: user.name, email: user.email, username: user.username };
     }
     finally {
         activeChecks--;
@@ -77,7 +79,7 @@ export async function createSession(userId: string) {
 export async function findSession(token: string | undefined): Promise<AdminUser | null> {
     if (!token || !/^[A-Za-z0-9_-]{43}$/.test(token))
         return null;
-    return await getDatabase().prepare("SELECT u.id, u.name, u.email FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ?").get(tokenHash(token), Date.now()) as AdminUser | undefined ?? null;
+    return await getDatabase().prepare("SELECT u.id, u.name, u.email, u.username FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ?").get(tokenHash(token), Date.now()) as AdminUser | undefined ?? null;
 }
 export async function revokeSession(token: string | undefined) { if (token)
     await getDatabase().prepare("DELETE FROM sessions WHERE token_hash = ?").run(tokenHash(token)); }

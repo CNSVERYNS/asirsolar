@@ -1,4 +1,41 @@
 /* Brand refresh. Shared inner-page styles remain in globals.css. */
+.live-projects { padding-bottom: 28px; }
+.live-projects__heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 30px; }
+.live-projects__heading .eyebrow { margin-bottom: 14px; }
+.live-projects__heading h2 { font-size: clamp(27px, 3vw, 44px); }
+.live-projects__controls { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+.live-projects__controls > span { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--muted); margin-right: 12px; }
+.live-projects__controls button, .live-projects__image-controls button { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line-strong); border-radius: 50%; font-size: 24px; cursor: pointer; background: transparent; color: var(--ink); }
+.live-projects__controls button:hover:not(:disabled) { background: var(--brand-purple); border-color: var(--brand-purple); color: #fff; }
+.live-projects__controls button:disabled { opacity: .3; cursor: default; }
+.live-projects__card { display: grid; grid-template-columns: 1.15fr 1fr; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+.live-projects__card--text { grid-template-columns: 1fr; }
+.live-projects__gallery { min-width: 0; background: var(--surface); }
+.live-projects__image { position: relative; min-height: 360px; aspect-ratio: 4 / 3; }
+.live-projects__image img { object-fit: cover; }
+.live-projects__image-controls { display: flex; justify-content: center; align-items: center; gap: 24px; padding: 12px; font-size: 12px; }
+.live-projects__image-controls button { width: 44px; height: 44px; }
+.live-projects__details { min-width: 0; padding: clamp(26px, 4vw, 58px); align-self: center; }
+.live-projects__kicker { display: block; font-size: 11px; font-weight: 600; letter-spacing: .14em; color: var(--brand-purple); margin-bottom: 24px; }
+.live-projects__details h3 { font-size: clamp(28px, 3vw, 42px); letter-spacing: -.035em; line-height: 1.15; overflow-wrap: anywhere; }
+.live-projects__description { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--muted); margin-block: 24px 32px; line-height: 1.8; font-size: 15px; }
+.live-projects__details dl { display: flex; flex-wrap: wrap; gap: 20px 45px; padding-top: 24px; border-top: 1px solid var(--line); }
+.live-projects__details dt { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+.live-projects__details dd { font-size: 15px; margin: 0; }
+.live-projects__empty { padding: clamp(30px, 6vw, 80px); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; min-height: 280px; display: flex; flex-direction: column; justify-content: center; }
+.live-projects__empty h3 { font-size: clamp(25px, 3vw, 36px); max-width: 24ch; margin-bottom: 18px; }
+.live-projects__empty p { max-width: 58ch; color: var(--muted); font-size: 15px; }
+.live-projects__notice { color: var(--muted); font-size: 13px; margin-top: 18px; }
+.project-inspiration { border-top: 1px solid var(--line); }
+.project-inspiration__heading { margin-bottom: 32px; }
+.project-inspiration__heading > p { font-size: clamp(22px, 2.5vw, 32px); margin-top: 20px; }
+.project-inspiration__heading small { display: block; color: var(--muted); margin-top: 12px; font-size: 12px; }
+@media (max-width: 800px) {
+  .live-projects__card { grid-template-columns: 1fr; }
+  .live-projects__image { min-height: 240px; }
+  .live-projects__heading { flex-wrap: wrap; align-items: center; }
+  .live-projects__controls { margin-left: auto; }
+}
 body { background: var(--paper); }
 body::after { display: none; }
 html { scroll-padding-top: calc(var(--header-h) + 24px); }

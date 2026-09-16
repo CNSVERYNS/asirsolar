@@ -1,21 +1,27 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { Container } from "@/components/Container";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Reveal } from "@/components/Reveal";
-import { ProjectCard } from "@/components/ProjectCard";
+import { LiveProjects } from "@/components/LiveProjects";
 import { Marquee } from "@/components/Marquee";
-import { projects } from "@/data/projects";
+import { listProjects } from "@/lib/projects/repository";
+import type { ManagedProject } from "@/lib/projects/types";
 import { galleryImages } from "@/data/gallery";
 import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = { ...pageMetadata({
-  title: "Projeler — Güneş Enerjisi Sistemleri Uygulamaları",
-  description:
-    projects.length > 0 ? "Asır Solar güneş enerjisi projeleri: sistem tipi, konum ve uygulama kapsamı." : "Asır Solar proje arşivi hazırlık aşamasında. Çatı, cephe ve arazi uygulamalarımız hakkında bilgi alın.",
-  path: "/projeler",
-}), ...(projects.length === 0 ? { robots: { index: false, follow: true } } : {}) };
+export const dynamic = "force-dynamic";
+const loadProjects = cache(async () => {
+  try { return { projects: await listProjects(), unavailable: false }; }
+  catch { return { projects: [] as ManagedProject[], unavailable: true }; }
+});
+export async function generateMetadata(): Promise<Metadata> {
+  const { projects } = await loadProjects();
+  return { ...pageMetadata({ title: "Projeler — Güneş Enerjisi Sistemleri Uygulamaları", description: "Asır Solar güncel güneş enerjisi projeleri, saha görselleri, uygulama detayları ve proje takvimleri.", path: "/projeler" }), ...(projects.length ? {} : { robots: { index: false, follow: true } }) };
+}
 
-export default function ProjelerPage() {
+export default async function ProjelerPage() {
+  const { projects, unavailable } = await loadProjects();
   return (
     <>
       <section className="page-hero">
@@ -27,50 +33,15 @@ export default function ProjelerPage() {
             </Reveal>
             <Reveal className="page-hero__desc" delay={100}>
               <p className="text-lg">
-                {projects.length > 0 ? "Uyguladığımız projeler; konum, sistem tipi ve kapsam bilgileriyle birlikte burada yer alır." : "Proje arşivimizi hazırlıyoruz. Doğrulanan uygulama bilgileri ve saha fotoğrafları burada paylaşılacak."}
+                Güneşten aldığımız gücü sahaya taşıyoruz. Projelerimizin detaylarını, görsellerini ve uygulama takvimlerini keşfedin.
               </p>
             </Reveal>
           </div>
         </Container>
       </section>
 
-      {projects.length > 0 ? (
-        <section className="section">
-          <Container>
-            <div className="project-masonry">
-              {projects.map((project, i) => (
-                <Reveal key={project.slug} delay={i * 60} as="div">
-                  <ProjectCard project={project} variant={i % 3 === 1 ? "tall" : "wide"} />
-                </Reveal>
-              ))}
-            </div>
-          </Container>
-        </section>
-      ) : (
-        <>
-          <section className="section--tight">
-            <Reveal>
-              <Marquee images={galleryImages} />
-            </Reveal>
-          </section>
-
-          <section className="section">
-            <Container>
-              <Reveal className="empty-state" as="div">
-                <p className="label" style={{ marginBottom: 0 }}>
-                  Belgelenmiş proje kaydı yakında eklenecektir
-                </p>
-                <p>
-                  Yukarıdaki stok görseller sistem tiplerini anlatmak için kullanılan temsili görsellerdir.
-                  Tamamlanan projelerimiz; konum, sistem
-                  tipi, kapasite ve hizmet kapsamı bilgileriyle birlikte
-                  doğrulandıkça bu sayfaya eklenecektir.
-                </p>
-              </Reveal>
-            </Container>
-          </section>
-        </>
-      )}
+      <section className="section--tight"><Container><LiveProjects initialProjects={projects} unavailable={unavailable} /></Container></section>
+      <section className="section project-inspiration"><Container><div className="project-inspiration__heading"><SectionLabel index="02" text="UYGULAMA ALANLARI" /><p>Çatıdan araziye, güneşin olduğu her yerde.</p><small>Aşağıdaki görseller uygulama alanlarını anlatan temsili görsellerdir.</small></div></Container><Marquee images={galleryImages} /></section>
     </>
   );
 }

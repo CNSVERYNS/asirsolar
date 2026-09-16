@@ -17,7 +17,7 @@ export const sources = [
 ] as const;
 export type Stage = typeof stages[number]["id"];
 export type Source = typeof sources[number]["id"];
-export type AdminUser = { id: string; name: string; email: string };
+export type AdminUser = { id: string; name: string; email: string; username?: string | null };
 export type Lead = {
   id: string; reference: string; name: string; phone: string; email: string;
   company: string; projectType: string; message: string; source: Source;

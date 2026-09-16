@@ -2,10 +2,13 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site";
 import { services } from "@/data/services";
 import { projects } from "@/data/projects";
+import { listProjects } from "@/lib/projects/repository";
 import { guideItems } from "@/data/guides";
 import { guideDetails } from "@/data/guide-details";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = "force-dynamic";
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const publishedProjects = await listProjects().catch(() => []);
   // /kvkk, /gizlilik-politikasi ve /cerez-politikasi bilinçli olarak
   // dışarıda: hukuk danışmanı onayına kadar noindex (bkz. o sayfaların
   // metadata'sı) — noindex bir URL'i sitemap'e koymak çelişkilidir.
@@ -16,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/kurumsal",
     "/hizmetler",
-    ...(projects.length > 0 ? ["/projeler"] : []),
+    ...(projects.length > 0 || publishedProjects.length > 0 ? ["/projeler"] : []),
     "/rehber",
     "/ekibimiz",
     "/iletisim",
