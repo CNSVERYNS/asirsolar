@@ -2,19 +2,19 @@
 
 Web formu `/api/talepler` üzerinden talebi kaydeder. `/admin`, Onur Durak ve Furkan Cansever'in ortak çalışma alanıdır. Giriş adresi `/admin/giris`.
 
-## Üretim bağlantısı — 10 Eylül 2026
+## Üretim bağlantısı — 16 Eylül 2026
 
 - Vercel: `yunus-projeler/asirsolar`, Next.js, Node.js 24, üretim dalı `main`.
-- Site: `https://asirsolar.vercel.app`; panel: `https://asirsolar.vercel.app/admin`.
+- Site: `https://www.asirsolar.com`; panel: `https://www.asirsolar.com/admin`.
 - Supabase: mevcut `asirsolar` projesi, `htudwfcazvwzutboheeb`, Ohio (`us-east-2`).
 - Bağlantı, `asir_crm` şemasının sahibi olan ayrı `asir_crm_app` hesabını ve transaction pooler'ı kullanır. Bu hesabın süper kullanıcı, rol oluşturma veya veritabanı oluşturma yetkisi yoktur. Mevcut `postgres` parolası değiştirilmemiştir.
 - `DATABASE_URL` ve Supabase CA sertifikası `DATABASE_SSL_CA` olarak yalnızca Vercel Production ortamındadır; sertifika ve sunucu adı doğrulanır. Yerel `.env.local` canlı veritabanına geçirilmemiştir.
 - Onur ve Furkan için üretim hesapları oluşturulmuştur. İlk giriş bilgileri bu bilgisayardaki Git tarafından hariç tutulan `.local-tools/admin-access-*.txt` dosyalarındadır. İlk girişte parolaları değiştirin.
-- SMTP sağlayıcısı henüz yapılandırılmamıştır. Talepler panelde saklanır; e-posta bildirimleri kuyrukta bekler. Kendi alan adına geçiş ayrıca yapılacaktır.
+- ZeptoMail REST entegrasyonu hazır; Send Mail Token bağlantısı ve onaylı gerçek gönderim testi bekliyor. Ortak adres `iletisim@asirsolar.com`. E-posta/SMS kapalıyken talepler ve bildirim işleri panelde korunur. Güncel adımlar: [ZOHO_NETGSM_KURULUM.md](ZOHO_NETGSM_KURULUM.md).
 
 ## Akış
 
-- Web sitesi talepleri otomatik müşteri kaydı, takip numarası, işlem geçmişi ve iki ekip bildirimi oluşturur. Aynı gönderimin bağlantı hatası nedeniyle tekrarlanması ikinci kayıt oluşturmaz.
+- Web sitesi talepleri müşteri kaydı, takip numarası, geçmiş, müşteri teşekkür e-postası ve iki mühendise ayrı e-posta/SMS olmak üzere beş bildirim işi oluşturur. Tekrarlı gönderim ikinci kayıt oluşturmaz.
 - Telefon, WhatsApp, e-posta, referans ve diğer kanallar elle kaydedilir. E-posta gelen kutusu ve WhatsApp hesabı okunmaz.
 - Aşamalar: yeni talep, ön görüşme, teklif gönderildi, onaylandı, uygulamada, tamamlandı veya reddedildi. Red nedeni zorunludur.
 - Sorumlu kişi, takip tarihi, öncelik, teklif tutarı, görüşme notları ve arşiv yönetilebilir. İki kullanıcı aynı kaydı düzenlerse eski sürümün kaydedilmesi engellenir.
@@ -58,12 +58,15 @@ Vercel > Settings > Environment Variables, **Production**:
 | --- | --- |
 | `DATABASE_URL` | Supabase transaction pooler URI; sensitive |
 | `DATABASE_SSL_CA` | Gerekirse Supabase CA sertifikası |
-| `APP_ORIGIN` | `https://asirsolar.vercel.app` |
-| `NEXT_PUBLIC_SITE_URL` | `https://asirsolar.vercel.app` |
+| `APP_ORIGIN` | `https://www.asirsolar.com` |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.asirsolar.com` |
 | `CRON_SECRET` | En az 32 karakter rastgele değer; sensitive |
-| `CRM_SMTP_HOST`, `CRM_SMTP_PORT` | E-posta sağlayıcısının SMTP adresi; 587/TLS veya 465 |
-| `CRM_SMTP_USER`, `CRM_SMTP_PASSWORD` | SMTP kimliği; parola sensitive |
-| `CRM_EMAIL_FROM` | Sağlayıcının doğruladığı gönderici adresi |
+| `CRM_EMAIL_PROVIDER` | `zeptomail`; eski SMTP uyumluluğu için `smtp` |
+| `CRM_ZEPTOMAIL_TOKEN` | ZeptoMail ham Send Mail Token; sensitive, yalnızca Production |
+| `CRM_EMAIL_FROM` | `Asır Solar İletişim <iletisim@asirsolar.com>` |
+| `CRM_EMAIL_REPLY_TO` | `iletisim@asirsolar.com` |
+| `CRM_EMAIL_ENABLED`, `CRM_SMS_ENABLED` | Gerçek test için ayrı onay verilene kadar `false` |
+| `CRM_SMTP_HOST`, `CRM_SMTP_PORT`, `CRM_SMTP_USER`, `CRM_SMTP_PASSWORD` | Yalnızca eski SMTP yolu; ZeptoMail REST bunları kullanmaz |
 
 Ortam değişikliklerinden sonra yeniden deploy gerekir. Vercel'de `DATABASE_URL` olmadan yerel disk yedeğine geçilmez: talep ve panel uçları açık hata verir, kayıt varmış gibi başarı göstermez.
 
@@ -73,11 +76,11 @@ Domain bağlanınca `APP_ORIGIN` ve `NEXT_PUBLIC_SITE_URL` değerlerini yeni HTT
 
 ## E-posta bildirimi
 
-Talep, görüşme geçmişi ve bildirim kuyruğu tek veritabanı işlemiyle kaydedilir. E-posta hatası talebi kaybettirmez. SMTP ayarları yoksa kuyruk bekler; panel bunu açıkça gösterir.
+Talep, geçmiş ve beş bildirim işi tek veritabanı işlemiyle kaydedilir. Provider hatası talebi kaybettirmez. Seçili sağlayıcı config eksikse veya gönderim kapalıysa kuyruk held bekler; eski held kayıtlar ayar açılınca topluca gönderilmez.
 
-Gönderim form yanıtından sonra denenir. Bekleyen bildirimler panel listesi yenilendiğinde ve her gün 06:00 UTC'deki yetkili Vercel cron çağrısında tekrar denenir. Bir çağrı en fazla iki bildirim işler. Hatalarda artan bekleme süresi uygulanır. Müşteri kaydından elle yeniden deneme de mümkündür. Daha sık, kesintisiz bildirim için planın desteklediği cron sıklığı veya ayrı bir kuyruk çalışanı gerekir.
+Etkin kanalda ilk deneme form yanıtından sonra başlar. Supabase görevi iki dakikada bir retry/rapor kontrolü yapar; günlük Vercel cron ikincildir. Her çalışmada kanal başına en fazla dört gönderim işlenir. Kayıt üzerinden ayrı yeniden deneme vardır. Ayrıntılar: [NOTIFICATION_SETUP.md](NOTIFICATION_SETUP.md).
 
-SMTP kabulü, alıcının gelen kutusuna kesin teslim anlamına gelmez. Süreç SMTP kabulünden hemen sonra kesilirse nadiren aynı bildirim tekrar iletilebilir; sabit Message-ID kullanılır. SPF/DKIM ve gönderici doğrulaması e-posta sağlayıcısında yapılmalıdır.
+API/SMTP kabulü gelen kutusuna kesin teslim anlamına gelmez. Belirsiz kabul/timeout unknown kalır ve otomatik tekrarlanmaz. Message-ID ve client_reference korelasyon için kullanılır; mutlak provider idempotency garantisi değildir. Gerçek teslimat testi açık kullanıcı onayı bekler.
 
 ## Güvenlik, yedek ve veri yönetimi
 
@@ -97,6 +100,6 @@ npm run build
 npm run test:integration
 ```
 
-Birim testleri geçici PostgreSQL kullanır; SMTP bir test alıcısıyla taklit edilir, gerçek e-posta gönderilmez. Entegrasyon testi 3001 portunda ayrı üretim sunucusu açar; gerçek form → panel akışını, erişim kontrollerini, e-posta kuyruğunu ve mevcut sayfa/medya davranışını kontrol eder. Görsel tarayıcı incelemesi bu komutların kapsamında değildir.
+Birim testleri geçici PostgreSQL kullanır; ZeptoMail/SMTP/Netgsm çağrıları mock edilir. PGlite bellek kullanımı için test dosyaları sırayla çalışır. HTTP entegrasyonu 3001 portunda ayrı yerel sunucu ve DB ile form/panel akışını kontrol eder; gerçek ileti göndermez. `node scripts/check-communication-build.mjs` client build'de secret/provider kodu sızıntısını kontrol eder.
 
 Teknik kaynaklar: [Supabase bağlantı seçenekleri](https://supabase.com/docs/guides/database/connecting-to-postgres), [Vercel bağlantı havuzları](https://vercel.com/kb/guide/connection-pooling-with-functions).

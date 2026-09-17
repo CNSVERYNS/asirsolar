@@ -78,6 +78,7 @@ export default async function IletisimPage({ searchParams }: { searchParams: Pro
                     E-posta
                   </span>
                   <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <a href={`mailto:${company.generalEmail}`} className="text-link" style={{ border: "none" }}>Asır Solar İletişim — {company.generalEmail}</a>
                     {company.emails.map((e) => (
                       <a key={e.email} href={`mailto:${e.email}`} className="text-link" style={{ border: "none" }}>
                         {e.name} — {e.email}

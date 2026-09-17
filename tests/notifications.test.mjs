@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 import nodemailer from 'nodemailer';
 delete process.env.DATABASE_URL;
 delete process.env.VERCEL;
-Object.assign(process.env, { CRM_LOCAL_PATH:'memory://',CRM_LOCAL_DATABASE:'true',CRM_EMAIL_ENABLED:'false',CRM_SMS_ENABLED:'false',APP_ORIGIN:'https://example.invalid' });
+Object.assign(process.env, { CRM_LOCAL_PATH:'memory://',CRM_LOCAL_DATABASE:'true',CRM_EMAIL_ENABLED:'false',CRM_SMS_ENABLED:'false',CRM_EMAIL_PROVIDER:'smtp',CRM_ZEPTOMAIL_TOKEN:'',CRM_EMAIL_REPLY_TO:'',APP_ORIGIN:'https://example.invalid' });
 const db = await import('../lib/crm/database.ts');
 const auth = await import('../lib/crm/auth.ts');
 const repo = await import('../lib/crm/repository.ts');
@@ -116,11 +116,11 @@ test('customer and engineer notification persistence, delivery and recovery', as
     assert.equal(item.deliveries.length,3);
     assert.deepEqual(item.deliveries.filter(row=>row.recipient===input.email).map(row=>row.purpose).sort(),['customer_receipt','team']);
     const mails=[];
-    process.env.CRM_EMAIL_REPLY_TO='info@example.invalid';
+    process.env.CRM_EMAIL_REPLY_TO='iletisim@example.invalid';
     mock.method(nodemailer,'createTransport',()=>({close(){},async sendMail(message){mails.push(message);return {accepted:[message.to.address],rejected:[]};}}));
     await flushEmailOutbox(created.id);
     assert.equal(mails.length,3);
-    assert.equal(mails.find(message=>message.subject.startsWith('Talebinizi aldık')).replyTo,'info@example.invalid');
+    assert.equal(mails.find(message=>message.subject.startsWith('Talebinizi aldık')).replyTo,'iletisim@example.invalid');
     delete process.env.CRM_EMAIL_REPLY_TO;mock.restoreAll();
   });
   await t.test('untrusted fields are escaped in team HTML and omitted from customer receipts',async()=>{

@@ -5,7 +5,7 @@ import { apiRequest } from "./client";
 
 const labels: Record<string, string> = {
   held: "Gönderim etkinleştirilmedi / onay bekliyor", pending: "Gönderim bekliyor", sending: "Gönderiliyor",
-  sent: "E-posta sunucusu kabul etti", accepted: "SMS sağlayıcısı kabul etti", delivered: "Telefona teslim edildi",
+  sent: "E-posta sağlayıcısı kabul etti", accepted: "SMS sağlayıcısı kabul etti", delivered: "Telefona teslim edildi",
   failed: "Gönderim başarısız", unknown: "Teslim durumu belirsiz — kontrol gerekli", cancelled: "İptal edildi",
 };
 export function NotificationStatus({ detail }: { detail: LeadDetail }) {

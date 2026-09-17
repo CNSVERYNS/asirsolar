@@ -8,7 +8,7 @@ import sharp from 'sharp';
 await mkdir('.local-tools',{recursive:true});
 const dataDir=await mkdtemp(resolve('.local-tools/crm-http-'));
 // Explicit empty values override any .env.local deployment settings in the child.
-const isolated={DATABASE_URL:'',VERCEL:'',CRM_SMTP_HOST:'',CRM_EMAIL_ENABLED:'false',CRM_SMS_ENABLED:'false',CRM_NETGSM_USERCODE:'',CRM_LOCAL_DATABASE:'true',CRM_LOCAL_PATH:dataDir,APP_ORIGIN:'http://localhost:3001',CRON_SECRET:'integration-cron-secret',NODE_ENV:'production'};
+const isolated={DATABASE_URL:'',VERCEL:'',CRM_EMAIL_PROVIDER:'zeptomail',CRM_ZEPTOMAIL_TOKEN:'',CRM_SMTP_HOST:'',CRM_SMTP_USER:'',CRM_SMTP_PASSWORD:'',CRM_EMAIL_ENABLED:'false',CRM_SMS_ENABLED:'false',CRM_NETGSM_USERCODE:'',CRM_NETGSM_PASSWORD:'',CRM_LOCAL_DATABASE:'true',CRM_LOCAL_PATH:dataDir,APP_ORIGIN:'http://localhost:3001',CRON_SECRET:'integration-cron-secret',NODE_ENV:'production'};
 Object.assign(process.env,isolated);
 const {provisionAdmin,adminAccounts}=await import('../lib/crm/auth.ts');
 const {closeDatabase}=await import('../lib/crm/database.ts');
@@ -92,6 +92,9 @@ try {
   const key=randomUUID();
   assert.equal((await request('/api/talepler',{method:'POST',origin:'https://attacker.invalid',body:enquiry,headers:{'Idempotency-Key':key}})).status,403);
   assert.equal((await request('/api/talepler',{method:'POST',body:{...enquiry,consent:false},headers:{'Idempotency-Key':key}})).status,400);
+  for(const email of ['', 'invalid', 'a,b@example.invalid', 'user@example.invalid\r\nBcc:evil@example.invalid']) {
+    assert.equal((await request('/api/talepler',{method:'POST',body:{...enquiry,email},headers:{'Idempotency-Key':randomUUID()}})).status,400);
+  }
   const created=await json(await request('/api/talepler',{method:'POST',body:enquiry,headers:{'Idempotency-Key':key}}),201);
   const duplicate=await json(await request('/api/talepler',{method:'POST',body:enquiry,headers:{'Idempotency-Key':key}}),200);assert.equal(created.reference,duplicate.reference);
   assert.equal((await request('/api/talepler',{method:'POST',body:{...enquiry,message:'A different project request.'},headers:{'Idempotency-Key':key}})).status,409);

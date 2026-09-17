@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs",
     "crm:setup": "node scripts/crm-setup.mjs",
     "test:integration": "node tests/crm.integration.mjs"
   },

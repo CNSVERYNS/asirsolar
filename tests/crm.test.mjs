@@ -9,6 +9,7 @@ delete process.env.DATABASE_URL;
 delete process.env.VERCEL;
 process.env.CRM_LOCAL_PATH = 'memory://';
 process.env.CRM_LOCAL_DATABASE = 'true';
+Object.assign(process.env,{CRM_EMAIL_PROVIDER:'smtp',CRM_ZEPTOMAIL_TOKEN:'',CRM_EMAIL_REPLY_TO:'',CRM_EMAIL_ENABLED:'false',CRM_SMS_ENABLED:'false'});
 const auth = await import('../lib/crm/auth.ts');
 const db = await import('../lib/crm/database.ts');
 const repo = await import('../lib/crm/repository.ts');

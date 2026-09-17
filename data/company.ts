@@ -32,6 +32,6 @@ export const company = {
     { name: "Furkan Cansever", email: "furkan.cansever@asirsolar.com" },
   ],
 
-  // Genel iletişim için ilk mühendis adresi kullanılır.
-  generalEmail: "onur.durak@asirsolar.com",
+  // Onur ve Furkan'ın eriştiği doğrulanmış ortak posta kutusu.
+  generalEmail: "iletisim@asirsolar.com",
 } as const;

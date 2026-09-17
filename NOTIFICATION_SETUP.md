@@ -1,6 +1,6 @@
 # Form bildirimleri kurulumu
 
-16 Eylül 2026. Canlı site `https://www.asirsolar.com`; kök domain buraya yönlenir. Müşteri teşekkür e-postası ve mühendis bildirimleri için altyapı hazır. Henüz SMTP veya SMS sağlayıcı hesabı bağlanmadı ve gerçek teslimat doğrulanmadı. Hesap ve DNS adımları: [Zoho / Netgsm kurulumu](ZOHO_NETGSM_KURULUM.md).
+16 Eylül 2026. Canlı site `https://www.asirsolar.com`; kök domain buraya yönlenir. Zoho Mail Lite 10 GB, ortak `iletisim@asirsolar.com` kutusu ve ZeptoMail domain doğrulamaları kullanıcı tarafından tamamlandı. Site ZeptoMail REST gönderimine hazır; token bağlantısı ve ayrı onaylı gerçek transactional/SMS testleri bekliyor. Güncel durum ve exact env adları: [Zoho / Netgsm kurulumu](ZOHO_NETGSM_KURULUM.md).
 
 ## Alıcılar ve akış
 
@@ -15,11 +15,11 @@ Her web formu tek veritabanı işlemiyle talep, geçmiş olayı ve beş bildirim
 
 ## Sağlayıcıları bağlama
 
-1. Şirket posta kutuları için Zoho Mail Lite, form e-postaları için ZeptoMail seçildi. Gönderici domain ve iki posta kutusuna erişim doğrulanır. SMTP değerleri yalnızca Vercel **Production** sunucu ortamına girilir: `CRM_SMTP_HOST`, `CRM_SMTP_PORT` (587 veya 465), `CRM_SMTP_USER`, `CRM_SMTP_PASSWORD`, `CRM_EMAIL_FROM`. `CRM_EMAIL_REPLY_TO` müşteri yanıtlarının gideceği şirket adresidir; boşsa gönderen adresi kullanılır. SMTP TLS zorunludur.
+1. Production `CRM_EMAIL_PROVIDER=zeptomail`, `CRM_EMAIL_FROM=Asır Solar İletişim <iletisim@asirsolar.com>`, `CRM_EMAIL_REPLY_TO=iletisim@asirsolar.com` kullanır. Agent'ın ham Send Mail Token'ı yalnızca Production secret `CRM_ZEPTOMAIL_TOKEN` alanına girilir. REST endpoint sabittir; Agent Alias env'si yoktur. Önceki SMTP değişkenleri yalnızca `CRM_EMAIL_PROVIDER=smtp` uyumluluğu için korunur; ZeptoMail seçiliyken eksik token SMTP'ye düşmez.
 2. Netgsm için REST v2 gönderim ve rapor bağdaştırıcısı hazırlandı; hesap açılmadı veya paket satın alınmadı. Kullanıcının sağlayıcısı farklıysa bu bağdaştırıcı değiştirilir. Netgsm kullanılacaksa API alt kullanıcı erişimi, gönderici başlığı ve bakiye doğrulanıp `CRM_SMS_PROVIDER=netgsm`, `CRM_NETGSM_USERCODE`, `CRM_NETGSM_PASSWORD`, `CRM_NETGSM_HEADER` girilir.
 3. `APP_ORIGIN=https://www.asirsolar.com` olmalıdır. Bildirim bağlantıları HTTPS gerektirir. Parolalar/anahtarlar `NEXT_PUBLIC_` değişkenlerine, kaynak koduna veya bu belgeye yazılmaz.
-4. Sağlayıcı doğrulamaları bitene kadar `CRM_EMAIL_ENABLED=false`, `CRM_SMS_ENABLED=false` kalır (eksik değer de kapalıdır). Hazır kanallar için değerler ayrı ayrı `true` yapılıp yeniden dağıtılır. Bu değişiklik eski `held` kayıtları topluca göndermez.
-5. Bir kontrollü form ile **müşterinin teşekkür e-postası, iki mühendis posta kutusu ve iki telefon** üzerinde gerçek teslimat doğrulanır. SMTP kabulü posta kutusuna teslim kanıtı değildir. SMS’de sağlayıcı kabulü ile telefona teslim ayrı gösterilir.
+4. Bu görevde `CRM_EMAIL_ENABLED=false`, `CRM_SMS_ENABLED=false` kalır. Kullanıcıdan e-posta ve SMS için ayrı açık gerçek test onayı alınmadan açılmaz. Onay sonrasında hazır kanal `true` yapılıp yeniden dağıtılır; bu yeni formların gönderimini de açar. Eski `held` kayıtlar topluca gönderilmez.
+5. Ayrı test onaylarından sonra kontrollü form ile **müşterinin teşekkür e-postası, iki mühendis posta kutusu ve iki telefon** üzerinde gerçek teslimat doğrulanır. API/SMTP kabulü posta kutusuna teslim kanıtı değildir. SMS’de sağlayıcı kabulü ile telefona teslim ayrı gösterilir.
 
 Mühendis e-postasında talep bilgileri ve müşteriye yanıt adresi bulunur. Müşteri teşekkür e-postasında referans ve şirket yanıt adresi vardır; form serbest metni, mühendis bilgileri ve özel panel bağlantısı bulunmaz. HTML içerik güvenli biçimde kaçırılır ve alıcı tek adres nesnesi olarak gönderilir. SMS, kullanıcının isteğiyle müşterinin adını, proje türünü ve giriş gerektiren CRM bağlantısını içerir; açıklama, telefon ve e-posta SMS’e aktarılmaz. SMS uzunluğu/Türkçe karakterler nedeniyle ücretlendirilen parça sayısı, seçilen başlık ve gerçek sağlayıcı hesabıyla kabul testinde kontrol edilir.
 
@@ -54,12 +54,14 @@ Görevi durdurmak için Supabase yöneticisi `SELECT cron.unschedule('asir-crm-n
 | `failed` | Kesin hata. Geçici hata otomatik denenir; kalıcı hata için bağlantı/başlık/bakiye kontrolü ve elle tekrar gerekir. |
 | `unknown` | Zaman aşımı, yarım kalmış gönderim veya kabul sonrası kayıt sorunu. Otomatik tekrar yapılmaz. Kimlik varsa rapor sorgulanır; yoksa sağlayıcı paneli ve alıcı kontrol edilir. |
 
+ZeptoMail için 429 retryable, kesin 4xx failed; 5xx/timeout/bozuk başarı yanıtı unknown olarak tutulur. Ham provider cevabı veya Authorization kaydedilmez. E-posta kuyruk kimliği `client_reference` olarak gönderilir ve sağlayıcı loglarında korelasyon için kullanılabilir; provider idempotency garantisi sayılmaz. Ayrı request ID için yeni DB migration eklenmedi.
+
 Belirsiz bir bildirimi tekrar göndermeden önce yöneticinin **teslim edilmediğini doğrulaması** gerekir. Manuel işlem talep geçmişine yazılır. Gönderilmiş veya teslim edilmiş kayıt yeniden sıraya alınamaz. Geçiş öncesindeki bekleyen e-postalar tek seferlik göçle `held` durumuna alınır; mevcut üretim kuyruğu geçiş öncesi boştu.
 
 ## Yayın kabulü ve domain değişimi
 
-- Yerel otomatik testler: beş kalıcı kayıt, atomik geri alma, çift gönderim engeli, eşzamanlılık, SMTP alıcı hatası, zaman aşımı, Netgsm kabul/rapor eşleşmesi ve sınırlı tekrar. Müşteri/ekip şablon ayrımı, HTML kaçışları, çoklu alıcı engeli ve müşterinin mühendis adresini kullanması da kontrol edilir.
-- Üretim derlemesi, lint ve HTTP entegrasyonu geçti. 68 site rotası ve yönetici yetkileri kontrol edildi. Gerçek sağlayıcı yerine taklit servislerle yapılan testler teslimat kanıtı değildir.
+- 44 yerel otomatik test geçti: beş kalıcı kayıt, atomik geri alma, çift gönderim engeli, eşzamanlılık, SMTP uyumluluğu, ZeptoMail başarılı/başarısız/eksik token akışları, timeout/429/5xx, Netgsm hata izolasyonu, HTML ve header güvenliği.
+- Üretim build'i, lint, ayrı TypeScript kontrolü ve yerel HTTP entegrasyonu geçti. 67 site rotası kontrol edildi; sentetik secret canary ile 23 client artifact tarandı. Gerçek provider veya production form testi yapılmadı; mock testleri gerçek teslimat kanıtı değildir.
 - Müşteri teşekkür e-postası + iki mühendis posta kutusu + iki telefonda teslimat, spam kontrolü, sağlayıcı hatası sonrası doğru tekrar ve son domain üzerinde aynı test, bildirimlerin kabulü için gerekir.
 - Gerçek domain taşınınca `APP_ORIGIN`, `NEXT_PUBLIC_SITE_URL` ve Vault’taki `asir_crm_notification_url` birlikte güncellenir. HTTP yönlendirmesine güvenilmez. Google, DNS ve içerik maddeleri ana kontrol listesindedir.
 

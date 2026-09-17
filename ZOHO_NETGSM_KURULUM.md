@@ -1,86 +1,143 @@
-# Asır Solar — Zoho ve Netgsm kurulumu
+﻿# Asır Solar — Production iletişim kurulumu
 
-16 Eylül 2026. Site adresi `https://www.asirsolar.com`; `asirsolar.com` bu adrese yönleniyor.
+16 Eylül 2026. Ana site `https://www.asirsolar.com`; `asirsolar.com` buraya yönlenir. `asirsolar.com.tr` yalnızca web yönlendirmesi içindir, e-posta domaini değildir.
 
-Site yazılımı hazırlandığında her yeni web talebi için müşteriye teşekkür e-postası, Onur ve Furkan'a ayrı ayrı e-posta ve SMS kaydı oluşturulur. Hesap açılışı, DNS doğrulaması, sağlayıcı erişimi ve gerçek teslimat kontrolü tamamlanmadan gönderimler açılmaz. Admin giriş hesapları, şirket posta kutularından ayrıdır.
+**Ortak adres: Asır Solar İletişim <iletisim@asirsolar.com>.** Eski `info@asirsolar.com` primary/shared adres değildir. Bu görevde gerçek e-posta/SMS gönderilmez. E-posta testi ve SMS testi için ayrı, açık kullanıcı onayı gerekir.
 
-## 1. Şirket e-posta adresleri: Zoho Mail Lite
+## Tamamlanan hesap ve DNS kurulumu
 
-Başlangıç için **Mail Lite 5 GB, iki kullanıcı** seçin. [Paket sayfasında](https://www.zoho.com/mail/zohomail-pricing.html) yıllık ücretlendirme ve hesabınızın ülkesine ait son fiyatı kontrol edin. Bu iş için e-posta paketi yeterli; ayrıca ofis uygulaması paketi gerekmiyor.
+Bu bölüm kullanıcının bildirdiği tamamlanmış kurulum ve gerçek posta kutusu testlerine dayanır; web sitesinden transactional teslimatın test edildiği anlamına gelmez.
 
-1. Şirket yetkilisi olarak Zoho hesabınızı açın; kendi telefonunuzla doğrulamayı ve gerekiyorsa satın almayı tamamlayın. Mevcut alan adı olarak `asirsolar.com` ekleyin.
-2. Zoho'nun verdiği domain doğrulama TXT kaydını **Vercel → Domains → asirsolar.com → DNS Records** bölümüne ekleyin, sonra Zoho'da doğrulayın. Hesaba özel kayıt değeri Zoho ekranından alınmalıdır.
-3. **Users** bölümünde iki posta kutusu oluşturun:
-   - `onur.durak@asirsolar.com` — Onur Durak
-   - `furkan.cansever@asirsolar.com` — Furkan Cansever
-4. **Groups** bölümünde `info@asirsolar.com` grubu oluşturun; ikisini üye ekleyin. Dışarıdan müşteri yanıtları gelebilmesi için gruba e-posta gönderebilecekleri **Everyone** olarak seçin. Böylece teşekkür e-postasının yanıtları iki mühendise de ulaşır. [Zoho grup ayarları](https://www.zoho.com/mail/help/adminconsole/creating-groups.html)
-5. **Domains → asirsolar.com → Email Configuration** ekranındaki MX, SPF ve DKIM kayıtlarını Vercel DNS'e ekleyin. MX önceliklerini aynen koruyun. Sunucu adları veri merkezine göre değişebilir; rastgele `.com` veya `.eu` değerleri kullanmayın. Aynı domain adına ikinci bir SPF TXT kaydı eklemeyin; varsa mevcut SPF içinde birleştirin. Web sitesinin A/CNAME ve nameserver ayarlarını değiştirmek gerekmez. [Zoho e-posta kurulumu](https://www.zoho.com/mail/help/adminconsole/email-hosting-setup.html)
-6. Zoho'da kayıtları doğrulayın; iki kutunun ve `info` grubunun dışarıdan posta alabildiğini kontrol edin. DKIM'i etkinleştirin. DMARC'ı sağlayıcı panelinin önerdiği kayıtla kurup SPF/DKIM geçişlerini kontrol edin.
+- [x] asirsolar.com Vercel DNS'e taşındı: ns1.vercel-dns.com, ns2.vercel-dns.com.
+- [x] Zoho Mail Lite **10 GB**, iki kullanıcı lisansı aktif.
+- [x] onur.durak@asirsolar.com oluşturuldu — Onur Durak.
+- [x] furkan.cansever@asirsolar.com oluşturuldu — Ahmet Furkan Cansever.
+- [x] iletisim@asirsolar.com Shared Mailbox oluşturuldu; adı Asır Solar İletişim.
+- [x] Onur Shared Mailbox Moderator.
+- [x] Furkan Shared Mailbox Moderator.
+- [x] İkisinde de “Send using group email address” = Allowed.
+- [x] Zoho MX verified: mx.zoho.com / 10, mx2.zoho.com / 20, mx3.zoho.com / 50.
+- [x] Zoho SPF verified: `v=spf1 include:zohomail.com ~all`.
+- [x] Zoho Mail DKIM verified: zmail._domainkey.
+- [x] Domain ownership TXT mevcut ve doğrulanmış.
+- [x] Harici Gmail'den ortak kutuya inbound mail gerçek test edildi.
+- [x] Shared mailbox reply gerçek test edildi; gönderen iletisim@asirsolar.com.
+- [x] ZeptoMail hesabı oluşturuldu — Organization: ASIR SOLAR.
+- [x] ZeptoMail DKIM verified: 16151140._domainkey.
+- [x] ZeptoMail bounce CNAME verified: bounce-zem → cluster89.zeptomail.com.
+- [x] mail_agent_1 asirsolar.com ile associate edildi.
+- [x] Sender Address Restriction enabled.
+- [x] Allowed transactional sender = iletisim@asirsolar.com.
+- [x] ZeptoMail Send Mail Token mevcut; değeri bu belgede tutulmaz.
 
-## 2. Web sitesi otomatik e-postaları: Zoho ZeptoMail
+Mevcut DNS/MX/SPF/DKIM kayıtlarını yeniden kurmak gerekmez.
 
-Zoho Mail'in yönetim panelindeki **Transactional Emails / ZeptoMail** alanını kullanın; hesabınızda bulunmuyorsa aynı Zoho hesabıyla [ZeptoMail](https://www.zoho.com/zeptomail/) açın. Bu servis web formu gibi işlemlere bağlı e-postalar içindir. [Zoho entegrasyon açıklaması](https://www.zoho.com/mail/help/adminconsole/transactional-email-integration.html)
+## Uygulama akışı
 
-1. Asır Solar için bir Agent oluşturun. Kullanım açıklaması olarak şunu yazabilirsiniz: “Our website contact form sends a confirmation email to the visitor and a notification to two company engineers. We do not send marketing or bulk email.”
-2. Gönderen domaini `asirsolar.com` ekleyin. ZeptoMail'in verdiği **DKIM TXT** ve **return-path CNAME** kayıtlarını Vercel DNS'e ekleyin, doğrulayın. Zoho Mail'in MX kayıtları korunur. Hesap/işletme incelemesi istenirse tamamlayın. [Domain doğrulama](https://www.zoho.com/zeptomail/help/domains.html)
-3. Agent içindeki **SMTP/API → SMTP** ekranından sunucu, kullanıcı ve SMTP parolasını alın. Genel örnek `smtp.zeptomail.com`, kullanıcı `emailapikey`, port `587`/TLS; **kendi hesabınızdaki sunucu değerini** kullanın. [SMTP ayarları](https://help.zoho.com/portal/en/kb/zeptomail/faqs/sending-emails/articles/how-to-configure-smtp)
-4. Vercel → asirsolar projesi → **Settings → Environment Variables → Production** alanına aşağıdakileri girin. SMTP parolasını **Secret/Sensitive** olarak kaydedin; sohbete veya Git'e yazmayın.
+Tek public submission endpoint'i **POST /api/talepler**. `/iletisim` üzerindeki ContactForm kullanır; hizmet/çözüm seçimleri aynı forma proje türü parametresiyle yönlenir. Geri ödeme hesaplayıcısı yalnızca tarayıcıda çalışır, lead/e-posta oluşturmaz.
 
-| Değişken | Değer |
-| --- | --- |
-| `CRM_SMTP_HOST` | ZeptoMail SMTP ekranındaki sunucu |
-| `CRM_SMTP_PORT` | `587` |
-| `CRM_SMTP_USER` | ZeptoMail SMTP ekranındaki kullanıcı |
-| `CRM_SMTP_PASSWORD` | Agent SMTP parolası — gizli |
-| `CRM_EMAIL_FROM` | `Asır Solar <info@asirsolar.com>` |
-| `CRM_EMAIL_REPLY_TO` | `info@asirsolar.com` |
-| `CRM_EMAIL_ENABLED` | Doğrulama tamamlanınca `true` |
-| `APP_ORIGIN` | `https://www.asirsolar.com` |
-| `NEXT_PUBLIC_SITE_URL` | `https://www.asirsolar.com` |
+Form alanları: ad soyad, telefon, e-posta, firma, proje türü, açıklama ve onay. Ayrı şehir/fatura/tüketim alanı yoktur; açıklamaya yazılan konum ve sistem bilgilerinin tamamı internal e-postaya girer. Yeni form alanı veya uydurma URL eklenmedi.
 
-ZeptoMail kredili çalışır: bir kredi 10.000 alıcı e-postasıdır ve altı ay geçerlidir. Bir form üç e-posta tüketir. Paket fiyatını satın alma ekranında kontrol edin; 2026 fiyat değişikliği duyurulduğundan eski dolar fiyatları bu belgeye sabitlenmedi. [Güncel fiyatlandırma](https://www.zoho.com/zeptomail/pricing.html)
+Doğrulama → lead + geçmiş + üç e-posta + iki SMS işinin aynı DB transaction'ında kaydı → HTTP yanıtı → Next.js after içinde bağımsız gönderimler. Idempotency, advisory lock, rate limit, API yanıtı ve panel URL'si korunur. Provider hatası kaydedilmiş lead'i silmez.
 
-Müşteriye giden örnek metin:
+| İş | To | From | Reply-To |
+| --- | --- | --- | --- |
+| Müşteri teşekkür | Formdaki doğrulanmış adres | Asır Solar İletişim <iletisim@asirsolar.com> | iletisim@asirsolar.com |
+| Onur internal | onur.durak@asirsolar.com | Aynı ortak adres | Müşterinin doğrulanmış adresi |
+| Furkan internal | furkan.cansever@asirsolar.com | Aynı ortak adres | Müşterinin doğrulanmış adresi |
 
-> Merhaba,
->
-> Asır Solar ile iletişime geçtiğiniz için teşekkür ederiz. Talebinizi aldık. Mühendislerimiz projenizi inceleyerek en kısa sürede sizinle iletişime geçecek.
->
-> Talep numaranız: ASR-…
->
-> Eklemek istediğiniz bir bilgi varsa bu e-postayı yanıtlayabilirsiniz.
->
-> Saygılarımızla, Asır Solar Ekibi
+Üç e-posta üç ayrı kuyruk işi ve API çağrısıdır. Mevcut HTML/text tasarımı korunur. Müşteriye talebin alındığı, inceleneceği, dönüş yapılacağı ve referansı bildirilir; özel CRM bağlantısı veya kullanıcı serbest metni gönderilmez. Internal mesajlar tüm form alanlarını, talep numarasını, lead ID'yi ve **/admin/talepler/{lead.id}** bağlantısını içerir. HTML kaçırılır; recipient/reply-to tek adres olarak doğrulanır.
 
-Müşterinin e-postasında yönetim paneli bağlantısı veya mühendislerin özel bilgileri bulunmaz. Mühendislere giden e-postada form bilgileri, panel bağlantısı ve müşteriye doğrudan yanıt adresi vardır.
+SMS mevcut ad + proje türü + panel bağlantısı şablonunu korur. Alıcılar: Onur **0541 924 35 45**, Furkan **0543 118 58 61**. Müşteriye SMS yoktur. Netgsm kapalı/eksikse SMS işleri held kalır; ağ çağrısı yapılmaz, e-posta ve kayıt devam eder.
 
-## 3. Telefon bildirimleri: Netgsm
+## ZeptoMail REST ve SMTP uyumluluğu
 
-1. [Netgsm](https://www.netgsm.com.tr/) üzerinden şirket adına **Toplu SMS / API** hizmeti için başvurun. Başvuru sırasında istenen şirket/yetkili doğrulamasını tamamlayın ve kullanımınıza uygun SMS bakiyesi alın.
-2. Portalda **SMS Hizmeti → SMS Ayarları → Başlıklarım** bölümünden `ASIR SOLAR` gibi şirket başlığı için başvurun. Gönderimde sağlayıcının onayladığı başlık aynen kullanılmalıdır.
-3. **Kullanıcı İşlemleri → API Talep İşlemleri** üzerinden API erişimini talep edin. **Abonelik İşlemleri → Alt Kullanıcı Hesapları** bölümünde web sitesi için ayrı API alt kullanıcısı oluşturun, gerekli SMS gönderim/rapor yetkilerini tanımlayın ve onayını bekleyin. [Netgsm API dokümanı](https://www.netgsm.com.tr/dokuman/), [alt kullanıcı kurulumu](https://bilgibankasi.netgsm.com.tr/abonelik-islemleri/diger-islemler/alt-kullanici-olusturma)
-4. Vercel Production ortamına aşağıdaki değerleri ekleyin. Alt kullanıcı parolasını **Secret/Sensitive** olarak kaydedin.
+Kod: lib/crm/zeptomail.ts; mevcut işleyici: lib/crm/email.ts. Sunucu giriş noktası notifications.server.ts, server-only sınırını içerir.
 
-| Değişken | Değer |
-| --- | --- |
-| `CRM_SMS_PROVIDER` | `netgsm` |
-| `CRM_NETGSM_USERCODE` | Netgsm API alt kullanıcı kodu |
-| `CRM_NETGSM_PASSWORD` | API alt kullanıcı parolası — gizli |
-| `CRM_NETGSM_HEADER` | Onaylı SMS başlığının birebir aynısı |
-| `CRM_SMS_ENABLED` | Hesap, API ve başlık hazır olunca `true` |
+- Sabit HTTPS endpoint: https://api.zeptomail.com/v1.1/email.
+- Authorization: `Zoho-enczapikey <Send Mail Token>`. Env'ye **ham token** girin, öneki kod ekler.
+- from, tek öğeli to, reply_to, subject, htmlbody, textbody, mime_headers, client_reference kullanılır; tracking kapalıdır.
+- Agent Alias request için gerekmez; alias/host/domain env'si eklenmedi. Token ilgili Agent'ı belirler.
+- 10 saniye timeout; redirect: error. Token farklı hosta yönlendirilemez.
+- EM_104 başarı kodu ve request ID doğrulanır. sent sağlayıcının kabulüdür; inbox teslim garantisi değildir.
+- 429 artan beklemeyle tekrar denenir. Kesin 4xx failed; timeout, 5xx, bozuk/belirsiz başarı unknown kalır ve otomatik tekrar edilmez. client_reference provider idempotency garantisi sayılmaz.
+- Provider error body, token, Authorization veya ham exception loglanmaz; sabit güvenli hata kodları tutulur.
 
-SMS alıcıları kodda tanımlıdır: Onur **0541 924 35 45**, Furkan **0543 118 58 61**. Müşteriye SMS gönderilmez.
+[Resmî Send Email sözleşmesi](https://www.zoho.com/zeptomail/help/api/email-sending.html), [hata kodları](https://www.zoho.com/zeptomail/help/api/error-codes.html).
 
-Örnek: “Asır Solar: Mehmet Şahin, çatı projesi için sizinle iletişime geçmek istiyor. Talep: https://www.asirsolar.com/admin/talepler/…”
+**İki yeni env gerekçesi:** CRM_ZEPTOMAIL_TOKEN SMTP parolasından farklı Send Mail Token'ı taşır. CRM_EMAIL_PROVIDER token eksik olduğunda eski SMTP ayarlarına sessizce dönülmesini önler. Diğer adlar korunur. Provider hiç tanımlanmamış eski deployment'larda varsayılan smtp'dir; mevcut SMTP uyumluluğu sürer. Bilinmeyen provider gönderimi kapalı tutar.
 
-Ad ve proje türü SMS'tedir; müşterinin uzun açıklaması, telefonu ve e-postası paneldedir. Türkçe karakterler ve bağlantı nedeniyle bir bildirim birden fazla SMS parçası olarak ücretlendirilebilir; ilk gönderimde Netgsm raporundan kontrol edin.
+## Vercel env — exact source code adları
 
-## 4. Son adım: yeniden yayınla ve teslimatı kontrol et
+Vercel → asirsolar → Settings → Environment Variables. Gerçek provider credentials **yalnızca Production**. Preview/Development gönderim bayrakları false, gerçek token/parolalar boş olmalıdır. Testler sentetik değer ve mock sağlayıcı kullanır, prod DB'ye bağlanmaz.
 
-Vercel ortam değişikliği mevcut dağıtımı değiştirmez: **Deployments → son Production dağıtımı → Redeploy** yapın. E-posta ve SMS bağımsız açılabilir; SMS hesabı beklenirken e-posta kullanılabilir.
+| ENV VARIABLE NAME | Ne için / değer | Secret? | Nereden / ortam |
+| --- | --- | --- | --- |
+| CRM_EMAIL_PROVIDER | zeptomail | Hayır | Uygulama ayarı; Production. Preview/Development da aynı seçim, gönderim kapalı. |
+| CRM_ZEPTOMAIL_TOKEN | Ham Send Mail Token | **Evet** | ZeptoMail mail_agent_1 → SMTP/API → Send Mail Token; **Production only**, Sensitive/Secret. |
+| CRM_EMAIL_FROM | Asır Solar İletişim <iletisim@asirsolar.com> | Hayır | Doğrulanmış sender; Production. |
+| CRM_EMAIL_REPLY_TO | iletisim@asirsolar.com | Hayır | Shared Mailbox; Production. Boşsa From kullanılır. |
+| CRM_EMAIL_ENABLED | Şimdi **false**; ayrı gerçek test onayı sonrası true | Hayır | Preview/Development false. |
+| APP_ORIGIN | https://www.asirsolar.com | Hayır | Production origin; Preview kendi URL'si, Development http://localhost:3000. Bildirimler HTTPS ister. |
+| NEXT_PUBLIC_SITE_URL | https://www.asirsolar.com | Hayır, public | Kanonik site URL'si; secret içermez. |
+| CRM_SMS_PROVIDER | netgsm | Hayır | Netgsm hazır olduğunda Production. |
+| CRM_SMS_ENABLED | Şimdi **false**; ayrı SMS onayı sonrası true | Hayır | Preview/Development false. |
+| CRM_NETGSM_USERCODE | API alt kullanıcı kodu | Credential olarak koruyun | Netgsm API alt kullanıcı; Production only. |
+| CRM_NETGSM_PASSWORD | API alt kullanıcı parolası | **Evet** | Netgsm alt kullanıcı; Production only, Sensitive/Secret. |
+| CRM_NETGSM_HEADER | Onaylı başlığın birebir aynısı | Hayır | Netgsm Başlıklarım; Production. |
+| CRON_SECRET | Mevcut zamanlayıcı yetkilendirmesi | **Evet** | Vercel ve Supabase Vault'taki mevcut değer; değiştirmeyin. Production only. |
+| DATABASE_URL | Mevcut Supabase bağlantısı | **Evet** | Production değeri korunur. Preview için ayrı DB gerekir. |
+| DATABASE_SSL_CA | Mevcut DB sertifika doğrulaması | Hayır, server ayarı | Mevcut Production değeri korunur. |
+| CRM_SMTP_HOST | Eski SMTP host | Hayır | Yalnızca provider=smtp; REST kullanmaz. |
+| CRM_SMTP_PORT | Eski SMTP portu; varsayılan 587, alternatif 465 | Hayır | Yalnızca SMTP. |
+| CRM_SMTP_USER | Eski SMTP kullanıcı adı | Credential olarak koruyun | Yalnızca SMTP. |
+| CRM_SMTP_PASSWORD | Eski SMTP parolası | **Evet** | Yalnızca SMTP. Send Mail Token'ını buraya koymayın. |
 
-Kendi erişiminiz olan müşteri e-posta adresiyle tek test formu doldurun. Panelde tek talep ve beş bildirim görünmeli. Müşterinin teşekkür e-postasını, iki mühendisin e-postalarını ve iki telefondaki SMS'i kontrol edin. E-posta yanıtının `info` grubu üzerinden her iki mühendise ulaştığını da doğrulayın. SMTP kabulü tek başına gelen kutusuna teslimat anlamına gelmez.
+CRM_TRUST_PROXY IP rate-limit ayarı, CRM_LOCAL_DATABASE/CRM_LOCAL_PATH yerel test ayarları olarak kalır; Production sağlayıcı kurulumu için değişmez. VERCEL, VERCEL_URL ve VERCEL_PROJECT_PRODUCTION_URL platformdan gelir. NEXT_PUBLIC_WHATSAPP_PHONE/NAME public WhatsApp ayarlarıdır, e-posta/SMS credentials değildir.
 
-Eski bekletilmiş kayıtlar etkinleştirmeyle topluca gönderilmez. Geçmişte oluşturulan taleplere geriye dönük teşekkür e-postası eklenmez. Ayrıntılar: [Bildirim altyapısı](NOTIFICATION_SETUP.md).
+Bu çalışmada Production non-secret CRM_EMAIL_PROVIDER, CRM_EMAIL_FROM, CRM_EMAIL_REPLY_TO hazırlandı; iki gönderim anahtarı false bırakıldı. Token okunmadı, alınmadı veya bağlanmadı. Token eklerken tüm environments seçeneğini kullanmayın.
 
-Hesap açılışı, telefon doğrulaması, işletme onayı ve ödeme şirket yetkilisi tarafından tamamlanmalıdır. DNS kayıtlarının **ad/tür/değer** bilgilerini paylaşabilirsiniz; bunlar doğrulama için kullanılabilir. SMTP ve Netgsm parolaları yalnızca Vercel'in gizli değişken alanına girilmelidir.
+## Test stratejisi ve kalan işler
+
+Gerçek secret bağlamadan önce mock birim testleri, lint, build/typecheck, client bundle sızıntı kontrolü ve geçici yerel DB ile HTTP entegrasyonu çalıştırılır. Gerçek ileti gönderilmez. Build kontrolü gerçek token yerine sentetik canary kullanabilir.
+
+```powershell
+npm test
+npm run lint
+npm run build
+npx tsc --noEmit
+node scripts/check-communication-build.mjs
+npm run test:integration
+```
+
+- [ ] ZeptoMail token Vercel CRM_ZEPTOMAIL_TOKEN'a girilecek.
+- [ ] Gerekli diğer Vercel email env'leri son kez kontrol edilecek; non-secret değerler hazır, gönderim kapalı.
+- [ ] Token/aktivasyon sonrasında production deployment/redeploy yapılacak. Kodun gönderimsiz yayını aktivasyon değildir.
+- [ ] Açık kullanıcı onayıyla controlled transactional email test.
+- [ ] Customer confirmation email inbox testi.
+- [ ] Onur internal notification inbox testi.
+- [ ] Furkan internal notification inbox testi.
+- [ ] Netgsm account.
+- [ ] Netgsm approved SMS header.
+- [ ] Netgsm API sub-user/credentials.
+- [ ] Netgsm env variables.
+- [ ] Ayrı açık kullanıcı onayıyla SMS controlled test.
+- [ ] Full end-to-end production form test.
+
+**Kontrollü gerçek test önerisi:** Kullanıcının onayladığı test adresiyle, gönderimler kapalıyken tek test formu oluşturulur ve beş iş held kalır. E-posta testi onayından sonra email kanalı açılır/redeploy edilir; yalnızca bu talebin üç email işi panelden başlatılır. Bayrağı açmak yeni gerçek formların email gönderimini de etkinleştirir; bu etki onay kapsamında açıkça belirtilmelidir. SMS false kalır. SMS için daha sonra ayrı onay ve aktivasyon gerekir. Eski held işler kendiliğinden açılmaz. Provider kabulü sonrası inbox/telefon teslimatı ayrıca kontrol edilir.
+
+## Netgsm hesabı geldiğinde
+
+[Netgsm portalında](https://portal.netgsm.com.tr/) şirket hesabı/SMS bakiyesi oluşturun. SMS Hizmeti → SMS Ayarları → Başlıklarım üzerinden başlık onayı alın. Kullanıcı İşlemleri → API Talep İşlemleri ve Abonelik İşlemleri → Alt Kullanıcı Hesapları üzerinden API alt kullanıcısı ve SMS gönderim/rapor yetkilerini tamamlayın. Parolayı yalnızca Vercel Production secret alanına girin. [Netgsm API dokümanı](https://www.netgsm.com.tr/dokuman/)
+
+Zamanlayıcı ve teslim durumları: [NOTIFICATION_SETUP.md](NOTIFICATION_SETUP.md). Token/parola/Authorization hiçbir belge, commit veya log'a yazılmaz.
+
+## Bu sürümün doğrulaması
+
+- [x] 44 otomatik test; ZeptoMail/SMTP/Netgsm çağrılarının tamamı mock.
+- [x] Lint, production build ve ayrı TypeScript kontrolü geçti.
+- [x] Yerel HTTP entegrasyonu ve 67 sayfa/rota kontrolü geçti.
+- [x] Sentetik secret canary ile 23 client build dosyası tarandı; provider kodu veya secret sızıntısı yok.
+- [x] Vercel Preview ve Development'ta ortam değişkeni tanımlı olmadığı kontrol edildi; production credentials kopyalanmadı.
+- [x] Production sender/reply-to güncellendi, provider seçildi; iki gönderim anahtarı false.
+- [ ] Gerçek transactional e-posta/SMS teslimatı — yapılmadı, ayrı açık onay gerekiyor.

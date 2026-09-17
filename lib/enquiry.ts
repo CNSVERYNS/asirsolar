@@ -13,7 +13,8 @@ export type EnquiryErrors = Partial<Record<keyof Enquiry, string>>;
 
 // One plain mailbox only; the public form must never expand to multiple recipients.
 export function isValidEmail(value: string) {
-  return /^[^\s@<>,;:"\\\[\]]+@[^\s@<>,;:"\\\[\]]+\.[^\s@<>,;:"\\\[\]]+$/.test(value);
+  return value.length <= 254 && !/[\u0000-\u001f\u007f]/.test(value)
+    && /^[^\s@<>,;:"\\\[\]]+@[^\s@<>,;:"\\\[\]]+\.[^\s@<>,;:"\\\[\]]+$/.test(value);
 }
 
 export function resolveProjectType(value: unknown): string {
