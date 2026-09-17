@@ -52,11 +52,13 @@ test('customer and engineer notification persistence, delivery and recovery', as
     assert.deepEqual(await db.getDatabase().prepare('SELECT count(*) AS total FROM leads').get(),before);
   });
   await t.test('parallel workers send each recipient once and keep private form text out of SMS',async()=>{
+    process.env.CRM_EMAIL_FROM='ASIR SOLAR GÜNEŞ ENERJİSİ SİSTEMLERİ <iletisim@asirsolar.com>';
     const item=await create(); const mails=[]; const texts=[];
     mock.method(nodemailer,'createTransport',()=>({close(){},async sendMail(message){mails.push(message);return {accepted:[message.to.address],rejected:[]};}}));
     mock.method(globalThis,'fetch',async(url,options)=>{assert.equal(url,'https://api.netgsm.com.tr/sms/rest/v2/send');const body=JSON.parse(options.body);texts.push(body);return smsAccepted(String(100+texts.length));});
     await Promise.all([processNotifications(item.lead.id),processNotifications(item.lead.id)]);
     assert.equal(mails.length,3);assert.equal(texts.length,2);
+    assert.ok(mails.every(message=>message.from===process.env.CRM_EMAIL_FROM));
     assert.deepEqual(texts.map(body=>body.messages[0].no).sort(),['5419243545','5431185861']);
     assert.ok(texts.every(body=>!body.messages[0].msg.includes(enquiry.message)&&!body.messages[0].msg.includes(enquiry.email)));
     assert.ok(texts.every(body=>body.messages[0].msg.includes(enquiry.name)&&body.messages[0].msg.includes('çatı projesi')));

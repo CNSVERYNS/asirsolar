@@ -15,7 +15,7 @@ Her web formu tek veritabanı işlemiyle talep, geçmiş olayı ve beş bildirim
 
 ## Sağlayıcıları bağlama
 
-1. Production `CRM_EMAIL_PROVIDER=zeptomail`, `CRM_EMAIL_FROM=Asır Solar İletişim <iletisim@asirsolar.com>`, `CRM_EMAIL_REPLY_TO=iletisim@asirsolar.com` kullanır. Agent'ın ham Send Mail Token'ı yalnızca Production secret `CRM_ZEPTOMAIL_TOKEN` alanına girilir. REST endpoint sabittir; Agent Alias env'si yoktur. Önceki SMTP değişkenleri yalnızca `CRM_EMAIL_PROVIDER=smtp` uyumluluğu için korunur; ZeptoMail seçiliyken eksik token SMTP'ye düşmez.
+1. Production `CRM_EMAIL_PROVIDER=zeptomail`, `CRM_EMAIL_FROM=ASIR SOLAR GÜNEŞ ENERJİSİ SİSTEMLERİ <iletisim@asirsolar.com>`, `CRM_EMAIL_REPLY_TO=iletisim@asirsolar.com` kullanır. Agent'ın ham Send Mail Token'ı yalnızca Production secret `CRM_ZEPTOMAIL_TOKEN` alanına girilir. REST endpoint sabittir; Agent Alias env'si yoktur. Önceki SMTP değişkenleri yalnızca `CRM_EMAIL_PROVIDER=smtp` uyumluluğu için korunur; ZeptoMail seçiliyken eksik token SMTP'ye düşmez.
 2. Netgsm için REST v2 gönderim ve rapor bağdaştırıcısı hazırlandı; hesap açılmadı veya paket satın alınmadı. Kullanıcının sağlayıcısı farklıysa bu bağdaştırıcı değiştirilir. Netgsm kullanılacaksa API alt kullanıcı erişimi, gönderici başlığı ve bakiye doğrulanıp `CRM_SMS_PROVIDER=netgsm`, `CRM_NETGSM_USERCODE`, `CRM_NETGSM_PASSWORD`, `CRM_NETGSM_HEADER` girilir.
 3. `APP_ORIGIN=https://www.asirsolar.com` olmalıdır. Bildirim bağlantıları HTTPS gerektirir. Parolalar/anahtarlar `NEXT_PUBLIC_` değişkenlerine, kaynak koduna veya bu belgeye yazılmaz.
 4. Bu görevde `CRM_EMAIL_ENABLED=false`, `CRM_SMS_ENABLED=false` kalır. Kullanıcıdan e-posta ve SMS için ayrı açık gerçek test onayı alınmadan açılmaz. Onay sonrasında hazır kanal `true` yapılıp yeniden dağıtılır; bu yeni formların gönderimini de açar. Eski `held` kayıtlar topluca gönderilmez.
@@ -60,7 +60,7 @@ Belirsiz bir bildirimi tekrar göndermeden önce yöneticinin **teslim edilmedi�
 
 ## Yayın kabulü ve domain değişimi
 
-- 44 yerel otomatik test geçti: beş kalıcı kayıt, atomik geri alma, çift gönderim engeli, eşzamanlılık, SMTP uyumluluğu, ZeptoMail başarılı/başarısız/eksik token akışları, timeout/429/5xx, Netgsm hata izolasyonu, HTML ve header güvenliği.
+- 45 yerel otomatik test geçti: beş kalıcı kayıt, atomik geri alma, çift gönderim engeli, eşzamanlılık, SMTP uyumluluğu, ZeptoMail başarılı/başarısız/eksik token akışları, timeout/429/5xx, Netgsm hata izolasyonu, HTML ve header güvenliği, tam şirket adı ve ortak logo başlığı.
 - Üretim build'i, lint, ayrı TypeScript kontrolü ve yerel HTTP entegrasyonu geçti. 67 site rotası kontrol edildi; sentetik secret canary ile 23 client artifact tarandı. Gerçek provider veya production form testi yapılmadı; mock testleri gerçek teslimat kanıtı değildir.
 - Müşteri teşekkür e-postası + iki mühendis posta kutusu + iki telefonda teslimat, spam kontrolü, sağlayıcı hatası sonrası doğru tekrar ve son domain üzerinde aynı test, bildirimlerin kabulü için gerekir.
 - Gerçek domain taşınınca `APP_ORIGIN`, `NEXT_PUBLIC_SITE_URL` ve Vault’taki `asir_crm_notification_url` birlikte güncellenir. HTTP yönlendirmesine güvenilmez. Google, DNS ve içerik maddeleri ana kontrol listesindedir.

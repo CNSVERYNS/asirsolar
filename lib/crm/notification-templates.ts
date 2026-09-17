@@ -5,10 +5,13 @@ function escapeHtml(value: string) {
 }
 
 function emailLayout(title: string, content: string, origin: string) {
+  const logoUrl = new URL("/images/brand/asir-logo.jpeg", origin).href;
   return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)}</title></head>
 <body style="margin:0;background:#f5f6f4;color:#18302b;font-family:Arial,sans-serif">
 <table role="presentation" style="width:100%;border-collapse:collapse"><tr><td align="center" style="padding:32px 16px">
-<table role="presentation" style="width:100%;max-width:600px;border-collapse:collapse;background:#fff"><tr><td style="padding:28px 32px;background:#173f35;color:#fff;font-size:24px;font-weight:bold">Asır Solar</td></tr>
+<table role="presentation" style="width:100%;max-width:600px;border-collapse:collapse;background:#fff"><tr><td align="center" style="padding:28px 32px;background:#173f35;color:#fff">
+<table role="presentation" align="center" bgcolor="#ffffff" style="border-collapse:collapse;background:#fff"><tr><td style="padding:12px"><img src="${escapeHtml(logoUrl)}" alt="Asır Solar Güneş Enerjisi Sistemleri" width="160" style="display:block;width:160px;max-width:100%;height:auto;border:0;color:#173f35;font-family:Arial,sans-serif;font-size:14px"></td></tr></table>
+<p style="margin:16px 0 0;font-size:16px;line-height:1.5;font-weight:bold">Asır Solar · Güneş Enerjisi Sistemleri</p></td></tr>
 <tr><td style="padding:32px;font-size:16px;line-height:1.7"><h1 style="margin:0 0 24px;font-size:25px;line-height:1.3">${escapeHtml(title)}</h1>${content}</td></tr>
 <tr><td style="padding:24px 32px;border-top:1px solid #e4e9e5;color:#5a6964;font-size:13px;line-height:1.7">Asır Solar · Güneş Enerjisi Sistemleri<br><a href="${escapeHtml(origin)}" style="color:#173f35">${escapeHtml(new URL(origin).hostname)}</a></td></tr></table>
 </td></tr></table></body></html>`;

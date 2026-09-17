@@ -75,7 +75,7 @@ Vercel → asirsolar → Settings → Environment Variables. Gerçek provider cr
 | --- | --- | --- | --- |
 | CRM_EMAIL_PROVIDER | zeptomail | Hayır | Uygulama ayarı; Production. Preview/Development da aynı seçim, gönderim kapalı. |
 | CRM_ZEPTOMAIL_TOKEN | Ham Send Mail Token | **Evet** | ZeptoMail mail_agent_1 → SMTP/API → Send Mail Token; **Production only**, Sensitive/Secret. |
-| CRM_EMAIL_FROM | Asır Solar İletişim <iletisim@asirsolar.com> | Hayır | Doğrulanmış sender; Production. |
+| CRM_EMAIL_FROM | `ASIR SOLAR GÜNEŞ ENERJİSİ SİSTEMLERİ <iletisim@asirsolar.com>` | Hayır | Doğrulanmış sender; Production. |
 | CRM_EMAIL_REPLY_TO | iletisim@asirsolar.com | Hayır | Shared Mailbox; Production. Boşsa From kullanılır. |
 | CRM_EMAIL_ENABLED | Şimdi **false**; ayrı gerçek test onayı sonrası true | Hayır | Preview/Development false. |
 | APP_ORIGIN | https://www.asirsolar.com | Hayır | Production origin; Preview kendi URL'si, Development http://localhost:3000. Bildirimler HTTPS ister. |
@@ -94,6 +94,8 @@ Vercel → asirsolar → Settings → Environment Variables. Gerçek provider cr
 | CRM_SMTP_PASSWORD | Eski SMTP parolası | **Evet** | Yalnızca SMTP. Send Mail Token'ını buraya koymayın. |
 
 CRM_TRUST_PROXY IP rate-limit ayarı, CRM_LOCAL_DATABASE/CRM_LOCAL_PATH yerel test ayarları olarak kalır; Production sağlayıcı kurulumu için değişmez. VERCEL, VERCEL_URL ve VERCEL_PROJECT_PRODUCTION_URL platformdan gelir. NEXT_PUBLIC_WHATSAPP_PHONE/NAME public WhatsApp ayarlarıdır, e-posta/SMS credentials değildir.
+
+Gönderen görünen adı `CRM_EMAIL_FROM` içinden güvenli ayrıştırılır; ZeptoMail `from.address` ve `from.name` alanlarına birlikte aktarılır. Ayrı display-name env'si yoktur. Müşteri ve ekip HTML e-postaları aynı başlığı kullanır: kaynak `logo.jpeg` ile aynı olan `public/images/brand/asir-logo.jpeg`, `APP_ORIGIN` üzerinden mutlak HTTPS URL ile yüklenir. Production logo URL'si: https://www.asirsolar.com/images/brand/asir-logo.jpeg. Düz metin ve Reply-To davranışı değişmez. Branding güncellemesi token, diğer secrets veya gönderim bayraklarını değiştirmez; doğrulama mock testler ve logo için GET ile yapılır.
 
 Bu çalışmada Production non-secret CRM_EMAIL_PROVIDER, CRM_EMAIL_FROM, CRM_EMAIL_REPLY_TO hazırlandı; iki gönderim anahtarı false bırakıldı. Token okunmadı, alınmadı veya bağlanmadı. Token eklerken tüm environments seçeneğini kullanmayın.
 
@@ -134,7 +136,7 @@ Zamanlayıcı ve teslim durumları: [NOTIFICATION_SETUP.md](NOTIFICATION_SETUP.m
 
 ## Bu sürümün doğrulaması
 
-- [x] 44 otomatik test; ZeptoMail/SMTP/Netgsm çağrılarının tamamı mock.
+- [x] 45 otomatik test; ZeptoMail/SMTP/Netgsm çağrılarının tamamı mock. Tam gönderen adı ve logo başlığı doğrulandı.
 - [x] Lint, production build ve ayrı TypeScript kontrolü geçti.
 - [x] Yerel HTTP entegrasyonu ve 67 sayfa/rota kontrolü geçti.
 - [x] Sentetik secret canary ile 23 client build dosyası tarandı; provider kodu veya secret sızıntısı yok.

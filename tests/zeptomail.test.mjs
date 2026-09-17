@@ -6,7 +6,8 @@ import nodemailer from 'nodemailer';
 delete process.env.DATABASE_URL;
 delete process.env.VERCEL;
 const fakeToken = `test-only-${randomUUID()}`;
-const from = 'Asır Solar İletişim <iletisim@asirsolar.com>';
+const senderName = 'ASIR SOLAR GÜNEŞ ENERJİSİ SİSTEMLERİ';
+const from = `${senderName} <iletisim@asirsolar.com>`;
 const active = () => Object.assign(process.env, {
   CRM_LOCAL_DATABASE:'true', CRM_LOCAL_PATH:'memory://', APP_ORIGIN:'https://www.asirsolar.com',
   CRM_EMAIL_PROVIDER:'zeptomail', CRM_ZEPTOMAIL_TOKEN:fakeToken, CRM_EMAIL_ENABLED:'true',
@@ -21,6 +22,7 @@ const {processNotifications,retryNotification} = await import('../lib/crm/notifi
 const {emailConfigured} = await import('../lib/crm/notification-config.ts');
 const {parsePublicEnquiry} = await import('../lib/crm/validation.ts');
 const {sendZeptoMail} = await import('../lib/crm/zeptomail.ts');
+const {parseEmailAddress} = await import('../lib/crm/email-address.ts');
 const enquiry = {name:'Ahmet Yılmaz',phone:'05000000000',email:'customer@example.invalid',company:'Test Firma',projectType:'Çatı Tipi',message:'Konum Gebze; aylık tüketim 1000 kWh, çatı 150 m². <script>bad()</script>',consent:true};
 const create = async () => repo.getLead((await repo.createWebsiteLead(parsePublicEnquiry(enquiry),randomUUID())).id);
 const accepted = () => new Response(JSON.stringify({data:[{code:'EM_104',message:'OK'}],message:'OK',request_id:randomUUID()}),{status:200});
@@ -54,12 +56,19 @@ test('ZeptoMail REST notification delivery (all provider calls mocked)',async t=
       assert.equal(url,'https://api.zeptomail.com/v1.1/email');
       assert.equal(options.headers.Authorization,`Zoho-enczapikey ${fakeToken}`);
       assert.equal(options.redirect,'error');assert.ok(options.signal instanceof AbortSignal);
-      assert.deepEqual(body.from,{address:'iletisim@asirsolar.com',name:'Asır Solar İletişim'});
+      assert.deepEqual(body.from,{address:'iletisim@asirsolar.com',name:senderName});
       assert.equal(body.to.length,1);assert.equal(body.cc,undefined);assert.equal(body.bcc,undefined);
       assert.equal(body.track_opens,false);assert.equal(body.track_clicks,false);
       assert.equal(body.mime_headers['Auto-Submitted'],'auto-generated');
       assert.ok(detail.deliveries.some(row=>row.id===body.client_reference));
       assert.ok(body.textbody&&body.htmlbody);assert.ok(!body.htmlbody.includes('<script>'));
+      const logo=body.htmlbody.match(/<img\b[^>]*>/g);
+      assert.equal(logo?.length,1);
+      assert.ok(logo[0].includes('src="https://www.asirsolar.com/images/brand/asir-logo.jpeg"'));
+      assert.ok(logo[0].includes('alt="Asır Solar Güneş Enerjisi Sistemleri"'));
+      assert.ok(logo[0].includes('width="160"')&&logo[0].includes('height:auto'));
+      assert.ok(!/localhost|127\.0\.0\.1|file:|[A-Z]:\\/i.test(logo[0]));
+      assert.ok(!body.textbody.includes('<img')&&!body.textbody.includes('/images/brand/'));
       assert.ok(!JSON.stringify(body).includes(fakeToken)&&!JSON.stringify(body).includes('info@asirsolar.com'));
       if(body.to[0].email_address.address===enquiry.email){
         assert.deepEqual(body.reply_to,[{address:'iletisim@asirsolar.com',name:''}]);
@@ -72,6 +81,15 @@ test('ZeptoMail REST notification delivery (all provider calls mocked)',async t=
       }
     }
     await processNotifications(first.id);assert.equal(calls.length,3);
+  });
+  await t.test('sender parser preserves the exact Unicode brand name and rejects header injection',()=>{
+    const expected={address:'iletisim@asirsolar.com',name:senderName};
+    assert.deepEqual(parseEmailAddress(from),expected);
+    assert.deepEqual(parseEmailAddress(`  "${senderName}" <iletisim@asirsolar.com>  `),expected);
+    assert.deepEqual(parseEmailAddress('iletisim@asirsolar.com'),{address:'iletisim@asirsolar.com',name:''});
+    for(const value of [undefined,'',`${senderName}\r\nBcc:other@example.invalid <iletisim@asirsolar.com>`,`${senderName}\u0000 <iletisim@asirsolar.com>`,`${from}, other@example.invalid`]){
+      assert.equal(parseEmailAddress(value),null);
+    }
   });
   await t.test('missing token or disabled email holds jobs without SMTP fallback or failed submissions',async()=>{
     for(const state of ['missing','disabled']){

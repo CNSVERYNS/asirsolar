@@ -63,7 +63,7 @@ Vercel > Settings > Environment Variables, **Production**:
 | `CRON_SECRET` | En az 32 karakter rastgele değer; sensitive |
 | `CRM_EMAIL_PROVIDER` | `zeptomail`; eski SMTP uyumluluğu için `smtp` |
 | `CRM_ZEPTOMAIL_TOKEN` | ZeptoMail ham Send Mail Token; sensitive, yalnızca Production |
-| `CRM_EMAIL_FROM` | `Asır Solar İletişim <iletisim@asirsolar.com>` |
+| `CRM_EMAIL_FROM` | `ASIR SOLAR GÜNEŞ ENERJİSİ SİSTEMLERİ <iletisim@asirsolar.com>` |
 | `CRM_EMAIL_REPLY_TO` | `iletisim@asirsolar.com` |
 | `CRM_EMAIL_ENABLED`, `CRM_SMS_ENABLED` | Gerçek test için ayrı onay verilene kadar `false` |
 | `CRM_SMTP_HOST`, `CRM_SMTP_PORT`, `CRM_SMTP_USER`, `CRM_SMTP_PASSWORD` | Yalnızca eski SMTP yolu; ZeptoMail REST bunları kullanmaz |
