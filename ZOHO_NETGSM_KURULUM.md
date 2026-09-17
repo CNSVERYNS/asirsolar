@@ -32,6 +32,8 @@ Bu bölüm kullanıcının bildirdiği tamamlanmış kurulum ve gerçek posta ku
 
 Mevcut DNS/MX/SPF/DKIM kayıtlarını yeniden kurmak gerekmez.
 
+17 Eylül 2026 canlı DMARC/BIMI audit'i, iki mühendise RUA raporlama taslağı, vektör logo/sertifika gereksinimleri ve enforcement öncesi kontroller: [BIMI_DMARC_KURULUM.md](BIMI_DMARC_KURULUM.md). Bu hazırlık DNS veya sağlayıcı ayarlarını değiştirmez.
+
 ## Uygulama akışı
 
 Tek public submission endpoint'i **POST /api/talepler**. `/iletisim` üzerindeki ContactForm kullanır; hizmet/çözüm seçimleri aynı forma proje türü parametresiyle yönlenir. Geri ödeme hesaplayıcısı yalnızca tarayıcıda çalışır, lead/e-posta oluşturmaz.
