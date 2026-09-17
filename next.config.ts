@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  async redirects() {
+    // Keep cached pages/crawlers using the former icon URLs on the company logo.
+    return [
+      { source: "/favicon.svg", destination: "/icon.png", permanent: true },
+      { source: "/icon-32.png", destination: "/favicon.ico", permanent: true },
+      { source: "/apple-touch-icon.png", destination: "/apple-icon.png", permanent: true },
+    ];
+  },
   // Page HTML was shipping with only `s-maxage` (no `max-age`), which
   // only constrains shared/CDN caches — a browser (especially an in-app
   // WebView reusing the same tab) is left to its own heuristics and can

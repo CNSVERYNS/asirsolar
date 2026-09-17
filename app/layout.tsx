@@ -41,13 +41,6 @@ export const metadata: Metadata = {
     description: siteConfig.defaultDescription,
     images: [defaultOgImage.url],
   },
-  icons: {
-    icon: [
-      { url: "/icon-32.png", type: "image/png", sizes: "32x32" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
-    ],
-    apple: "/apple-touch-icon.png",
-  },
 };
 
 export const viewport: Viewport = {
