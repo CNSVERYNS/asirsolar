@@ -159,8 +159,11 @@ test('CRM PostgreSQL persistence, authentication and workflow', async t => {
       const customerEmailMigration = await readFile(db.customerEmailMigrationPath, 'utf8');
       await restricted.exec(customerEmailMigration);
       await restricted.exec(customerEmailMigration);
+      const quotesMigration = await readFile(db.quotesMigrationPath, 'utf8');
+      await restricted.exec(quotesMigration);
+      await restricted.exec(quotesMigration);
       const tables = await restricted.query("SELECT count(*)::integer AS total FROM pg_tables WHERE schemaname='asir_crm'");
-      assert.equal(tables.rows[0].total, 11);
+      assert.equal(tables.rows[0].total, 17);
     } finally { await restricted.close(); }
   });
 });

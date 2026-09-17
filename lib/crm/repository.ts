@@ -63,8 +63,8 @@ export async function getLead(id: string): Promise<LeadDetail> {
     if (!lead)
         throw new CrmError("Müşteri kaydı bulunamadı.", 404);
     const events = await db.prepare("SELECT e.id, e.kind, e.content, COALESCE(u.name, 'Web sitesi') AS actorName, e.created_at AS createdAt FROM lead_events e LEFT JOIN users u ON u.id = e.actor_id WHERE e.lead_id = ? ORDER BY e.created_at DESC, e.sequence DESC").all(id) as LeadEvent[];
-    const deliveries = await db.prepare("SELECT id, recipient, purpose, status, attempts, sent_at AS sentAt, error_code AS errorCode, retryable FROM email_outbox WHERE lead_id = ? ORDER BY purpose, recipient").all(id) as EmailDelivery[];
-    const smsDeliveries = await db.prepare("SELECT id, recipient, status, attempts, sent_at AS sentAt, delivered_at AS deliveredAt, error_code AS errorCode, retryable, provider_id AS providerId FROM sms_outbox WHERE lead_id = ? ORDER BY recipient").all(id) as LeadDetail["smsDeliveries"];
+    const deliveries = await db.prepare("SELECT id, recipient, purpose, status, attempts, sent_at AS sentAt, error_code AS errorCode, retryable FROM email_outbox WHERE lead_id = ? AND quote_id IS NULL ORDER BY purpose, recipient").all(id) as EmailDelivery[];
+    const smsDeliveries = await db.prepare("SELECT id, recipient, status, attempts, sent_at AS sentAt, delivered_at AS deliveredAt, error_code AS errorCode, retryable, provider_id AS providerId FROM sms_outbox WHERE lead_id = ? AND quote_id IS NULL ORDER BY recipient").all(id) as LeadDetail["smsDeliveries"];
     return { lead, events, deliveries, smsDeliveries };
 }
 export async function listLeads(params: URLSearchParams): Promise<DashboardData> {

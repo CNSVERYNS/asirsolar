@@ -1,5 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { getDatabase, transaction } from "./database.ts";
+import { lockQuote, maintainQuoteJobs } from "../quotes/repository.ts";
+import { quoteJobAllowed, refreshQuoteJobToken } from "../quotes/notifications.ts";
 import { flushEmailOutbox } from "./email.ts";
 import { flushSmsOutbox, refreshSmsReports } from "./sms.ts";
 import { emailEnabled, smsEnabled } from "./notification-config.ts";
@@ -11,6 +13,7 @@ export async function processNotifications(leadId?: string) {
     const claimed = await db.prepare("INSERT INTO notification_worker(id,last_started_at) VALUES ('worker',?) ON CONFLICT(id) DO UPDATE SET last_started_at=EXCLUDED.last_started_at,last_error=NULL WHERE notification_worker.last_started_at < ? RETURNING id").get(Date.now(), Date.now() - 60000);
     if (!claimed) return { configured: emailEnabled() || smsEnabled(), skipped: true, sent: 0, accepted: 0 };
   }
+  if (!leadId) { try { await maintainQuoteJobs(); } catch { console.error("Quote maintenance deferred."); } }
   const outcomes = await Promise.allSettled([flushEmailOutbox(leadId), flushSmsOutbox(leadId), ...(leadId ? [] : [refreshSmsReports()])]);
   const hasError = outcomes.some(result => result.status === "rejected" || ("error" in result.value && !!result.value.error) || ("errors" in result.value && !!result.value.errors));
   if (!leadId) await db.prepare("UPDATE notification_worker SET last_finished_at=?,last_error=? WHERE id='worker'").run(Date.now(), hasError ? "worker_channel_error" : null);
@@ -26,10 +29,16 @@ export async function retryNotification(leadId: string, channel: "email" | "sms"
   if (!(channel === "email" ? emailEnabled() : smsEnabled())) throw new CrmError("Bu bildirim kanalı henüz etkinleştirilmedi.", 503);
   const table = channel === "email" ? "email_outbox" : "sms_outbox";
   return transaction(async db => {
+    const job = await db.prepare(`SELECT quote_id${channel === "email" ? ",purpose" : ""} FROM ${table} WHERE id=? AND lead_id=?`).get(deliveryId, leadId) as { quote_id: string | null; purpose?: string } | undefined;
+    if (job?.quote_id) {
+      await lockQuote(job.quote_id);
+      if (!await quoteJobAllowed(job.quote_id, channel === "sms" || job.purpose === "quote_customer")) throw new CrmError("Teklif gönderimi kapalı veya teklif artık gönderime uygun değil.", 409);
+    }
     const row = await db.prepare(`SELECT status FROM ${table} WHERE id=? AND lead_id=? FOR UPDATE`).get(deliveryId, leadId) as { status: string } | undefined;
     if (!row) throw new CrmError("Bildirim bulunamadı.", 404);
     if (!["held", "failed", "unknown"].includes(row.status)) throw new CrmError("Bu bildirim yeniden gönderilemez. Güncel durumu kontrol edin.", 409);
     if (row.status === "unknown" && !confirmedNotSent) throw new CrmError("Önce sağlayıcıda ve alıcıda bildirimin teslim edilmediğini doğrulayın.", 409);
+    if (job?.quote_id) await refreshQuoteJobToken(table, deliveryId, job.quote_id, channel === "sms" || job.purpose === "quote_customer");
     await db.prepare(`UPDATE ${table} SET status='pending',retryable=true,attempts=0,error_code=NULL,available_at=0,claim_token=NULL${channel === "sms" ? ",provider_id=NULL,report_checked_at=0" : ""} WHERE id=? AND lead_id=?`).run(deliveryId, leadId);
     await db.prepare("INSERT INTO lead_events(id,lead_id,actor_id,kind,content,created_at) VALUES (?,?,?,?,?,?)").run(randomUUID(), leadId, actorId, "notification", `${channel === "email" ? "E-posta" : "SMS"} bildirimi kullanıcı tarafından gönderim sırasına alındı.${row.status === "unknown" ? " Önceki teslimatın gerçekleşmediği doğrulandı." : ""}`, new Date().toISOString());
   });

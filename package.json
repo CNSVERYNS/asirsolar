@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "test": "node --test --test-concurrency=1 tests/*.test.mjs",
     "crm:setup": "node scripts/crm-setup.mjs",
-    "test:integration": "node tests/crm.integration.mjs"
+    "test:integration": "node tests/crm.integration.mjs",
+    "test:quotes": "node tests/quotes.integration.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",

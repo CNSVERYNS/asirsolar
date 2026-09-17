@@ -6,7 +6,7 @@ async function files(path) {
   const entries=await readdir(path,{withFileTypes:true});
   return (await Promise.all(entries.map(entry=>entry.isDirectory()?files(join(path,entry.name)):[join(path,entry.name)]))).flat();
 }
-const forbidden=['CRM_ZEPTOMAIL_TOKEN','CRM_NETGSM_PASSWORD','CRM_SMTP_PASSWORD','Zoho-enczapikey','https://api.zeptomail.com/v1.1/email'];
+const forbidden=['CRM_ZEPTOMAIL_TOKEN','CRM_NETGSM_PASSWORD','CRM_SMTP_PASSWORD','DATABASE_URL','CRON_SECRET','Zoho-enczapikey','https://api.zeptomail.com/v1.1/email','quote_tokens','quote_token','quote_number_seq'];
 // Optional synthetic build canaries are read without ever printing their values.
 for(const name of ['CRM_ZEPTOMAIL_TOKEN','CRM_NETGSM_PASSWORD','CRM_SMTP_PASSWORD']){
   if(process.env[name])forbidden.push(process.env[name]);

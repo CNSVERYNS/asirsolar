@@ -1,10 +1,10 @@
 import type { EmailPurpose, Lead } from "./types.ts";
 
-function escapeHtml(value: string) {
+export function escapeHtml(value: string) {
   return value.replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
 }
 
-function emailLayout(title: string, content: string, origin: string) {
+export function emailLayout(title: string, content: string, origin: string) {
   const logoUrl = new URL("/images/brand/asir-logo.jpeg", origin).href;
   return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)}</title></head>
 <body style="margin:0;background:#f5f6f4;color:#18302b;font-family:Arial,sans-serif">
@@ -17,7 +17,7 @@ function emailLayout(title: string, content: string, origin: string) {
 </td></tr></table></body></html>`;
 }
 
-export function renderNotificationEmail(purpose: EmailPurpose, lead: Lead, origin: string) {
+export function renderNotificationEmail(purpose: Extract<EmailPurpose, "team" | "customer_receipt">, lead: Lead, origin: string) {
   if (purpose === "customer_receipt") {
     const title = "Bizimle iletişime geçtiğiniz için teşekkür ederiz";
     // Do not reflect public form text or expose private CRM links in a customer receipt.

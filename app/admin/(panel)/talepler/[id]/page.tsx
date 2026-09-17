@@ -4,6 +4,7 @@ import { listUsers } from "@/lib/crm/auth";
 import { getLead } from "@/lib/crm/repository";
 import { CrmError } from "@/lib/crm/validation";
 import { LeadWorkspace } from "@/components/admin/LeadWorkspace";
+import { listQuotes } from "@/lib/quotes/server";
 export default async function LeadPage({ params }: {
     params: Promise<{
         id: string;
@@ -20,5 +21,5 @@ export default async function LeadPage({ params }: {
             notFound();
         throw error;
     }
-    return <LeadWorkspace initialDetail={detail} users={await listUsers()}/>;
+    return <LeadWorkspace initialDetail={detail} users={await listUsers()} quotes={await listQuotes(id)}/>;
 }

@@ -25,6 +25,13 @@ const nextConfig: NextConfig = {
   // (they're content-hashed and keep their own long-lived caching).
   async headers() {
     return [
+      ...["/teklif/:path*", "/api/teklif/:path*"].map(source => ({ source, headers: [
+        { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
+        { key: "Referrer-Policy", value: "no-referrer" },
+        { key: "X-Frame-Options", value: "DENY" },
+        { key: "X-Content-Type-Options", value: "nosniff" },
+        { key: "Cache-Control", value: "private, no-store" },
+      ] })),
       {
         // The image route validates visibility before allowing a cached image
         // to be reused, and must retain its own conditional-response headers.
