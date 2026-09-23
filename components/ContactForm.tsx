@@ -49,12 +49,12 @@ export function ContactForm({ initialProjectType = "Diğer / Bilmiyorum", initia
     }
   }
 
-  if (!available) return <div className="form-completion"><p className="eyebrow">BİZE ULAŞIN</p><h3>Projenizi birlikte değerlendirelim.</h3><p className="form-help">Çevrim içi talep formu şu anda kullanılamıyor. Telefon veya e-posta üzerinden ekibimizle iletişim kurabilirsiniz.</p><div className="form-completion__actions"><a className="btn btn--primary" href={company.phoneHref}>{company.phoneDisplay} ↗</a><a className="text-link" href={`mailto:${company.generalEmail}`}>E-posta gönder ↗</a></div></div>;
+  if (!available) return <div className="form-completion"><p className="eyebrow">BİZE ULAŞIN</p><h2 className="h3">Projenizi birlikte değerlendirelim.</h2><p className="form-help">Çevrim içi talep formu şu anda kullanılamıyor. Telefon veya e-posta üzerinden ekibimizle iletişim kurabilirsiniz.</p><div className="form-completion__actions"><a className="btn btn--primary" href={company.phoneHref}>{company.phoneDisplay} ↗</a><a className="text-link" href={`mailto:${company.generalEmail}`}>E-posta gönder ↗</a></div></div>;
 
   if (reference) return (
     <div className="form-completion" ref={resultRef} tabIndex={-1}>
       <p className="eyebrow">TALEBİNİZ KAYDEDİLDİ</p>
-      <h3>Projeniz için ilk adımı attık.</h3>
+      <h2 className="h3">Projeniz için ilk adımı attık.</h2>
       <p className="form-help">Bilgileriniz ekibimize ulaştı. İhtiyacınızı değerlendirip paylaştığınız iletişim bilgileri üzerinden size ulaşacağız.</p>
       <p className="form-help">Talep numaranız: <strong>{reference}</strong></p>
       <div className="form-completion__actions"><Link href="/" className="btn btn--primary">Ana sayfaya dön <span aria-hidden="true">↗</span></Link><a className="text-link" href={company.phoneHref}>{company.phoneDisplay}</a></div>
