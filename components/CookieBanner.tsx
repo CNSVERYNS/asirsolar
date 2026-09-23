@@ -41,7 +41,7 @@ export function CookieBanner() {
     >
       <p>
         {marketing.enabled ? "İzninizle ziyaret ölçümü ve reklam araçları yüklenebilir. Reddettiğinizde bu araçlar yüklenmez; form ve site çalışmaya devam eder." : "Bu sitede reklam veya analiz takibi yapılmaz. Yalnızca bu bildirimdeki tercihiniz tarayıcınızda saklanır."} Detaylar için{" "}
-        <Link href="/cerez-politikasi" className="text-link">
+        <Link href="/cerezler" className="text-link">
           Çerez Politikası
         </Link>
         ’nı inceleyebilirsiniz.

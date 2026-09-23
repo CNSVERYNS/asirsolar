@@ -4,7 +4,7 @@ import sharp from 'sharp';
 // GET-only: safe for production; never submits forms or authenticates to CRM.
 const target=new URL(process.argv[2]||'http://localhost:3000').origin;
 const get=path=>fetch(new URL(path,target),{redirect:'manual',signal:AbortSignal.timeout(60000)});
-const pages=['/','/ges-hesaplama','/ges-kurulumu','/ges-kurulumu/kocaeli','/ges-kurulumu/kocaeli/gebze-osb','/hizmetler/endustriyel-cati-ges','/hizmetler/arazi-ges','/iletisim'];
+const pages=['/','/hesapla','/bolgeler','/bolgeler/kocaeli','/bolgeler/kocaeli/gebze-osb','/hizmetler/cati-ges','/hizmetler/arazi-ges','/iletisim'];
 for(const path of pages){
  const response=await get(path);assert.equal(response.status,200,path);const html=await response.text();
  assert.match(response.headers.get('content-security-policy'),/frame-ancestors 'none'/);assert.ok(!response.headers.get('content-security-policy').includes('unsafe-eval'));
@@ -16,8 +16,8 @@ for(const path of pages){
  assert.match(html,/<meta property="og:image" content="https:\/\//);assert.match(html,/<meta name="twitter:card" content="summary_large_image"/);
  if(path.includes('gebze-osb'))assert.ok(html.includes('gosb.com.tr'));
 }
-for(const path of ['/ges-kurulumu/uydurma','/ges-kurulumu/kocaeli/uydurma','/og-image?path=%2Fadmin','/og-image?path=https://attacker.invalid'])assert.equal((await get(path)).status,404,path);
-for(const path of ['/','/ges-kurulumu/kocaeli/gebze-osb','/hizmetler/endustriyel-cati-ges']){
+for(const path of ['/bolgeler/uydurma','/bolgeler/kocaeli/uydurma','/og-image?path=%2Fadmin','/og-image?path=https://attacker.invalid'])assert.equal((await get(path)).status,404,path);
+for(const path of ['/','/bolgeler/kocaeli/gebze-osb','/hizmetler/cati-ges']){
  const response=await get('/og-image?path='+encodeURIComponent(path));assert.equal(response.status,200,path);assert.match(response.headers.get('content-type'),/image\/png/);
  const dimensions=await sharp(Buffer.from(await response.arrayBuffer())).metadata();assert.equal(dimensions.width,1200);assert.equal(dimensions.height,630);
 }

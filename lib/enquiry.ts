@@ -1,4 +1,8 @@
 export const projectTypes = ["Konut / Villa", "İşletme / Fabrika", "Çatı Tipi", "Cephe Tipi", "Arazi Tipi", "Elektrik ve Pano Sistemleri", "Bakım / Teknik Destek", "Diğer / Bilmiyorum"] as const;
+const projectKeys = ["konut", "isletme", "cati", "cephe", "arazi", "elektrik", "bakim", "diger"];
+export function projectTypeKey(value: string): string {
+  return projectKeys[projectTypes.indexOf(value as typeof projectTypes[number])] ?? "diger";
+}
 
 export type Enquiry = {
   name: string;
@@ -18,6 +22,7 @@ export function isValidEmail(value: string) {
 }
 
 export function resolveProjectType(value: unknown): string {
+  if (typeof value === "string" && projectKeys.includes(value)) return projectTypes[projectKeys.indexOf(value)];
   return typeof value === "string" && projectTypes.some((type) => type === value) ? value : "Diğer / Bilmiyorum";
 }
 

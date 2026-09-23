@@ -37,7 +37,7 @@ export type GuideItem = {
 export const guideItems: GuideItem[] = [
   // ---- Temel Bilgiler ----
   {
-    slug: "gunes-enerjisi-sistemi-nasil-calisir",
+    slug: "gunes-enerjisi",
     question: "Güneş enerjisi sistemi nasıl çalışır?",
     category: "Temel Bilgiler",
     summary:
@@ -47,10 +47,10 @@ export const guideItems: GuideItem[] = [
       "Sistemin bir diğer temel bileşeni olan inverter, panellerden gelen doğru akımı, şebekedeki ve elektrikli cihazlardaki standart alternatif akıma (AC) dönüştürür. Üretilen enerji önce binanın kendi tüketimini karşılar; artan veya eksik kalan miktar şebeke bağlantısı üzerinden dengelenir.",
       "Sistemin verimli çalışması; panel yerleşimi, gölgeleme durumu, inverter seçimi ve elektrik altyapısının doğru boyutlandırılmasına bağlıdır — bu yüzden kurulumdan önce sahada yapılan analiz belirleyicidir.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
   {
-    slug: "gunes-paneli-nedir-nelerden-olusur",
+    slug: "gunes-paneli",
     question: "Güneş paneli nedir, nelerden oluşur?",
     category: "Temel Bilgiler",
     summary:
@@ -60,10 +60,10 @@ export const guideItems: GuideItem[] = [
       "Paneli çevreleyen alüminyum çerçeve, hem mekanik dayanıklılık sağlar hem de montaj sistemine sabitlenmesini mümkün kılar. Panelin arkasında, ürettiği akımı dış devreye ileten bağlantı kutusu bulunur.",
       "Bir sistemde panel tek başına yeterli değildir — inverter, montaj konstrüksiyonu, kablolama ve koruma ekipmanlarıyla birlikte bütün bir kurulum oluşturur.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
   {
-    slug: "cati-tipi-gunes-paneli-sistemi-nedir",
+    slug: "cati-ges",
     question: "Çatı tipi güneş paneli sistemi nedir?",
     category: "Temel Bilgiler",
     summary:
@@ -73,10 +73,10 @@ export const guideItems: GuideItem[] = [
       "Bu sistem tipinde belirleyici olan; çatının yönü (güneye bakan yüzeyler genelde daha verimlidir), eğim açısı, gölgeleme durumu ve taşıma kapasitesidir. Uygun olmayan bir montaj yöntemi, hem panel veriminde hem çatının uzun ömründe soruna yol açabilir.",
       "Çatı tipi kurulumlar; ek arazi gerektirmemesi ve mevcut yapıyı değerlendirmesi nedeniyle konut ve sanayi çatılarında en sık tercih edilen sistem tipidir.",
     ],
-    relatedServiceSlug: "cephe-tipi-uygulamalar",
+    relatedServiceSlug: "cati-cephe",
   },
   {
-    slug: "cephe-tipi-gunes-paneli-sistemi-nedir",
+    slug: "cephe-ges",
     question: "Cephe tipi güneş paneli sistemi nedir?",
     category: "Temel Bilgiler",
     summary:
@@ -86,10 +86,10 @@ export const guideItems: GuideItem[] = [
       "Cephe uygulamaları, çatı kurulumlarından farklı bir mühendislik yaklaşımı gerektirir: taşıyıcı sistem bina statiğiyle uyumlu olacak şekilde ayrıca projelendirilir, rüzgar yükü hesabı daha kritik hale gelir ve panellerin dikey açısı nedeniyle güneş alma verimi çatı tipine göre farklılaşır.",
       "Doğru uygulandığında cephe tipi sistemler, hem enerji üretimi sağlar hem de bina cephesinin bir parçası olarak işlev görür.",
     ],
-    relatedServiceSlug: "cephe-tipi-uygulamalar",
+    relatedServiceSlug: "cati-cephe",
   },
   {
-    slug: "arazi-tipi-ges-nedir",
+    slug: "arazi-ges",
     question: "Arazi tipi güneş enerji santrali (GES) nedir?",
     category: "Temel Bilgiler",
     summary:
@@ -99,12 +99,12 @@ export const guideItems: GuideItem[] = [
       "Bu sistem tipinde arazi eğimi, zemin etüdü, gölgeleme ve panel sıraları arası mesafe gibi faktörler; çatı tipi kurulumlara göre farklı bir planlama gerektirir.",
       "Arazi tipi sistemler; geniş, gölgesiz ve güneşe uygun konumlanmış bir arazisi olan işletmeler veya tarım arazileri için değerlendirilebilecek bir seçenektir.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
 
   // ---- Teknik ----
   {
-    slug: "monokristal-polikristal-panel-farki",
+    slug: "panel-turleri",
     question: "Monokristal ve polikristal panel arasındaki fark nedir?",
     category: "Teknik",
     summary:
@@ -114,10 +114,10 @@ export const guideItems: GuideItem[] = [
       "Polikristal paneller ise birden fazla silikon kristalinin eritilip kalıplanmasıyla üretilir. Üretim süreci nispeten daha basittir ve panel yüzeyinde karakteristik mavi, kristalli bir doku görülür.",
       "Hangi panel tipinin bir proje için uygun olduğu; mevcut çatı/cephe alanı, hedeflenen sistem gücü ve bütçe önceliklerine göre değerlendirilir — bu değerlendirme projelendirme aşamasında yapılır.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
   {
-    slug: "inverter-nedir-neden-gereklidir",
+    slug: "inverter",
     question: "İnverter nedir, neden gereklidir?",
     category: "Teknik",
     summary:
@@ -127,10 +127,10 @@ export const guideItems: GuideItem[] = [
       "İnverter aynı zamanda sistemin güvenliği için de kritiktir: şebeke kesintisinde otomatik olarak devreden çıkar, aşırı gerilim ve kaçak akım gibi durumlara karşı koruma sağlar ve sistemin anlık üretim verilerini izlemeyi mümkün kılar.",
       "İnverter kapasitesinin panel gücüyle uyumlu seçilmesi, sistemin toplam verimini doğrudan etkiler; bu seçim projelendirme aşamasında sistem büyüklüğüne göre yapılır.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
   {
-    slug: "gunes-paneli-verimini-neler-etkiler",
+    slug: "panel-verimi",
     question: "Güneş paneli verimini hangi faktörler etkiler?",
     category: "Teknik",
     summary:
@@ -140,10 +140,10 @@ export const guideItems: GuideItem[] = [
       "Kısmi gölgeleme (bir bacadan, ağaçtan veya komşu binadan gelen gölge) tek bir panelin değil, bağlı olduğu string'in verimini düşürebilir. Panel yüzeyindeki toz, kir veya kar birikimi de benzer şekilde üretimi azaltır.",
       "Sıcaklık da bir faktördür: güneş panelleri yüksek sıcaklıkta beklenenin aksine biraz daha düşük verimle çalışır. Tüm bu değişkenler, doğru projelendirme ve düzenli bakımla kontrol altında tutulabilir.",
     ],
-    relatedServiceSlug: "projelendirme-ve-muhendislik",
+    relatedServiceSlug: "muhendislik",
   },
   {
-    slug: "gunes-panelleri-bulutlu-havada-calisir-mi",
+    slug: "bulutlu-hava",
     question: "Güneş panelleri bulutlu havada veya kışın çalışır mı?",
     category: "Teknik",
     summary:
@@ -153,10 +153,10 @@ export const guideItems: GuideItem[] = [
       "Kış aylarında güneşlenme süresinin kısalması ve güneşin ufka daha yakın açıyla doğması, günlük toplam üretimi yaz aylarına göre azaltır. Bu, sistem planlanırken yıllık ortalama üzerinden hesaba katılan normal bir dalgalanmadır.",
       "Kar yağışı panel yüzeyini geçici olarak örtebilir; panellerin eğimli montajı genellikle karın kendiliğinden kaymasına yardımcı olur.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
   {
-    slug: "gunes-paneli-garanti-suresi",
+    slug: "panel-garantisi",
     question: "Güneş paneli garanti süresi ne kadardır?",
     category: "Teknik",
     summary:
@@ -166,12 +166,12 @@ export const guideItems: GuideItem[] = [
       "Bu süreler ve oranlar panel markasına ve modeline göre değişir; bu yüzden panel seçimi yapılırken sadece fiyat değil, üreticinin garanti koşulları da değerlendirilmelidir.",
       "İnverter gibi diğer bileşenlerin garanti süreleri panellerden farklı ve genellikle daha kısadır — sistem teklifinde bu ayrımın net olması önemlidir.",
     ],
-    relatedServiceSlug: "bakim-ve-teknik-destek",
+    relatedServiceSlug: "bakim",
   },
 
   // ---- Planlama ve Kurulum ----
   {
-    slug: "kac-kw-sistem-gerekir",
+    slug: "sistem-gucu",
     question: "Evim veya işletmem için kaç kW'lık sistem gerekir?",
     category: "Planlama ve Kurulum",
     summary:
@@ -181,10 +181,10 @@ export const guideItems: GuideItem[] = [
       "Sistem çok küçük boyutlandırılırsa beklenen tasarruf sağlanamaz; gereğinden büyük boyutlandırılırsa hem ilk yatırım maliyeti hem de şebekeye aktarılan fazla enerjinin değerlendirilme şekli gereksiz yere değişir.",
       "Bu hesap, sahada yapılan keşif ve tüketim analiziyle netleşir — bu yüzden güneş enerjisi teklifleri genellikle bir keşif ziyaretiyle başlar.",
     ],
-    relatedServiceSlug: "projelendirme-ve-muhendislik",
+    relatedServiceSlug: "muhendislik",
   },
   {
-    slug: "gunes-paneli-kurulum-sureci-adim-adim",
+    slug: "kurulum-sureci",
     question: "Güneş paneli kurulum süreci adım adım nasıl işler?",
     category: "Planlama ve Kurulum",
     summary:
@@ -194,10 +194,10 @@ export const guideItems: GuideItem[] = [
       "Analiz sonrasında tek hat şeması, panel yerleşim planı ve teknik şartname hazırlanır — bu belgeler hem uygulamanın hem de resmi başvuru sürecinin referans dokümanıdır.",
       "Projelendirme tamamlandıktan sonra taşıyıcı sistem, panel montajı ve elektrik bağlantıları sahada uygulanır. Son aşamada izolasyon, topraklama ve string ölçümleri yapılarak sistem test edilir ve devreye alınır.",
     ],
-    relatedServiceSlug: "kurulum-ve-devreye-alma",
+    relatedServiceSlug: "kurulum",
   },
   {
-    slug: "gunes-paneli-kurulumu-ne-kadar-surer",
+    slug: "kurulum-suresi",
     question: "Güneş paneli kurulumu ne kadar sürer?",
     category: "Planlama ve Kurulum",
     summary:
@@ -207,10 +207,10 @@ export const guideItems: GuideItem[] = [
       "Saha uygulamasının kendisi (montaj, kablolama, bağlantı) genellikle sistem büyüklüğüne göre birkaç günden birkaç haftaya kadar sürebilirken; başvuru ve onay süreçleri kurum yoğunluğuna bağlı olarak değişkenlik gösterir.",
       "Bu yüzden net bir takvim, ancak keşif ve projelendirme sonrasında, sistemin büyüklüğü ve bölgedeki başvuru süreci netleştikten sonra verilebilir.",
     ],
-    relatedServiceSlug: "kurulum-ve-devreye-alma",
+    relatedServiceSlug: "kurulum",
   },
   {
-    slug: "catim-gunes-paneline-uygun-mu",
+    slug: "cati-uygunlugu",
     question: "Çatım güneş paneline uygun mu, nasıl anlarım?",
     category: "Planlama ve Kurulum",
     summary:
@@ -220,10 +220,10 @@ export const guideItems: GuideItem[] = [
       "Bunun yanında çatının taşıma kapasitesi de kritik bir faktördür — panel, montaj konstrüksiyonu ve kar yükü gibi ek yüklerin bina statiğiyle uyumlu olması gerekir.",
       "Bu değerlendirme, gözle kabaca yapılabilecek bir kontrol değildir; sahada yapılan bir keşifle netleştirilir.",
     ],
-    relatedServiceSlug: "cephe-tipi-uygulamalar",
+    relatedServiceSlug: "cati-cephe",
   },
   {
-    slug: "gunes-paneli-catinin-statigini-etkiler-mi",
+    slug: "cati-statigi",
     question: "Güneş paneli kurulumu çatının statiğini etkiler mi?",
     category: "Planlama ve Kurulum",
     summary:
@@ -233,12 +233,12 @@ export const guideItems: GuideItem[] = [
       "Doğru planlanmış bir kurulumda montaj noktaları, yükü çatının taşıyıcı elemanlarına uygun şekilde dağıtacak biçimde seçilir; bu da statik açıdan sorun yaratmadan uygulamayı mümkün kılar.",
       "Cephe tipi uygulamalarda bu değerlendirme daha da belirleyicidir, çünkü taşıyıcı sistem doğrudan bina statiğiyle etkileşime girer ve ayrıca projelendirilir.",
     ],
-    relatedServiceSlug: "cephe-tipi-uygulamalar",
+    relatedServiceSlug: "cati-cephe",
   },
 
   // ---- Mevzuat ve Şebeke Bağlantısı ----
   {
-    slug: "gunes-paneli-icin-izin-gerekir-mi",
+    slug: "kurulum-izinleri",
     question: "Güneş paneli kurmak için izin gerekir mi?",
     category: "Mevzuat ve Şebeke Bağlantısı",
     summary:
@@ -247,10 +247,10 @@ export const guideItems: GuideItem[] = [
       "Türkiye’de şebekeye bağlı bir çatı veya cephe güneş enerjisi sistemi için bağlantı ve teknik onay süreçleri bulunur. Lisanssız üretim kapsamındaki işlemler, ilgili mevzuat ve yetkili şebeke işletmecisinin güncel başvuru koşullarıyla yürütülür.",
       "Başvurunun yapılması tek başına sistemi işletmeye alma izni değildir. Proje onayı, anlaşmalar, kabul ve bağlantıya ilişkin gereklilikler tesisin kapsamına göre tamamlanır.",
     ],
-    relatedServiceSlug: "projelendirme-ve-muhendislik",
+    relatedServiceSlug: "muhendislik",
   },
   {
-    slug: "lisanssiz-elektrik-uretimi-nedir",
+    slug: "lisanssiz-uretim",
     question: "Lisanssız elektrik üretimi nedir?",
     category: "Mevzuat ve Şebeke Bağlantısı",
     summary:
@@ -260,10 +260,10 @@ export const guideItems: GuideItem[] = [
       "Bu çerçeve; başvuru süreci, bağlantı koşulları ve şebekeyle ilişkilendirme (mahsuplaşma) esaslarını belirler. Kurallar zaman içinde güncellenebildiği için, güncel koşullar başvuru sırasında ilgili dağıtım şirketiyle netleştirilir.",
       "Bu mevzuata uygun başvuru ve belgelendirme, sistemin yasal olarak devreye alınabilmesi için zorunludur.",
     ],
-    relatedServiceSlug: "projelendirme-ve-muhendislik",
+    relatedServiceSlug: "muhendislik",
   },
   {
-    slug: "edas-baglanti-basvurusu-nasil-yapilir",
+    slug: "baglanti-basvurusu",
     question: "EDAŞ bağlantı başvurusu nasıl yapılır?",
     category: "Mevzuat ve Şebeke Bağlantısı",
     summary:
@@ -273,10 +273,10 @@ export const guideItems: GuideItem[] = [
       "Değerlendirme sonrası onay verilmesi durumunda, mevcut sayaç sistemin ürettiği ve şebekeden çektiği enerjiyi ölçebilecek bir sayaçla değiştirilir veya buna uygun hale getirilir.",
       "Bu sürecin doğru belge ve teknik hesaplarla yürütülmesi, başvurunun gecikmeden sonuçlanması açısından önemlidir — bu koordinasyon projelendirme sürecinin bir parçasıdır.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
   {
-    slug: "mahsuplasma-net-metering-nedir",
+    slug: "mahsuplasma",
     question: "Mahsuplaşma (net metering) nedir, nasıl çalışır?",
     category: "Mevzuat ve Şebeke Bağlantısı",
     summary:
@@ -286,10 +286,10 @@ export const guideItems: GuideItem[] = [
       "Bu sayede sistem sahibi, ürettiği enerjiyi depolamak zorunda kalmadan, şebekeyi bir tür dengeleme aracı olarak kullanabilir. Hesaplama dönemi ve koşulları, ilgili mevzuat ve dağıtım şirketinin uygulamasına göre belirlenir.",
       "Mahsuplaşmanın nasıl işleyeceği, bağlantı başvurusu onaylandıktan sonra sayaç ve sözleşme koşullarıyla birlikte netleşir.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
   {
-    slug: "sebekeye-verilen-fazla-enerji-ne-oluyor",
+    slug: "fazla-enerji",
     question: "Şebekeye verilen fazla enerjiye ne oluyor?",
     category: "Mevzuat ve Şebeke Bağlantısı",
     summary:
@@ -299,12 +299,12 @@ export const guideItems: GuideItem[] = [
       "Kayıt altına alınan bu fazla üretim, mahsuplaşma dönemi içinde şebekeden çekilen enerjiyle karşılıklı olarak hesaplanır. Dönem sonunda net tüketim veya net üretim durumuna göre faturalandırma yapılır.",
       "Bu mekanizmanın işleyiş detayları (dönem uzunluğu, hesaplama yöntemi), bağlantı başvurusu sırasında dağıtım şirketiyle netleşen sözleşme koşullarına bağlıdır.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
 
   // ---- Maliyet ve Bakım ----
   {
-    slug: "gunes-paneli-fiyatini-neler-belirler",
+    slug: "panel-fiyatlari",
     question: "Güneş paneli fiyatını hangi faktörler belirler?",
     category: "Maliyet ve Bakım",
     summary:
@@ -314,10 +314,10 @@ export const guideItems: GuideItem[] = [
       "Buna ek olarak elektrik altyapısının mevcut durumu da belirleyicidir: pano revizyonu, kablolama ve koruma ekipmanlarının yenilenmesi gerekip gerekmediği toplam bütçeyi etkiler. İzin ve başvuru süreçleri de projeye dahil olan kalemlerdendir.",
       "Bu değişkenlerin çokluğu nedeniyle güvenilir bir fiyat, ancak saha koşulları görüldükten ve ihtiyaç netleştikten sonra, somut bir teklifle verilebilir.",
     ],
-    relatedServiceSlug: "projelendirme-ve-muhendislik",
+    relatedServiceSlug: "muhendislik",
   },
   {
-    slug: "yatirimin-geri-donusu-nasil-hesaplanir",
+    slug: "amortisman",
     question: "Güneş enerjisi sistemi yatırımının geri dönüşü nasıl hesaplanır?",
     category: "Maliyet ve Bakım",
     summary:
@@ -327,10 +327,10 @@ export const guideItems: GuideItem[] = [
       "Elektrik tarifeleri zamanla değiştiği ve tüketim profili her bina için farklı olduğu için, geri dönüş süresi genel bir ortalama yerine, sizin faturalarınıza ve sahanıza özgü bir hesapla anlamlı hale gelir.",
       "Bu nedenle güvenilir bir geri dönüş hesabı, keşif sonrasında hazırlanan proje ve güncel tarifeler üzerinden sunulur; genel bir rakamla önceden vaat edilmesi yanıltıcı olur.",
     ],
-    relatedServiceSlug: "projelendirme-ve-muhendislik",
+    relatedServiceSlug: "muhendislik",
   },
   {
-    slug: "gunes-panelleri-bakim-gerektirir-mi",
+    slug: "panel-bakimi",
     question: "Güneş panelleri düzenli bakım gerektirir mi?",
     category: "Maliyet ve Bakım",
     summary:
@@ -340,10 +340,10 @@ export const guideItems: GuideItem[] = [
       "Düzenli bakımın kapsamı genellikle şunları içerir: panel yüzeyinin toz/kir birikimi açısından kontrolü, elektriksel bağlantı noktalarının gözden geçirilmesi ve inverterin performans verilerinin izlenmesi.",
       "Beklenmeyen bir performans düşüşü veya arıza durumunda, sorunun sahada mı yoksa uzaktan mı müdahale gerektirdiği inverter verileri üzerinden genellikle önceden tespit edilebilir.",
     ],
-    relatedServiceSlug: "bakim-ve-teknik-destek",
+    relatedServiceSlug: "bakim",
   },
   {
-    slug: "kar-dolu-firtina-panellere-zarar-verir-mi",
+    slug: "hava-kosullari",
     question: "Kar, dolu veya fırtına panellere zarar verir mi?",
     category: "Maliyet ve Bakım",
     summary:
@@ -353,10 +353,10 @@ export const guideItems: GuideItem[] = [
       "Sistemin dayanıklılığı yalnızca panelin kendisine değil, montaj konstrüksiyonunun doğru rüzgar ve kar yükü hesabıyla kurulmasına da bağlıdır — bu hesap projelendirme aşamasında yapılır.",
       "Aşırı ve istisnai hava olayları her yapıda olduğu gibi risk taşısa da, doğru projelendirilmiş ve monte edilmiş bir sistem, bölgenin normal hava koşullarına dayanacak şekilde planlanır.",
     ],
-    relatedServiceSlug: "bakim-ve-teknik-destek",
+    relatedServiceSlug: "bakim",
   },
   {
-    slug: "kacak-akim-korumasi-topraklama-neden-onemli",
+    slug: "topraklama",
     question: "Kaçak akım koruması ve topraklama neden önemlidir?",
     category: "Maliyet ve Bakım",
     summary:
@@ -366,12 +366,12 @@ export const guideItems: GuideItem[] = [
       "Topraklama ise sistemde oluşabilecek aşırı gerilimin güvenli bir şekilde toprağa aktarılmasını sağlar; hem panel/inverter ekipmanının hem de bina elektrik tesisatının korunmasına katkıda bulunur.",
       "Bu koruma tesisatı, isteğe bağlı bir ek değil, güneş enerjisi sistemi kurulumunun standart ve zorunlu bir parçasıdır.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
 
   // ---- Karar ve Genel ----
   {
-    slug: "elektrik-kesintisinde-sistem-calisir-mi",
+    slug: "elektrik-kesintisi",
     question: "Güneş enerjisi sistemi elektrik kesintisinde çalışır mı?",
     category: "Karar ve Genel",
     summary:
@@ -381,10 +381,10 @@ export const guideItems: GuideItem[] = [
       "Kesinti sırasında da elektrik kullanmaya devam edebilmek için, sisteme ayrıca bir enerji depolama (batarya) ve buna uygun bir inverter/kontrol donanımı eklenmesi gerekir. Bu, standart bir şebeke bağlantılı kurulumdan farklı, ek bir yatırım ve planlama gerektiren bir seçenektir.",
       "Bu tür bir ihtiyacınız varsa, sistemin başlangıçta buna uygun tasarlanması gerekir; bu yüzden proje kapsamı belirlenirken bu tercih netleştirilmelidir.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
   {
-    slug: "panel-inverter-markasi-nasil-secilir",
+    slug: "marka-secimi",
     question: "Panel ve inverter markası nasıl seçilir?",
     category: "Karar ve Genel",
     summary:
@@ -394,10 +394,10 @@ export const guideItems: GuideItem[] = [
       "Garanti kapsamı ve süresi, üreticinin teknik destek ağı ve ekipmanın yerel şebeke standartlarına uygunluğu da seçimde dikkate alınması gereken faktörlerdir.",
       "Bu değerlendirme, sahaya çıkmadan önce projelendirme aşamasında yapılır; amaç en ucuz değil, o proje için en uygun ve güvenilir kombinasyonu belirlemektir.",
     ],
-    relatedServiceSlug: "projelendirme-ve-muhendislik",
+    relatedServiceSlug: "muhendislik",
   },
   {
-    slug: "gunes-paneli-firmasi-secerken-nelere-dikkat-edilmeli",
+    slug: "firma-secimi",
     question: "Güneş paneli kurulum firması seçerken nelere dikkat edilmeli?",
     category: "Karar ve Genel",
     summary:
@@ -407,10 +407,10 @@ export const guideItems: GuideItem[] = [
       "Kurulumun taşerona mı devredildiği yoksa firmanın kendi saha ekibi tarafından mı yapıldığı, uygulama kalitesi ve sonrasındaki sorumluluk açısından önemli bir farktır.",
       "Son olarak; verilen tekliflerin somut bir keşfe mi yoksa genel bir tahmine mi dayandığı, ve kurulum sonrası bakım/teknik destek kapsamının ne olduğu sorgulanmalıdır. Ciddi bir firma, kesin rakamları keşif yapmadan önce vaat etmez.",
     ],
-    relatedServiceSlug: "kurulum-ve-devreye-alma",
+    relatedServiceSlug: "kurulum",
   },
   {
-    slug: "gunes-enerjisinin-cevresel-faydalari",
+    slug: "cevre",
     question: "Güneş enerjisinin çevresel faydaları nelerdir?",
     category: "Karar ve Genel",
     summary:
@@ -420,10 +420,10 @@ export const guideItems: GuideItem[] = [
       "Güneş, insan ölçeğinde tükenmez bir enerji kaynağıdır; bu nedenle güneş enerjisi sistemleri yenilenebilir enerji kaynakları arasında sayılır.",
       "Bir binanın kendi tükettiği enerjinin bir kısmını yerinde üretmesi, aynı zamanda elektrik iletim hatlarındaki kayıpları da azaltan, dağıtık üretim modeline katkı sağlayan bir yaklaşımdır.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
   {
-    slug: "konut-ticari-sistem-farki",
+    slug: "konut-ve-isletme",
     question: "Konut ile ticari/endüstriyel güneş enerjisi sistemi arasındaki fark nedir?",
     category: "Karar ve Genel",
     summary:
@@ -433,12 +433,12 @@ export const guideItems: GuideItem[] = [
       "Ticari ve endüstriyel sistemlerde ise tüketim profili gün içinde daha yoğun ve öngörülebilir olabilir; çatı alanları genellikle daha büyüktür ve bina elektrik altyapısı (pano, dağıtım hattı) daha karmaşık olduğundan projelendirme aşamasında daha kapsamlı bir mühendislik değerlendirmesi gerekir.",
       "Her iki durumda da temel süreç aynıdır — keşif, analiz, projelendirme, uygulama, devreye alma — ancak ölçek büyüdükçe teknik detayların ve koordinasyonun önemi artar.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
 
   // ---- Ekipman ve Teknoloji ----
   {
-    slug: "half-cell-panel-nedir",
+    slug: "half-cell-panel",
     question: "Half-cell (yarı hücreli) panel nedir, avantajı nedir?",
     category: "Ekipman ve Teknoloji",
     summary:
@@ -448,10 +448,10 @@ export const guideItems: GuideItem[] = [
       "Daha önemlisi, kısmi gölgeleme durumunda (örneğin panelin bir kısmına bir bacadan gölge düşmesi) half-cell tasarım, panelin tamamının değil yalnızca etkilenen bölümünün üretim kaybetmesini sağlayacak şekilde devrelenebilir.",
       "Bu özellikler, özellikle gölgelenme riski olan çatılarda half-cell panelleri değerlendirmeye değer kılar; hangi panel tipinin bir proje için uygun olduğu projelendirme aşamasında saha koşullarına göre belirlenir.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
   {
-    slug: "bifacial-panel-nedir",
+    slug: "bifacial-panel",
     question: "Bifacial (çift yüzeyli) panel nedir?",
     category: "Ekipman ve Teknoloji",
     summary:
@@ -461,10 +461,10 @@ export const guideItems: GuideItem[] = [
       "Bu ek üretim; zeminin yansıtıcılığına (açık renkli çakıl, beton gibi), montaj yüksekliğine ve panelin açısına bağlı olarak değişir. Koyu renkli bir çatı yüzeyinde bu avantaj sınırlı kalabilir.",
       "Bifacial panellerin bir projede anlamlı bir fark yaratıp yaratmayacağı, montaj yüzeyinin özelliklerine bağlı olduğu için saha değerlendirmesiyle netleşir.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
   {
-    slug: "string-inverter-mikroinverter-farki",
+    slug: "inverter-turleri",
     question: "String inverter ile mikroinverter arasındaki fark nedir?",
     category: "Ekipman ve Teknoloji",
     summary:
@@ -474,10 +474,10 @@ export const guideItems: GuideItem[] = [
       "Mikroinverter yönteminde ise her panelin arkasına küçük, ayrı bir inverter yerleştirilir. Bu sayede bir paneldeki gölgeleme veya performans düşüşü, string'deki diğer panelleri etkilemez — her panel bağımsız çalışır.",
       "Mikroinverterler genellikle karmaşık gölgeleme koşulları olan çatılarda avantaj sağlarken, string inverterler daha basit ve düz güneş alan geniş yüzeylerde yaygın ve ekonomik bir tercihtir. Seçim, çatının koşullarına göre yapılır.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
   {
-    slug: "optimizer-nedir-ne-ise-yarar",
+    slug: "optimizer",
     question: "Optimizer (güç optimize edici) nedir, ne işe yarar?",
     category: "Ekipman ve Teknoloji",
     summary:
@@ -487,10 +487,10 @@ export const guideItems: GuideItem[] = [
       "Amacı, bir string inverterin sahip olduğu ekonomik avantajı korurken, mikroinverterin sunduğu panel bazlı esnekliğin bir kısmını yakalamaktır — özellikle kısmi gölgelemenin bulunduğu sistemlerde string genelindeki kaybı azaltır.",
       "Optimizerin bir projede gerekip gerekmediği, çatının gölgeleme profiline ve panel yerleşimine bağlıdır; bu değerlendirme projelendirme aşamasında yapılır.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
   {
-    slug: "panel-gucu-wp-peak-watt-ne-anlama-gelir",
+    slug: "panel-gucu",
     question: "Panel gücü (Wp / peak watt) ne anlama gelir?",
     category: "Ekipman ve Teknoloji",
     summary:
@@ -500,12 +500,12 @@ export const guideItems: GuideItem[] = [
       "Sahadaki gerçek üretim; anlık güneş ışığı seviyesi, sıcaklık, panelin açısı ve gölgeleme gibi değişkenlere göre bu değerin altında veya günün belirli anlarında yakınında seyreder.",
       "Bir sistemin toplam kurulu gücü, kullanılan panel sayısının Wp değeriyle çarpılmasıyla ifade edilir; ancak yıllık gerçek üretim tahmini için saha koşullarının ayrıca değerlendirilmesi gerekir.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
 
   // ---- Depolama ve Şebeke Bağımsızlığı ----
   {
-    slug: "batarya-depolama-sistemi-ne-zaman-gerekir",
+    slug: "batarya",
     question: "Batarya (enerji depolama) sistemi ne zaman gerekir?",
     category: "Depolama ve Şebeke Bağımsızlığı",
     summary:
@@ -515,10 +515,10 @@ export const guideItems: GuideItem[] = [
       "Batarya, şebeke kesintisinde de elektrik kullanmaya devam etmek istendiğinde veya şebekeden tamamen bağımsız (off-grid) bir kurulum hedeflendiğinde gündeme gelir. Bu, sistemin başlangıçta buna uygun tasarlanmasını gerektiren ayrı bir yatırım kalemidir.",
       "Bataryalı bir sistemin gerekip gerekmediği; kesinti sıklığınız, kritik yük ihtiyacınız (örneğin sürekli çalışması gereken bir ekipman) ve bütçe önceliklerinize bağlı olarak değerlendirilir.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
   {
-    slug: "off-grid-sistem-nedir",
+    slug: "off-grid",
     question: "Off-grid (şebekeden bağımsız) sistem nedir, kimler için uygundur?",
     category: "Depolama ve Şebeke Bağımsızlığı",
     summary:
@@ -528,10 +528,10 @@ export const guideItems: GuideItem[] = [
       "Bu sistem tipi; şebeke hattının ulaşmadığı uzak bir arazi, yayla evi veya benzeri bir yapı gibi, şebeke bağlantısının mümkün olmadığı veya tercih edilmediği durumlar için değerlendirilir.",
       "Off-grid bir sistem, şebekeye bağlı bir sistemden farklı olarak tüm yıl boyunca ihtiyacı tek başına karşılayacak şekilde (batarya kapasitesi dahil) daha dikkatli boyutlandırılmalıdır — çünkü şebeke gibi bir yedek kaynak yoktur.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
   {
-    slug: "akilli-sayac-nedir",
+    slug: "akilli-sayac",
     question: "Akıllı sayaç nedir, güneş enerjisi sisteminde nasıl kullanılır?",
     category: "Depolama ve Şebeke Bağımsızlığı",
     summary:
@@ -541,12 +541,12 @@ export const guideItems: GuideItem[] = [
       "Bu ihtiyacı karşılayan çift yönlü (akıllı) sayaç, bağlantı başvurusu onaylandıktan sonra dağıtım şirketi tarafından mevcut sayacın yerine takılır veya buna uygun hale getirilir.",
       "Bu sayaçtan alınan veriler, mahsuplaşma döneminde net tüketim/üretim hesabının ve faturalandırmanın temelini oluşturur.",
     ],
-    relatedServiceSlug: "elektrik-altyapisi",
+    relatedServiceSlug: "elektrik",
   },
 
   // ---- İzleme ve Performans ----
   {
-    slug: "panel-verimi-zamanla-ne-kadar-duser",
+    slug: "panel-omru",
     question: "Panel verimi zamanla ne kadar düşer (degradasyon)?",
     category: "İzleme ve Performans",
     summary:
@@ -556,10 +556,10 @@ export const guideItems: GuideItem[] = [
       "Üreticiler bu kaybı, panelin belirli yıllar sonunda başlangıç gücünün en az yüzde kaçını üretmeye devam edeceğini taahhüt eden performans garantisiyle belgelendirir. Bu oran markaya ve panel teknolojisine göre değişir.",
       "Bu yüzden panel seçiminde yalnızca ilk güç değeri değil, üreticinin sunduğu performans garantisinin süresi ve koşulları da değerlendirilmelidir.",
     ],
-    relatedServiceSlug: "bakim-ve-teknik-destek",
+    relatedServiceSlug: "bakim",
   },
   {
-    slug: "sistem-performansi-nasil-izlenir",
+    slug: "performans-takibi",
     question: "Güneş enerjisi sistemi performansı nasıl izlenir?",
     category: "İzleme ve Performans",
     summary:
@@ -569,10 +569,10 @@ export const guideItems: GuideItem[] = [
       "Bu izleme, yalnızca merak amaçlı değildir: beklenen üretimin altına düşen bir sistem, bir arızanın veya performans sorununun erken tespit edilmesini sağlar — genellikle sorun büyümeden fark edilir.",
       "Kurulum sonrası bu izleme verilerinin nasıl takip edileceği ve bir anormallik durumunda kimin bilgilendirileceği, teslim aşamasında netleştirilmesi gereken bir konudur.",
     ],
-    relatedServiceSlug: "bakim-ve-teknik-destek",
+    relatedServiceSlug: "bakim",
   },
   {
-    slug: "inverter-arizasi-belirtileri",
+    slug: "inverter-arizasi",
     question: "İnverter arızası belirtileri nelerdir?",
     category: "İzleme ve Performans",
     summary:
@@ -582,10 +582,10 @@ export const guideItems: GuideItem[] = [
       "İnverterin kendi ekranında veya bağlı uygulamada görülen hata kodları, cihazın belirli bir sorunu (aşırı ısınma, şebeke uyumsuzluğu, izolasyon hatası gibi) tespit ettiğini gösterir. İnverterin tamamen kapanması veya yeniden başlamaması da açık bir arıza belirtisidir.",
       "Bu belirtilerden herhangi biri fark edildiğinde, sistemin kendi kendine onarılmaya çalışılması önerilmez — teknik ekip tarafından uzaktan veya sahada değerlendirilmesi gerekir.",
     ],
-    relatedServiceSlug: "bakim-ve-teknik-destek",
+    relatedServiceSlug: "bakim",
   },
   {
-    slug: "panelleri-kendim-temizleyebilir-miyim",
+    slug: "panel-temizligi",
     question: "Panelleri kendim temizleyebilir miyim?",
     category: "İzleme ve Performans",
     summary:
@@ -595,10 +595,10 @@ export const guideItems: GuideItem[] = [
       "Buradaki asıl risk temizlik işleminin kendisinden çok, çatıya çıkma ihtiyacıdır — özellikle eğimli veya yüksek çatılarda bu, ciddi bir güvenlik riski taşır ve uygun ekipman/deneyim gerektirir.",
       "Erişimi zor veya yüksek kurulumlarda, temizlik ve genel kontrolün periyodik bakım kapsamında profesyonel bir ekip tarafından yapılması hem güvenlik hem de panellere zarar vermeme açısından önerilir.",
     ],
-    relatedServiceSlug: "bakim-ve-teknik-destek",
+    relatedServiceSlug: "bakim",
   },
   {
-    slug: "inverter-kac-yilda-bir-degisir",
+    slug: "inverter-omru",
     question: "İnverter kaç yılda bir değişir?",
     category: "İzleme ve Performans",
     summary:
@@ -608,12 +608,12 @@ export const guideItems: GuideItem[] = [
       "Bu, sistemin toplam kullanım ömrü boyunca inverterin bir kez değiştirilmesi ihtimalinin, panelin değiştirilmesine göre daha yüksek olduğu anlamına gelir. Bu, planlanabilir ve bütçelenebilir bir bakım kalemidir.",
       "İzleme verileri üzerinden takip edilen düşen performans veya artan hata sıklığı, bir inverterin ömrünün sonuna yaklaştığının erken göstergesi olabilir.",
     ],
-    relatedServiceSlug: "bakim-ve-teknik-destek",
+    relatedServiceSlug: "bakim",
   },
 
   // ---- İleri Projelendirme ----
   {
-    slug: "panel-acisi-yonu-nasil-optimize-edilir",
+    slug: "panel-acisi",
     question: "Panel açısı ve yönü nasıl optimize edilir?",
     category: "İleri Projelendirme",
     summary:
@@ -623,10 +623,10 @@ export const guideItems: GuideItem[] = [
       "Eğim açısı ise, panelin güneş ışığını yıl boyunca en dengeli şekilde karşılayacağı açıyla, mevcut çatı eğimi arasında bir uzlaşmadır — çatı tipi kurulumlarda panel genellikle çatının kendi eğimini takip eder.",
       "Bu optimizasyon, tek bir ideal sayı yerine; bulunduğunuz enlem, çatının mevcut yönü/eğimi ve gölgeleme durumu birlikte değerlendirilerek, projelendirme aşamasında sahaya özel yapılır.",
     ],
-    relatedServiceSlug: "projelendirme-ve-muhendislik",
+    relatedServiceSlug: "muhendislik",
   },
   {
-    slug: "golgeleme-analizi-nasil-yapilir",
+    slug: "golgeleme",
     question: "Gölgeleme analizi nasıl yapılır?",
     category: "İleri Projelendirme",
     summary:
@@ -636,10 +636,10 @@ export const guideItems: GuideItem[] = [
       "Bu değerlendirme sahada yapılan ölçümler ve gözlemlerle desteklenir; amaç yalnızca gölgeli alanları tespit etmek değil, panel ve string yerleşimini bu gölgelerin etkisini en aza indirecek şekilde planlamaktır.",
       "İhmal edilen bir gölgeleme analizi, tek bir panelin değil bağlı olduğu tüm string'in veriminin düşmesine yol açabilir — bu yüzden yerleşim planından önce tamamlanması gereken bir adımdır.",
     ],
-    relatedServiceSlug: "projelendirme-ve-muhendislik",
+    relatedServiceSlug: "muhendislik",
   },
   {
-    slug: "string-tasarimi-nedir",
+    slug: "string-tasarimi",
     question: "String tasarımı nedir, neden önemlidir?",
     category: "İleri Projelendirme",
     summary:
@@ -649,12 +649,12 @@ export const guideItems: GuideItem[] = [
       "Aynı string içindeki paneller, ideal olarak benzer güneş alma koşullarına (aynı yön, açı ve gölgeleme durumu) sahip olmalıdır — çünkü bir string inverter sisteminde, gruptaki en düşük performanslı panel, tüm grubun verimini o seviyeye çekebilir.",
       "Bu yüzden farklı yönlere bakan çatı yüzeyleri veya kısmi gölgelenen bölgeler varsa, bunların ayrı string'lere veya uygun ekipmana (bkz. optimizer/mikroinverter) ayrılması gerekir — bu karar projelendirme aşamasında verilir.",
     ],
-    relatedServiceSlug: "projelendirme-ve-muhendislik",
+    relatedServiceSlug: "muhendislik",
   },
 
   // ---- Ticari ve Endüstriyel Uygulamalar ----
   {
-    slug: "fabrika-depo-catisina-kurulumda-nelere-dikkat-edilir",
+    slug: "fabrika-catisi",
     question: "Fabrika veya depo çatısına güneş paneli kurulumunda nelere dikkat edilir?",
     category: "Ticari ve Endüstriyel Uygulamalar",
     summary:
@@ -664,10 +664,10 @@ export const guideItems: GuideItem[] = [
       "Çatı üzerindeki mevcut ekipmanlar (havalandırma bacaları, ışıklıklar, yangın tahliye sistemleri) yerleşim planı hazırlanırken dikkate alınmalı, panel dizilimi bunlarla çakışmayacak şekilde tasarlanmalıdır.",
       "Sanayi tesislerinde çatı çalışması, iş güvenliği mevzuatı açısından da ayrı bir hassasiyet gerektirir — bu yüzden uygulama, hem elektrik hem yapı güvenliği konusunda deneyimli bir saha ekibi gerektirir.",
     ],
-    relatedServiceSlug: "cephe-tipi-uygulamalar",
+    relatedServiceSlug: "cati-cephe",
   },
   {
-    slug: "sogutmali-depo-ozel-catida-ges-kurulumu",
+    slug: "soguk-hava-deposu",
     question: "Soğuk hava deposu gibi özel amaçlı çatılarda GES kurulumu farklı mıdır?",
     category: "Ticari ve Endüstriyel Uygulamalar",
     summary:
@@ -677,12 +677,12 @@ export const guideItems: GuideItem[] = [
       "Bu tip yapılarda genellikle çatıyı delmeyen (balastlı) veya delme noktası minimumda tutulan, özel sızdırmazlık detaylarıyla desteklenen montaj sistemleri tercih edilir.",
       "Bu kurulumlar, standart bir çatıya kıyasla daha fazla ön inceleme ve çatı üreticisiyle uyumlu bir montaj detayı gerektirdiğinden, projelendirme aşamasında ayrıca değerlendirilir.",
     ],
-    relatedServiceSlug: "cephe-tipi-uygulamalar",
+    relatedServiceSlug: "cati-cephe",
   },
 
   // ---- Karar ve Genel (devam) ----
   {
-    slug: "gunes-enerjisi-sistemi-gayrimenkul-degerini-etkiler-mi",
+    slug: "gayrimenkul-degeri",
     question: "Güneş enerjisi sistemi gayrimenkul değerine etki eder mi?",
     category: "Karar ve Genel",
     summary:
@@ -692,10 +692,10 @@ export const guideItems: GuideItem[] = [
       "Bu tür bir sistemin bir gayrimenkulün alım-satım veya kiralama sürecinde nasıl değerlendirileceği; bölgeye, alıcı profiline ve sistemin belgelerinin (proje, garanti, bağlantı onayı) eksiksiz olup olmadığına göre değişir.",
       "Bu nedenle kurulum sırasında hazırlanan proje dosyası ve resmi belgelerin saklanması, yalnızca teknik değil, uzun vadede gayrimenkulün değerini belgelemek açısından da önemlidir.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
   {
-    slug: "kocaeli-marmara-bolgesi-gunes-enerjisi-icin-uygun-mu",
+    slug: "marmara",
     question: "Kocaeli / Marmara Bölgesi güneş enerjisi için uygun mu?",
     category: "Karar ve Genel",
     summary:
@@ -705,7 +705,7 @@ export const guideItems: GuideItem[] = [
       "Bu, Kocaeli ve çevresinde güneş enerjisinin verimsiz olduğu anlamına gelmez — daha ölçülü bir güneşlenme profili, sistemin doğru büyüklükte ve doğru açıda projelendirilmesiyle dengelenir. Bölgedeki birçok konut ve sanayi tesisinde çatı ve cephe tipi sistemler zaten aktif olarak kullanılmaktadır.",
       "Bir bölgenin güneş enerjisi için uygunluğu, genel bir bölge ortalamasından çok; o binanın kendi çatı/cephe yönü, gölgeleme durumu ve tüketim profiliyle birlikte, sahada yapılan değerlendirmeyle anlam kazanır.",
     ],
-    relatedServiceSlug: "gunes-enerjisi-sistemleri",
+    relatedServiceSlug: "gunes-enerjisi",
   },
 ];
 

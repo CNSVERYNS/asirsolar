@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { estimateContactHref } from "@/lib/enquiry-context";
 import { calculateSolarEstimate, solarLocations, type SolarEstimateInput } from "@/lib/solar-estimate";
 import { whatsappContact } from "@/lib/whatsapp";
 const numericFields = [
@@ -23,7 +24,7 @@ export default function SolarEstimator() {
   const result = calculateSolarEstimate(input);
   const selected = solarLocations.find(location => location.id === values.location)!;
   const summary = result ? `GES ön değerlendirmesi: ${selected.label}; çatı ${number.format(input.roofArea)} m²; aylık fatura ${money.format(input.monthlyBill)}; yaklaşık ${number.format(result.suggestedKwp)} kWp ve ${number.format(result.annualGenerationKwh)} kWh/yıl. Varsayımları saha keşfiyle doğrulamak ve teklif almak istiyorum.` : "";
-  const contactHref = `/iletisim?${new URLSearchParams({ proje: "İşletme / Fabrika", mesaj: summary })}#contact-form`;
+  const contactHref = result ? estimateContactHref(values.location, input.roofArea, input.monthlyBill, result.suggestedKwp, result.annualGenerationKwh) : "/iletisim";
   function field(item: typeof numericFields[number] | typeof advancedFields[number]) {
     return <label className="calculator-field" key={item.key} htmlFor={`solar-${item.key}`}><span>{item.label}</span><input id={`solar-${item.key}`} name={item.key} type="number" inputMode="decimal" step="any" min={item.min} max={item.max} required value={values[item.key]} onChange={event => setValues(previous => ({ ...previous, [item.key]: event.target.value }))} /></label>;
   }

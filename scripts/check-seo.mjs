@@ -18,7 +18,7 @@ const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]);
 assert.ok(urls.length > 50);
 assert.equal(new Set(urls).size, urls.length);
 assert.ok(urls.every(url => new URL(url).origin === canonicalOrigin));
-assert.ok(urls.every(url => !/\/(admin|api|kvkk|gizlilik-politikasi|cerez-politikasi)(\/|$)/.test(new URL(url).pathname)));
+assert.ok(urls.every(url => !/\/(admin|api|kvkk|gizlilik|cerezler|gizlilik-politikasi|cerez-politikasi)(\/|$)/.test(new URL(url).pathname)));
 const robots = await read("/robots.txt");
 assert.match(robots, /Disallow: \/admin/);
 assert.match(robots, /Disallow: \/api\//);
@@ -54,7 +54,7 @@ for (let i = 0; i < urls.length; i += 5) {
     }
   }));
 }
-const roi = await read("/rehber/yatirimin-geri-donusu-nasil-hesaplanir");
+const roi = await read("/rehber/amortisman");
 assert.ok(roi.includes('id="hesaplama"'));
 assert.ok(roi.includes('datetime="2026-09-10"') || roi.includes('dateTime="2026-09-10"'));
 assert.equal((roi.match(/id="calc-/g) || []).length, 6);

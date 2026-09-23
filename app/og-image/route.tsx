@@ -3,11 +3,12 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { findPublicPage } from "@/lib/seo-catalog";
 import { getPublishedProject } from "@/lib/projects/public.server";
+import { canonicalPublicPath } from "@/lib/redirects";
 export const runtime = "nodejs";
 export async function GET(request: Request) {
-  const path = new URL(request.url).searchParams.get("path") || "/";
+  const path = canonicalPublicPath(new URL(request.url).searchParams.get("path") || "/");
   let page = findPublicPage(path);
-  if (!page && /^\/projeler\/[0-9a-f-]{36}$/.test(path)) {
+  if (!page && /^\/projeler\/[a-z0-9-]{1,48}$/.test(path)) {
     const project = await getPublishedProject(path.slice("/projeler/".length));
     if (project) page = { path, title: project.name, section: "PROJELER" };
   }

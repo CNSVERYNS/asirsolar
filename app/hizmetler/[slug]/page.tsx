@@ -102,7 +102,7 @@ export default async function ServiceDetailPage({
                     {section.items && <ul className="content-checklist">{section.items.map(item => <li key={item}>{item}</li>)}</ul>}
                   </section>
                 ))}
-                {service.slug === "endustriyel-cati-ges" && <InstallationProcess path={`/hizmetler/${service.slug}`} />}
+                {service.slug === "cati-ges" && <InstallationProcess path={`/hizmetler/${service.slug}`} />}
               </div>
             </div>
 

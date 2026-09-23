@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import { contentSecurityPolicy } from "./lib/security-headers.ts";
 import { marketing } from "./lib/marketing-config.ts";
+import { publicRedirects } from "./lib/redirects.ts";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -14,6 +15,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     // Keep cached pages/crawlers using the former icon URLs on the company logo.
     return [
+      ...publicRedirects,
       { source: "/favicon.svg", destination: "/icon.png", permanent: true },
       { source: "/icon-32.png", destination: "/favicon.ico", permanent: true },
       { source: "/apple-touch-icon.png", destination: "/apple-icon.png", permanent: true },

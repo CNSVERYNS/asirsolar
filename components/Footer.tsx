@@ -35,23 +35,23 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-              <Link href="/ges-hesaplama">GES hesaplama</Link><br /><Link href="/ges-kurulumu">Bölge ve OSB rehberi</Link>
+              <Link href="/hesapla">GES hesaplama</Link><br /><Link href="/bolgeler">Bölge ve OSB rehberi</Link>
             </div>
 
             <div className="footer-col">
               <h2>Hizmetler</h2>
               <ul>
                 <li>
-                  <Link href="/hizmetler/gunes-enerjisi-sistemleri">Güneş Enerjisi Sistemleri</Link>
+                  <Link href="/hizmetler/gunes-enerjisi">Güneş Enerjisi Sistemleri</Link>
                 </li>
                 <li>
-                  <Link href="/hizmetler/projelendirme-ve-muhendislik">Projelendirme ve Mühendislik</Link>
+                  <Link href="/hizmetler/muhendislik">Projelendirme ve Mühendislik</Link>
                 </li>
                 <li>
-                  <Link href="/hizmetler/kurulum-ve-devreye-alma">Kurulum ve Devreye Alma</Link>
+                  <Link href="/hizmetler/kurulum">Kurulum ve Devreye Alma</Link>
                 </li>
                 <li>
-                  <Link href="/hizmetler/bakim-ve-teknik-destek">Bakım ve Teknik Destek</Link>
+                  <Link href="/hizmetler/bakim">Bakım ve Teknik Destek</Link>
                 </li>
               </ul>
             </div>
@@ -88,8 +88,8 @@ export function Footer() {
           </p>
           <div className="site-footer__legal">
             <Link href="/kvkk">KVKK</Link>
-            <Link href="/gizlilik-politikasi">Gizlilik Politikası</Link>
-            <Link href="/cerez-politikasi">Çerez Politikası</Link>
+            <Link href="/gizlilik">Gizlilik Politikası</Link>
+            <Link href="/cerezler">Çerez Politikası</Link>
             <PrivacySettingsButton />
           </div>
         </div>

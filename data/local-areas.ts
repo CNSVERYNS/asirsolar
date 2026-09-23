@@ -21,5 +21,5 @@ export const localAreas: LocalArea[] = [{
     { label: "GOSB — ruhsatlandırma hizmetleri", href: "https://www.gosb.com.tr/hizmetler/ruhsatlandirma-hizmetleri" },
   ],
 }];
-export function localAreaPath(area: LocalArea): string { return `/ges-kurulumu/${area.citySlug}/${area.slug}`; }
+export function localAreaPath(area: LocalArea): string { return `/bolgeler/${area.citySlug}/${area.slug}`; }
 export function getLocalArea(city: string, slug: string): LocalArea | undefined { return localAreas.find(area => area.citySlug === city && area.slug === slug); }

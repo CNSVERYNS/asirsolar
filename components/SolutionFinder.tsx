@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { projectTypeKey } from "@/lib/enquiry";
 import { useRef, useState, type KeyboardEvent } from "react";
 
 const applications = [
@@ -32,7 +33,7 @@ export function SolutionFinder() {
       </div>
       <div className="application-panel" role="tabpanel" id="application-panel" aria-labelledby={`application-tab-${active}`} tabIndex={0}>
         <div className="application-panel__image"><Image key={application.image} src={application.image} alt={`${application.label} için temsili güneş enerjisi uygulaması`} fill sizes="(max-width: 800px) 100vw, 50vw" /><span>GÜNEŞ ENERJİSİ UYGULAMA ALANLARI</span></div>
-        <div className="application-panel__content"><p className="eyebrow">{application.tag}</p><h3>{application.title}</h3><p className="text-muted">{application.text}</p><ul>{application.points.map((point) => <li key={point}><span aria-hidden="true">✓</span>{point}</li>)}</ul><Link href={`/iletisim?proje=${encodeURIComponent(application.project)}`} className="btn btn--primary">Projenizi birlikte değerlendirelim <span className="btn__arrow" aria-hidden="true">↗</span></Link></div>
+        <div className="application-panel__content"><p className="eyebrow">{application.tag}</p><h3>{application.title}</h3><p className="text-muted">{application.text}</p><ul>{application.points.map((point) => <li key={point}><span aria-hidden="true">✓</span>{point}</li>)}</ul><Link href={`/iletisim?proje=${projectTypeKey(application.project)}`} className="btn btn--primary">Projenizi birlikte değerlendirelim <span className="btn__arrow" aria-hidden="true">↗</span></Link></div>
       </div>
     </div>
   );

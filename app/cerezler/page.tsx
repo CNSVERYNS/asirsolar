@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   ...pageMetadata({
     title: "Çerez Politikası",
     description: "Asır Solar çerez politikası.",
-    path: "/cerez-politikasi",
+    path: "/cerezler",
   }),
   // Taslak niteliğinde — hukuk danışmanı onayına kadar aranabilir olmamalı.
   robots: { index: false, follow: true },

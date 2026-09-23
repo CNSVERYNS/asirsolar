@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Image from "next/image";
 import { Container } from "@/components/Container";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -26,7 +26,8 @@ export async function generateMetadata({
   if (!project) {
     const published = await getPublishedProject(slug);
     if (!published) notFound();
-    return pageMetadata({ title: published.name, description: published.description.slice(0, 170), path: `/projeler/${published.id}` });
+    if (slug !== published.slug) permanentRedirect(`/projeler/${published.slug}`);
+    return pageMetadata({ title: published.name, description: published.description.slice(0, 170), path: `/projeler/${published.slug}` });
   }
   return pageMetadata({
     title: project.name,
@@ -45,6 +46,7 @@ export default async function ProjectDetailPage({
   if (!project) {
     const published = await getPublishedProject(slug);
     if (!published) notFound();
+    if (slug !== published.slug) permanentRedirect(`/projeler/${published.slug}`);
     return <PublishedProject project={published} />;
   }
 

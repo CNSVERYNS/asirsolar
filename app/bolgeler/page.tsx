@@ -1,0 +1,7 @@
+import Link from "next/link";
+import { localAreas, localAreaPath } from "@/data/local-areas";
+import { Container } from "@/components/Container";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { pageMetadata } from "@/lib/site";
+export const metadata = pageMetadata({ title: "Bölge ve OSB’ye Göre GES Kurulumu", description: "Fabrika çatı GES yatırımını bulunduğunuz bölgenin bağlantı ve saha koşullarıyla planlayın. Kocaeli ve Gebze OSB için keşif hazırlığı.", path: "/bolgeler" });
+export default function LocalIndexPage() { return <><section className="page-hero"><Container><Breadcrumbs path="/bolgeler" /><h1>Aynı güneş.<br />Her sahada farklı bir plan.</h1><p className="text-lg">Dağıtım bağlantısı, yapı belgeleri ve üretim düzeni yerel değerlendirme gerektirir. Sahanızın bulunduğu bölge için ilk görüşmeye hazırlanın.</p></Container></section><section className="section section--tight"><Container><h2>Bölge rehberleri</h2>{localAreas.map(area => <article className="local-area-card" key={area.slug}><Link className="eyebrow" href={`/bolgeler/${area.citySlug}`}>{area.city}</Link><h3><Link href={localAreaPath(area)}>{area.title}</Link></h3><p>{area.summary}</p><Link className="text-link" href={localAreaPath(area)}>Keşif hazırlığını inceleyin</Link></article>)}<p>Listede olmayan bir saha için <Link className="text-link" href="/iletisim">konumunuzu paylaşarak hizmet kapsamını görüşebilirsiniz.</Link></p></Container></section></>; }

@@ -123,9 +123,9 @@ export default function HomePage() {
             <Reveal className="two-col__side" delay={80}>
               <p className="eyebrow">KARAR ÖNCESİ ÜÇ ADIM</p>
               <div className="local-guide-links">
-                <Link href="/rehber/catim-gunes-paneline-uygun-mu"><span>01</span>Çatınızın uygunluğunu değerlendirin <span aria-hidden="true">↗</span></Link>
-                <Link href="/rehber/gunes-paneli-icin-izin-gerekir-mi"><span>02</span>Bağlantı ve izin sürecini inceleyin <span aria-hidden="true">↗</span></Link>
-                <Link href="/rehber/yatirimin-geri-donusu-nasil-hesaplanir#hesaplama"><span>03</span>Geri ödeme senaryonuzu hesaplayın <span aria-hidden="true">↗</span></Link>
+                <Link href="/rehber/cati-uygunlugu"><span>01</span>Çatınızın uygunluğunu değerlendirin <span aria-hidden="true">↗</span></Link>
+                <Link href="/rehber/kurulum-izinleri"><span>02</span>Bağlantı ve izin sürecini inceleyin <span aria-hidden="true">↗</span></Link>
+                <Link href="/rehber/amortisman#hesaplama"><span>03</span>Geri ödeme senaryonuzu hesaplayın <span aria-hidden="true">↗</span></Link>
               </div>
               <TextLink href="/iletisim">Keşif için görüşelim</TextLink>
             </Reveal>
@@ -133,7 +133,7 @@ export default function HomePage() {
         </Container>
       </section>
       <FAQ index="05" />
-      <section className="section"><Container><LazySolarEstimator /><div className="tw:mt-6"><TextLink href="/ges-kurulumu/kocaeli/gebze-osb">Gebze OSB için GES keşif hazırlığı</TextLink></div></Container></section>
+      <section className="section"><Container><LazySolarEstimator /><div className="tw:mt-6"><TextLink href="/bolgeler/kocaeli/gebze-osb">Gebze OSB için GES keşif hazırlığı</TextLink></div></Container></section>
       <CTASection />
     </>
   );

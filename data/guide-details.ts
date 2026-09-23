@@ -11,7 +11,7 @@ const epdk = { label: "EPDK — Lisanssız elektrik üretimi mevzuatı", href: "
 const sedas = { label: "SEDAŞ — Güncel başvuru belgeleri, süreçler ve duyurular", href: "https://www.sedas.com/Tr/icerik_lisanssiz-elektrik-uretimi_580" };
 
 export const guideDetails: Record<string, GuideDetail> = {
-  "catim-gunes-paneline-uygun-mu": {
+  "cati-uygunlugu": {
     updatedAt: "2026-09-10",
     sections: [
       { title: "1. Alan, yön ve gölgeyi birlikte değerlendirin", paragraphs: ["Çatı alanının tamamı panel yerleşimi için kullanılamayabilir. Bacalar, ışıklıklar, bakım yolları ve kenar mesafeleri yerleşimde dikkate alınır. Yön ve eğim üretim profilini değiştirir; doğu-batı yerleşimi de tüketim saatlerine göre değerlendirilebilecek seçeneklerdendir.", "Bir üretim modelinde konum, yön, eğim ve kayıp kabulleri açıkça belirtilmelidir. PVGIS gibi araçlar ilk üretim tahminini destekler; yakın çevredeki baca, ağaç ve yapı gölgeleri için yerinde inceleme gerekir."] },
@@ -19,7 +19,7 @@ export const guideDetails: Record<string, GuideDetail> = {
       { title: "3. Uygun çatı ile uygun sistem gücünü ayırın", paragraphs: ["Fiziksel olarak çok sayıda panel yerleştirilebilmesi, tamamının ekonomik veya bağlantı açısından uygun olduğu anlamına gelmez. Son 12 aylık tüketim, gündüz kullanım oranı ve bağlantı koşulları sistem gücü kararına birlikte girer. Gebze’deki bir işletme ile aynı alana sahip bir konutun ihtiyaçları farklı olabilir."] },
     ], sources: [pvgis],
   },
-  "gunes-paneli-icin-izin-gerekir-mi": {
+  "kurulum-izinleri": {
     updatedAt: "2026-09-10",
     sections: [
       { title: "Önce bağlantı türünü ve yetkili kurumu belirleyin", paragraphs: ["Bu rehber şebekeye bağlı çatı ve cephe sistemleri için genel bir yol haritasıdır. Lisanssız üretim, başvuru ve teknik yükümlülüklerin olmadığı anlamına gelmez. Şebekeden bağımsız sistemlerde ise elektrik şebekesine bağlantı süreci farklıdır; yapıya ve sahaya ilişkin gereklilikler ayrıca değerlendirilir.", "Gebze ve Kocaeli’de başvuru hazırlarken abonelikteki şebeke işletmecisini kontrol edin. SEDAŞ bölgesi için güncel belge listeleri ve duyurular aşağıdaki resmî sayfada bulunur. OSB içindeki bir tesis için ilgili OSB’nin dağıtım birimiyle başvuru yolu netleştirilmelidir."] },
@@ -27,7 +27,7 @@ export const guideDetails: Record<string, GuideDetail> = {
       { title: "Teklif almadan önce hangi belgeler hazırlanabilir?", paragraphs: ["Elektrik aboneliği ve tüketim bilgileri, tesis adresi, mülkiyet veya kullanım durumunu gösteren belgeler ve varsa elektrik/yapı projeleri ilk değerlendirmeyi kolaylaştırır. Bunlar genel hazırlık bilgileridir; başvuruda istenecek kesin listeyi yetkili kurum belirler.", "Bir başvuru takvimi hazırlanırken kurum değerlendirmesi, eksik belge tamamlama, proje onayı ve saha işleri ayrı düşünülmelidir. Bağlantı kapasitesi, ücretler veya kesin tamamlanma süresi, yalnızca genel bir internet rehberine dayanılarak kabul edilmemelidir."] },
     ], sources: [epdk, sedas, { label: "SEDAŞ — Lisanssız üretim başvuru portalı", href: "https://online.sedas.com/Luy/Login" }],
   },
-  "yatirimin-geri-donusu-nasil-hesaplanir": {
+  "amortisman": {
     updatedAt: "2026-09-10", calculator: true,
     sections: [
       { title: "Basit geri ödeme hesabının girdileri", paragraphs: ["İlk yatırım tutarına ekipman, montaj ve projeye dâhil diğer giderler aynı kapsamla eklenir. Yıllık üretim tahmini sahaya göre hazırlanır. Üretimin binada kullanıldığı bölüm ile şebekeye verildiği bölüm ayrı değerlendirilir.", "Öz tüketimdeki birim tasarruf değeri, güneş enerjisi sayesinde gerçekten azalan elektrik maliyetini temsil eder. Faturanın tamamını tüketim miktarına bölmek, sabit kalemler nedeniyle bu değeri her durumda doğru vermez. Şebekeye verilen enerjinin değeri ise geçerli mevzuat ve sözleşme koşulları doğrulanarak girilmelidir."] },

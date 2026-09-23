@@ -58,9 +58,11 @@ try {
   assert.equal((await request('/api/admin/projeler',{method:'POST',auth,body:{...projectInput,endDate:'2026-09-14'}})).status,400);
   const project=(await json(await request('/api/admin/projeler',{method:'POST',auth,body:projectInput}),201)).project;
   const projectUrl='/api/admin/projeler/'+project.id;
-  const detailPath='/projeler/'+project.id;
+  const legacyDetailPath='/projeler/'+project.id;
+  const detailPath='/projeler/'+project.slug;
   const ogPath='/og-image?path='+encodeURIComponent(detailPath);
   assert.equal((await request(detailPath)).status,404);
+  assert.equal((await request(legacyDetailPath)).status,404);
   assert.equal((await request(ogPath)).status,404);
   assert.equal((await json(await request('/api/projeler'),200)).projects.length,0);
   const png=await sharp({create:{width:1600,height:1000,channels:3,background:'#54228b'}}).png().toBuffer();
@@ -72,8 +74,14 @@ try {
   assert.equal((await request(image.url)).status,404);
   assert.equal((await request(image.url,{auth})).status,200);
   await json(await request(projectUrl,{method:'PATCH',auth,body:{...projectInput,published:true}}),200);
+  const movedProject = await request(legacyDetailPath);
+  assert.equal(movedProject.status,308);assert.equal(new URL(movedProject.headers.get('location'),base).pathname,detailPath);
   const publishedPage=await request(detailPath);assert.equal(publishedPage.status,200);
   const publishedHtml=await publishedPage.text();assert.ok(publishedHtml.includes('HTTP test project &lt;script&gt;'));assert.ok(!publishedHtml.includes('<script>alert(1)</script>'));
+  assert.equal(new URL(publishedHtml.match(/rel="canonical" href="([^"]+)"/)[1]).pathname,detailPath);
+  const renamed = await json(await request(projectUrl,{method:'PATCH',auth,body:{...projectInput,name:'Renamed project',published:true}}),200);
+  assert.equal(renamed.project.slug,project.slug);assert.equal((await request(detailPath)).status,200);
+  await json(await request(projectUrl,{method:'PATCH',auth,body:{...projectInput,published:true}}),200);
   const publishedOg=await request(ogPath);assert.equal(publishedOg.status,200);assert.match(publishedOg.headers.get('content-type'),/image\/png/);assert.match(publishedOg.headers.get('cache-control'),/no-store/);
   assert.ok((await (await request('/sitemap.xml')).text()).includes(detailPath+'</loc>'));
   const publicImage=await request(image.url);assert.equal(publicImage.status,200);assert.equal(publicImage.headers.get('content-type'),'image/webp');
@@ -128,6 +136,7 @@ try {
   await json(await request('/api/admin/cikis',{method:'POST',auth}),200);
   assert.equal((await request('/api/admin/talepler',{auth})).status,401);
   // Existing public pages and media must remain intact on the production server.
+  await new Promise((resolve,reject)=>{const check=spawn(process.execPath,['scripts/check-links.mjs',base],{windowsHide:true,stdio:['ignore','pipe','pipe']});let output='';check.stdout.on('data',data=>{output+=data});check.stderr.on('data',data=>{output+=data});check.on('exit',code=>code===0?(console.log(output.trim()),resolve()):reject(new Error(output)));});
   await new Promise((resolve,reject)=>{const check=spawn(process.execPath,['scripts/check-site.mjs',base],{windowsHide:true,stdio:['ignore','pipe','pipe']});let output='';check.stdout.on('data',data=>{output+=data});check.stderr.on('data',data=>{output+=data});check.on('exit',code=>code===0?(console.log(output.trim()),resolve()):reject(new Error(output)));});
   console.log('PASS: production HTTP authentication, CSRF, private endpoints, real form persistence, duplicate protection, manual leads, stages, notes, archive, size limits, cron authorization and logout.');
 } catch(error){console.error(logs);throw error;}

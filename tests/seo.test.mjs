@@ -20,7 +20,7 @@ test('business facts and all services share one verified provider, without inven
  assert.deepEqual(business.openingHoursSpecification[0].dayOfWeek,['Monday','Tuesday','Wednesday','Thursday','Friday']);assert.equal(business.openingHoursSpecification[0].opens,'08:00');assert.equal(business.openingHoursSpecification[0].closes,'17:00');
  assert.ok(!business.geo&&!business.sameAs&&!business.aggregateRating);assert.equal(verifiedReviews.length,0);
  for(const service of services)assert.equal(serviceSchema(service).provider['@id'],business['@id']);
- assert.ok(services.some(service=>service.slug==='endustriyel-cati-ges'));assert.ok(services.some(service=>service.slug==='arazi-ges'));
+ assert.ok(services.some(service=>service.slug==='cati-ges'));assert.ok(services.some(service=>service.slug==='arazi-ges'));
  assert.throws(()=>verifiedBusinessProperties({...businessEvidence,geo:{latitude:100,longitude:20}}));assert.throws(()=>verifiedBusinessProperties({socialProfiles:['javascript:alert(1)']}));
 });
 test('reviews remain absent without evidence; invalid or duplicate verified reviews are rejected',()=>{
@@ -33,8 +33,8 @@ test('allowlisted local pages have complete breadcrumbs and reject invented loca
  assert.equal(getLocalArea('istanbul','nonexistent'),undefined);assert.equal(findPublicPage('/admin'),undefined);assert.equal(findPublicPage('/teklif/secret'),undefined);assert.equal(new Set(publicPages.map(page=>page.path)).size,publicPages.length);
 });
 test('FAQ and HowTo are generated from visible content; dynamic metadata uses canonical path and branded image',()=>{
- assert.equal(faqSchema([{question:'Test?',answer:'Answer'}]).mainEntity[0].acceptedAnswer.text,'Answer');assert.equal(installationSchema('/hizmetler/endustriyel-cati-ges').step.length,6);
- const meta=pageMetadata({title:'Çatı GES',description:'Anlamlı test açıklaması',path:'/hizmetler/endustriyel-cati-ges'});assert.ok(meta.alternates.canonical.endsWith('/hizmetler/endustriyel-cati-ges'));assert.ok(meta.openGraph.images[0].url.includes('/og-image?path='));
+ assert.equal(faqSchema([{question:'Test?',answer:'Answer'}]).mainEntity[0].acceptedAnswer.text,'Answer');assert.equal(installationSchema('/hizmetler/cati-ges').step.length,6);
+ const meta=pageMetadata({title:'Çatı GES',description:'Anlamlı test açıklaması',path:'/hizmetler/cati-ges'});assert.ok(meta.alternates.canonical.endsWith('/hizmetler/cati-ges'));assert.ok(meta.openGraph.images[0].url.includes('/og-image?path='));
 });
 test('production CSP blocks frames, objects and eval; private routes can use an unpredictable nonce',()=>{
  const baseline=contentSecurityPolicy();assert.match(baseline,/frame-ancestors 'none'/);assert.match(baseline,/object-src 'none'/);assert.ok(!baseline.includes('unsafe-eval'));assert.ok(!baseline.includes('google-analytics'));

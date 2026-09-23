@@ -14,7 +14,7 @@ export type Service = {
 export const services: Service[] = [
   {
     num: "01",
-    slug: "gunes-enerjisi-sistemleri",
+    slug: "gunes-enerjisi",
     title: "Güneş Enerjisi Sistemleri",
     summary:
       "Çatı, cephe ve arazi tipi fotovoltaik sistemlerin tasarımı ve kurulumu.",
@@ -33,7 +33,7 @@ export const services: Service[] = [
   },
   {
     num: "02",
-    slug: "cephe-tipi-uygulamalar",
+    slug: "cati-cephe",
     title: "Çatı ve Cephe Tipi Uygulamalar",
     summary:
       "Standart çatı kurulumlarının yanı sıra bina cephesine entegre panel sistemleri.",
@@ -52,7 +52,7 @@ export const services: Service[] = [
   },
   {
     num: "03",
-    slug: "projelendirme-ve-muhendislik",
+    slug: "muhendislik",
     title: "Projelendirme ve Mühendislik",
     summary: "Ücretsiz keşif ile başlayan, teknik çizim ve hesaplarla ilerleyen süreç.",
     description: [
@@ -70,7 +70,7 @@ export const services: Service[] = [
   },
   {
     num: "04",
-    slug: "elektrik-altyapisi",
+    slug: "elektrik",
     title: "Elektrik Altyapısı ve Pano Sistemleri",
     summary: "Sistemin güvenli ve sürekli çalışması için elektrik altyapısının uyumlu hale getirilmesi.",
     description: [
@@ -88,7 +88,7 @@ export const services: Service[] = [
   },
   {
     num: "05",
-    slug: "kurulum-ve-devreye-alma",
+    slug: "kurulum",
     title: "Kurulum ve Devreye Alma",
     summary: "Mekanik montajdan elektriksel testlere kadar sahadaki uygulama süreci.",
     description: [
@@ -106,7 +106,7 @@ export const services: Service[] = [
   },
   {
     num: "06",
-    slug: "bakim-ve-teknik-destek",
+    slug: "bakim",
     title: "Bakım ve Teknik Destek",
     summary: "Kurulum sonrasında sistemin performansını koruyacak periyodik kontrol ve destek.",
     description: [
@@ -129,7 +129,7 @@ export function getServiceBySlug(slug: string): Service | undefined {
 }
 
 services.push({
-  num: "07", slug: "endustriyel-cati-ges", title: "Endüstriyel Çatı GES", icon: "panel", image: "/images/stock/industrial-roof.jpg",
+  num: "07", slug: "cati-ges", title: "Endüstriyel Çatı GES", icon: "panel", image: "/images/stock/industrial-roof.jpg",
   summary: "Fabrika ve depo çatılarında tüketim analizi, yapısal uygunluk, proje ve kurulumun birlikte planlanması.",
   description: ["Fabrika çatısında güç seçimi, kullanılabilir alanın yanında tesisin saatlik tüketimine dayanır. Vardiyalar, hafta sonu çalışma ve gelecekteki yük artışları üretim senaryosuna dahil edilir.", "Çatı statik belgeleri, kaplama, yangın erişimi ve elektrik bağlantı koşulları incelenmeden kapasite veya teslim takvimi kesinleştirilmez. Uygulama planı tesisin üretim programıyla birlikte hazırlanır."],
   scope: ["Tüketim ve öz tüketim senaryosu", "Çatı, gölge ve montaj değerlendirmesi", "OSB / dağıtım bağlantı koordinasyonu", "Proje, teklif, montaj ve teslim planı"],

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   ...pageMetadata({
     title: "Gizlilik Politikası",
     description: "Asır Solar gizlilik politikası.",
-    path: "/gizlilik-politikasi",
+    path: "/gizlilik",
   }),
   // Taslak niteliğinde — hukuk danışmanı onayına kadar aranabilir olmamalı.
   robots: { index: false, follow: true },

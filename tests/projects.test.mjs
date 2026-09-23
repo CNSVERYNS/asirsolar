@@ -19,6 +19,7 @@ test('project persistence, publishing, image handling and username login', async
   assert.equal(await auth.authenticate('ahmetcansever', 'wrong'), null);
   for (const change of [{ startDate: '2026-02-30' }, { endDate: '2026-09-14' }, { name: '' }, { published: 'true' }, { description: 'x'.repeat(5001) }]) assert.throws(() => input(change));
   const first = await repo.saveProject(input(), onur.id);
+  assert.equal(first.slug, 'test-saha-projesi');
   assert.equal((await repo.listProjects()).length, 0, 'drafts remain private');
   assert.equal((await repo.listProjects(false)).length, 1);
   const png = await sharp({ create: { width: 64, height: 32, channels: 3, background: '#287344' } }).png().toBuffer();
@@ -33,6 +34,19 @@ test('project persistence, publishing, image handling and username login', async
   assert.equal(published.length, 1); assert.equal(published[0].images.length, 1);
   assert.ok(await repo.getProjectImage(image.id));
   const second = await repo.saveProject(input({ name: 'İkinci proje', published: true }), ahmet.id);
+  assert.equal(second.slug, 'ikinci-proje');
+  const duplicates = await Promise.all(Array.from({length: 4}, () => repo.saveProject(input({name: 'İkinci proje'}), ahmet.id)));
+  assert.deepEqual(duplicates.map(project => project.slug).sort(), ['ikinci-proje-2', 'ikinci-proje-3', 'ikinci-proje-4', 'ikinci-proje-5']);
+  assert.equal((await repo.saveProject(input({name: 'Yeni proje adı', published: true}), ahmet.id, second.id)).slug, second.slug, 'renaming preserves shared URLs');
+  const beforeMigration = await repo.listProjects(false);
+  await db.migrateProjectSlugs();
+  assert.deepEqual(await repo.listProjects(false), beforeMigration, 'rerunning migration preserves content and URLs');
+  const turkish = await repo.saveProject(input({name: 'ÇĞİÖŞÜ çğıöşü'}), ahmet.id);
+  assert.equal(turkish.slug, 'cgiosu-cgiosu');
+  const long = await repo.saveProject(input({name: 'Uzun proje '.repeat(14)}), ahmet.id);
+  assert.ok(long.slug.length <= 32);assert.match(long.slug, /^[a-z0-9]+(-[a-z0-9]+)*$/);
+  const fallback = await repo.saveProject(input({name: '☀️'}), ahmet.id);
+  assert.equal(fallback.slug, 'proje');
   await assert.rejects(repo.removeProjectImage(second.id, image.id), error => error.status === 404);
   assert.ok(await repo.getProjectImage(image.id));
   for (let i = 1; i < 12; i++) await repo.addProjectImage(first.id, png);

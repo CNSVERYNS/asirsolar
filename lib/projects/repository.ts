@@ -18,7 +18,7 @@ export function parseProject(value: unknown): ProjectInput {
   if (typeof data.published !== "boolean") throw new CrmError("Yayın durumu geçersiz.");
   return { name: textField(data.name, "Proje ismi", 160, true), description: textField(data.description, "Açıklama", 5000, true), startDate, endDate, published: data.published };
 }
-const columns = `p.id, p.name, p.description, p.start_date AS startDate, p.end_date AS endDate,
+const columns = `p.id, p.slug, p.name, p.description, p.start_date AS startDate, p.end_date AS endDate,
   p.published, p.created_at AS createdAt, p.updated_at AS updatedAt,
   COALESCE((SELECT json_agg(json_build_object('id', i.id, 'url', '/api/projeler/gorseller/' || i.id) ORDER BY i.position, i.id)
     FROM project_images i WHERE i.project_id = p.id), '[]'::json) AS images`;

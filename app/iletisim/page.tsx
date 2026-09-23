@@ -8,7 +8,7 @@ import { company } from "@/data/company";
 import { pageMetadata, siteConfig } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
 import { organizationId, websiteId } from "@/lib/structured-data";
-import { resolveProjectType } from "@/lib/enquiry";
+import { contactContext, type ContactParams } from "@/lib/enquiry-context";
 import { WhatsAppLink } from "@/components/WhatsAppLink";
 import { whatsappContact } from "@/lib/whatsapp";
 import { LocationMap } from "@/components/LocationMap";
@@ -20,10 +20,9 @@ export const metadata: Metadata = pageMetadata({
   path: "/iletisim",
 });
 
-export default async function IletisimPage({ searchParams }: { searchParams: Promise<{ proje?: string | string[]; mesaj?: string | string[] }> }) {
+export default async function IletisimPage({ searchParams }: { searchParams: Promise<ContactParams> }) {
   const params = await searchParams;
-  const initialProjectType = resolveProjectType(params.proje);
-  const initialMessage = typeof params.mesaj === "string" ? params.mesaj.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "").slice(0, 1000) : "";
+  const { projectType: initialProjectType, message: initialMessage } = contactContext(params);
   return (
     <>
       <JsonLd data={{ "@context": "https://schema.org", "@type": "ContactPage", "@id": `${siteConfig.url}/iletisim#page`, url: `${siteConfig.url}/iletisim`, name: "Asır Solar iletişim ve keşif", mainEntity: { "@id": organizationId }, isPartOf: { "@id": websiteId } }} />
