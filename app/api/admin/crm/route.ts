@@ -1,13 +1,11 @@
 import { api, json, limit, readJson, requireAdmin, verifyOrigin } from "@/lib/crm/http";
-import { listPipeline, movePipeline } from "@/lib/crm/pipeline.server";
-import { record, textField } from "@/lib/crm/validation";
+import { createContact, listContacts } from "@/lib/crm/contacts.server";
 export async function GET(request: Request) {
-  return api(async () => { const user = await requireAdmin(); await limit(`pipeline-read:${user.id}`, 240, 60); return json(await listPipeline(new URL(request.url).searchParams)); });
+  return api(async () => { const user = await requireAdmin(); await limit(`contacts-read:${user.id}`, 240, 60); return json(await listContacts(new URL(request.url).searchParams)); });
 }
-export async function PATCH(request: Request) {
+export async function POST(request: Request) {
   return api(async () => {
-    const user = await requireAdmin(); verifyOrigin(request); await limit(`pipeline-edit:${user.id}`, 120, 3600);
-    const data = record(await readJson(request));
-    return json(await movePipeline(textField(data.id, "Talep", 64, true), data, user));
+    const user = await requireAdmin(); verifyOrigin(request); await limit(`contacts-create:${user.id}`, 120, 3600);
+    return json(await createContact(await readJson(request), request.headers.get("Idempotency-Key") || "", user.id), 201);
   });
 }

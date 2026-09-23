@@ -1,6 +1,6 @@
 # CRM teklif yönetimi
 
-Güncel kısa referanslar ve satış panosu: [CRM_PIPELINE_SETUP.md](CRM_PIPELINE_SETUP.md). Kullanıcının doğruladığı mevcut production durumunda `CRM_EMAIL_ENABLED=true`, `CRM_QUOTES_SEND_ENABLED=true`, `CRM_SMS_ENABLED=false`; teklif E2E testi yapılmıştır. Pipeline geliştirmesi bu ayarları değiştirmez ve gerçek mesaj göndermez.
+Kişi rehberi: [CRM_CONTACTS_SETUP.md](CRM_CONTACTS_SETUP.md). Kanban kaldırılmıştır. Kısa referansların migration geçmişi: [CRM_PIPELINE_SETUP.md](CRM_PIPELINE_SETUP.md). Kullanıcının doğruladığı mevcut production durumunda `CRM_EMAIL_ENABLED=true`, `CRM_QUOTES_SEND_ENABLED=true`, `CRM_SMS_ENABLED=false`; teklif E2E testi yapılmıştır. Rehber geliştirmesi bu ayarları değiştirmez ve gerçek mesaj göndermez.
 
 ## Mimari ve mevcut akış
 

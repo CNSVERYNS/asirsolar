@@ -1,5 +1,7 @@
 # CRM satış süreci ve kısa referanslar
 
+> 23 Eylül 2026: Kanban kullanıcı talebiyle kaldırıldı. `/admin/crm` artık [kişi rehberi](CRM_CONTACTS_SETUP.md); eski kolon taşıma API'si kullanılamaz. Aşağıdaki pano anlatımı geçmiş uygulamaya aittir. ASR referansları, sequence'lar, mevcut talep/teklif durumları ve migration geçmişi korunmuştur.
+
 ## Mevcut mimari ve kapsam
 
 `/admin/crm` mevcut admin oturumu altında Satış Süreci panosudur. `/api/admin/crm` GET yalnızca okur; PATCH mevcut Origin, oturum, JSON boyut ve DB rate-limit kontrollerini kullanır. Bu ekran bildirim worker'ını çağırmaz. Mevcut talep listesi, detay sayfası ve teklif URL'leri korunur.

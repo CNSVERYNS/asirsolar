@@ -1,5 +1,7 @@
 # Asır Solar talep ve iş takibi
 
+Kişi iletişim bilgileri `/admin/crm` altındaki [CRM kişi rehberinde](CRM_CONTACTS_SETUP.md) tutulur. Kanban kaldırılmıştır; `/admin` menüsünün adı **Talepler** olarak güncellenmiştir.
+
 Web formu `/api/talepler` üzerinden talebi kaydeder. `/admin`, Onur Durak ve Furkan Cansever'in ortak çalışma alanıdır. Giriş adresi `/admin/giris`.
 
 Talep detayından sürümlü teklif hazırlama, özel dosya paylaşımı ve müşteri onay/revizyon takibi: [QUOTE_CRM_SETUP.md](QUOTE_CRM_SETUP.md). Yeni teklif gönderimi `CRM_QUOTES_SEND_ENABLED` ile bağımsız ve varsayılan kapalıdır; mevcut form bildirimleri kendi ayarlarıyla çalışmayı sürdürür.

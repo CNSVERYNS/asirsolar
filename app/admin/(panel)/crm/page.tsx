@@ -1,7 +1,7 @@
 import { requireAdminPage } from "@/lib/crm/http";
-import { listPipeline } from "@/lib/crm/pipeline.server";
-import { PipelineBoard } from "@/components/admin/PipelineBoard";
+import { listContacts } from "@/lib/crm/contacts.server";
+import { ContactDirectory } from "@/components/admin/ContactDirectory";
 export default async function CrmPage() {
   await requireAdminPage();
-  return <PipelineBoard initial={await listPipeline(new URLSearchParams())} />;
+  return <ContactDirectory initial={await listContacts(new URLSearchParams())} />;
 }

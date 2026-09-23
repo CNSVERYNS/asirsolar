@@ -18,6 +18,7 @@ export const projectsMigrationPath = resolve("supabase/migrations/202609150001_p
 export const customerEmailMigrationPath = resolve("supabase/migrations/202609160001_customer_email.sql");
 export const quotesMigrationPath = resolve("supabase/migrations/202609170001_quotes.sql");
 export const pipelineMigrationPath = resolve("supabase/migrations/202609180001_pipeline_references.sql");
+export const contactsMigrationPath = resolve("supabase/migrations/202609230001_contacts.sql");
 export async function initializeDatabase() {
   if (!state.ready) state.ready = (async () => {
     if (process.env.DATABASE_URL) {
@@ -42,6 +43,7 @@ export async function initializeDatabase() {
       await state.local.exec(await readFile(customerEmailMigrationPath, "utf8"));
       await state.local.exec(await readFile(quotesMigrationPath, "utf8"));
       await state.local.exec(await readFile(pipelineMigrationPath, "utf8"));
+      await state.local.exec(await readFile(contactsMigrationPath, "utf8"));
     }
   })().catch((error) => { state.ready = undefined; throw error; });
   await state.ready;
@@ -87,6 +89,13 @@ export async function migrateDatabase() {
   if (state.pool) await state.pool.query(await readFile(customerEmailMigrationPath, "utf8"));
   if (state.pool) await state.pool.query(await readFile(quotesMigrationPath, "utf8"));
   if (state.pool) await state.pool.query(await readFile(pipelineMigrationPath, "utf8"));
+  if (state.pool) await state.pool.query(await readFile(contactsMigrationPath, "utf8"));
+}
+export async function migrateContactsModule() {
+  await initializeDatabase();
+  const sql = await readFile(contactsMigrationPath, "utf8");
+  if (state.pool) await state.pool.query(sql);
+  else await state.local!.exec(sql);
 }
 export async function migratePipelineModule() {
   await initializeDatabase();

@@ -26,6 +26,19 @@ async function fixture(){
 }
 const rows=async(db,query)=>(await db.query(query)).rows;
 async function protectedRows(db){const result={};for(const table of ['quote_tokens','quote_attachments','quote_events','lead_events','email_outbox','sms_outbox','quote_threads'])result[table]=await rows(db,`SELECT * FROM asir_crm.${table}`);result.quotes=await rows(db,'SELECT id,thread_id,lead_id,version,status,amount_cents,message,created_at FROM asir_crm.quotes ORDER BY id');return result;}
+test('contact backfill preserves existing quotes, tokens, files and notification jobs',async()=>{
+ const db=await fixture();try{
+  await db.exec(migration);
+  await db.exec("UPDATE asir_crm.leads SET name='Same Person',phone='05321234567',company=CASE WHEN id='a' THEN 'Earliest company' ELSE 'Later company' END");
+  const before=await protectedRows(db),leadRows=await rows(db,'SELECT * FROM asir_crm.leads ORDER BY id');
+  const contactsMigration=await readFile('supabase/migrations/202609230001_contacts.sql','utf8');
+  await db.exec(contactsMigration);
+  assert.deepEqual(await protectedRows(db),before);assert.deepEqual(await rows(db,'SELECT * FROM asir_crm.leads ORDER BY id'),leadRows);
+  const people=await rows(db,'SELECT * FROM asir_crm.contacts');assert.equal(people.length,1);assert.equal(people[0].company,'Earliest company');assert.equal(people[0].address,'');
+  assert.equal((await rows(db,'SELECT * FROM asir_crm.lead_contacts')).length,2);
+  await db.exec(contactsMigration);assert.deepEqual(await rows(db,'SELECT * FROM asir_crm.contacts'),people);assert.deepEqual(await protectedRows(db),before);
+ }finally{await db.close();}
+});
 test('reference backfill preserves IDs, tokens, bytes, history and outbox; deterministic and repeatable',async()=>{
  const db=await fixture();try{
   const before=await protectedRows(db);await db.exec(migration);
