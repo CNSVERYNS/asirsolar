@@ -104,4 +104,6 @@ npm run test:integration
 
 Birim testleri geçici PostgreSQL kullanır; ZeptoMail/SMTP/Netgsm çağrıları mock edilir. PGlite bellek kullanımı için test dosyaları sırayla çalışır. HTTP entegrasyonu 3001 portunda ayrı yerel sunucu ve DB ile form/panel akışını kontrol eder; gerçek ileti göndermez. `node scripts/check-communication-build.mjs` client build'de secret/provider kodu sızıntısını kontrol eder.
 
+Satış panosu, kısa talep/teklif referansları ve migration: [CRM_PIPELINE_SETUP.md](CRM_PIPELINE_SETUP.md).
+
 Teknik kaynaklar: [Supabase bağlantı seçenekleri](https://supabase.com/docs/guides/database/connecting-to-postgres), [Vercel bağlantı havuzları](https://vercel.com/kb/guide/connection-pooling-with-functions).

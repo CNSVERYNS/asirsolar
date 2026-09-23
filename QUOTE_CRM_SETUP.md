@@ -1,5 +1,7 @@
 # CRM teklif yönetimi
 
+Güncel kısa referanslar ve satış panosu: [CRM_PIPELINE_SETUP.md](CRM_PIPELINE_SETUP.md). Kullanıcının doğruladığı mevcut production durumunda `CRM_EMAIL_ENABLED=true`, `CRM_QUOTES_SEND_ENABLED=true`, `CRM_SMS_ENABLED=false`; teklif E2E testi yapılmıştır. Pipeline geliştirmesi bu ayarları değiştirmez ve gerçek mesaj göndermez.
+
 ## Mimari ve mevcut akış
 
 `/api/talepler`, form doğrulaması, Origin kontrolü, DB tabanlı hız sınırları ve idempotency anahtarıyla lead + geçmiş + mevcut beş bildirim işini aynı transaction içinde kaydeder. Bu sözleşme korunmuştur. Manuel lead oluşturma bildirim göndermez.
@@ -14,14 +16,14 @@ Migration: `supabase/migrations/202609170001_quotes.sql`. Mevcut tablo/kayıt si
 
 | Tablo | Amaç |
 | --- | --- |
-| `quote_threads` | Ticari teklif zinciri, lead bağlantısı ve değişmez benzersiz teklif numarası |
+| `quote_threads` | Ticari teklif zinciri, lead bağlantısı ve korunan eski thread numarası |
 | `quotes` | V1/V2 sürümleri, müşteri bilgisi anlık kopyası, fiyat, para birimi, KDV, tarih, mesaj, durum ve zaman damgaları |
 | `quote_attachments` | Sürüme ait özel BYTEA dosyaları, MIME, güvenli ad, boyut ve SHA-256 |
 | `quote_tokens` | 256 bit rastgele bağlantıların yalnızca SHA-256 özetleri |
 | `quote_dispatches` | İdempotent gönderim komutları |
 | `quote_events` | Admin/müşteri/sistem aktörüyle sıralı teklif geçmişi |
 
-`quote_number_seq` PostgreSQL sequence'i eşzamanlı güvenli numara üretir: `ASR-TKF-YYMMDD-0001`. Son bölüm global artar; gün değişiminde sıfırlanmaz, geri alınmış transaction'larda boşluk olabilir. Bir numara tek zincire aittir; sürümler aynı numara ve farklı `version` kullanır. `edit_version` taslaktaki eşzamanlı düzenlemeleri kontrol eder.
+Güncel görünen numara `quotes.quote_number` alanında `ASR-TKLF-N` biçimindedir; `quote_reference_seq` üretir. Her sürüm ayrı numara alır, aynı `thread_id` altında V1/V2 ilişkisi korunur. Talep numarası bağımsız `lead_reference_seq` ile `ASR-TLP-N` olur. `quote_number_seq` ve eski thread numarası yalnızca geçmiş/rolling-deploy uyumluluğu için korunur. `edit_version` taslaktaki eşzamanlı düzenlemeleri kontrol eder. `202609180001_pipeline_references.sql` backfill'i ve rollback ayrıntıları yeni pipeline dokümanındadır.
 
 Gönderilmiş müşteri bilgisi, fiyat, içerik ve dosyaları DB trigger'ları da korur. Kimlik, zincir ve ticari sürüm değiştirilemez. Eski sürüm korunur. V2 taslakken V1 açıktır; V2 gönderildiğinde V1'in bağlantıları iptal edilir. Kabul edilmiş tekliften doğrudan revizyon oluşturulamaz. Taslak oluşturulduktan sonra V1 kabul edilirse V2 gönderimi durdurulur.
 
@@ -37,6 +39,8 @@ node scripts/quote-migrate.mjs --apply  # yalnızca yeni migration, mevcut kayı
 ```
 
 Komut parolaları veya müşteri verilerini basmaz, hesap oluşturmaz, bildirim worker'ını çağırmaz. Migration kısa DDL kilitleri için 5 saniye lock timeout kullanır. Kilit alınamazsa transaction geri alınır; düşük trafikte tekrar çalıştırın. Önce migration, sonra yeni uygulama deployment'ı gerekir. `crm:setup` yeni yerel kurulumlarda bu migration'ı da uygular.
+
+Güncel sürüm ayrıca pipeline migration'ını gerektirir: `node scripts/pipeline-migrate.mjs --apply`. Production'da tüm eski migration'ları tekrar çalıştırmak yerine bu hedefli komutu kullanın.
 
 ## Durumlar ve CRM eşlemesi
 
@@ -81,7 +85,7 @@ Yeni tek değişken **`CRM_QUOTES_SEND_ENABLED`**: secret değildir; varsayılan
 
 | Exact değişken | Amaç / değer kaynağı | Secret | Ortam |
 | --- | --- | --- | --- |
-| `CRM_QUOTES_SEND_ENABLED` | `false`; ayrı onaylı canlı testten önce açmayın | Hayır | Production/Preview/Development varsayılan kapalı |
+| `CRM_QUOTES_SEND_ENABLED` | Varsayılan `false`; mevcut Production kullanıcı tarafından `true` olarak aktifleştirildi | Hayır | Preview/Development kapalı; Production mevcut değer korunur |
 | `APP_ORIGIN` | Public linkler: `https://www.asirsolar.com` | Hayır | Production; testte ayrı HTTPS origin |
 | `DATABASE_URL` | Mevcut Supabase pooler | Evet | Production; yerel testte ayrı DB |
 | `DATABASE_SSL_CA` | Mevcut Supabase TLS CA | Hayır | Mevcut sunucu ortamı |
@@ -118,7 +122,7 @@ Unit testleri gerçek provider `fetch`/SMTP çağrılarını mock eder. HTTP tes
 - [x] Salt okunur şema audit'i ve migration uygulaması doğrulandı.
 - [x] Testler, build ve client secret taraması geçti.
 - [ ] Yeni deployment Ready, admin yetki ve public 404/head kontrolleri yapıldı.
-- [x] Teklif gönderimi kapalı (`CRM_QUOTES_SEND_ENABLED` tanımsız veya `false`).
+- [x] İlk release kapalı yapıldı; kullanıcı sonraki production E2E testini ve gönderimin açıldığını doğruladı.
 - [ ] Onur/Furkan panelde bir taslağı, dosyayı, tutar ve alıcı özetini inceledi.
 - [ ] Gerçek e-posta için ayrıca kullanıcı onayı alındı.
 - [ ] Kontrollü alıcıyla e-posta testi yapıldı; From/Reply-To/özet/link incelendi.

@@ -9,7 +9,7 @@ import { quoteSendingEnabled } from "./config.ts";
 import { normalizedSmsPhone, publicTokenValid } from "./validation.ts";
 import type { PublicQuote, Quote, QuoteAttachment, QuoteDetail, QuoteEvent, QuoteInput } from "./types.ts";
 
-const columns = `q.id, q.thread_id AS threadId, q.lead_id AS leadId, t.quote_number AS quoteNumber, q.version, q.edit_version AS editVersion,
+const columns = `q.id, q.thread_id AS threadId, q.lead_id AS leadId, q.quote_number AS quoteNumber, l.reference_number AS leadReference, q.version, q.edit_version AS editVersion,
  q.customer_name AS customerName, q.customer_email AS customerEmail, q.customer_phone AS customerPhone, q.project_type AS projectType,
  q.title, q.message, q.amount_cents AS amountCents, q.currency, q.vat_mode AS vatMode, q.valid_until::text AS validUntil, q.status,
  q.email_requested AS emailRequested, q.sms_requested AS smsRequested, q.sent_at AS sentAt, q.first_viewed_at AS firstViewedAt,
@@ -20,7 +20,7 @@ const missing = () => new CrmError("Teklif bulunamadı veya bağlantı geçersiz
 const actionable = (quote: Quote) => ["sent", "viewed"].includes(quote.status);
 
 export async function quoteRecord(id: string): Promise<Quote> {
-  const quote = await getDatabase().prepare(`SELECT ${columns} FROM asir_crm.quotes q JOIN asir_crm.quote_threads t ON t.id=q.thread_id WHERE q.id=?`).get(id) as Quote | undefined;
+  const quote = await getDatabase().prepare(`SELECT ${columns} FROM asir_crm.quotes q JOIN leads l ON l.id=q.lead_id WHERE q.id=?`).get(id) as Quote | undefined;
   if (!quote) throw missing();
   quote.attachments = await getDatabase().prepare("SELECT id, original_filename AS filename, mime_type AS mimeType, size_bytes AS sizeBytes FROM asir_crm.quote_attachments WHERE quote_id=? ORDER BY created_at,id").all(id) as QuoteAttachment[];
   return quote;
@@ -58,7 +58,7 @@ async function expireQuote(quote: Quote) {
 }
 export async function getQuoteDetail(id: string): Promise<QuoteDetail> {
   const quote = await transaction(async () => expireQuote(await lockQuote(id)));
-  const events = await getDatabase().prepare("SELECT e.id,e.kind,e.actor_type AS actorType,COALESCE(u.name,CASE WHEN e.actor_type='customer' THEN 'Müşteri' ELSE 'Sistem' END) AS actorName,e.content,e.created_at AS createdAt FROM asir_crm.quote_events e LEFT JOIN users u ON u.id=e.actor_id WHERE e.quote_id=? ORDER BY e.sequence DESC").all(id) as QuoteEvent[];
+  const events = await getDatabase().prepare("SELECT e.id,e.kind,e.actor_type AS actorType,COALESCE(u.name,CASE WHEN e.actor_type='customer' THEN 'Müşteri' ELSE 'Sistem' END) AS actorName,CASE WHEN e.kind IN ('quote_email_accepted_by_provider','quote_sms_accepted_by_provider') THEN split_part(e.content,' Bildirim: ',1) ELSE e.content END AS content,e.created_at AS createdAt FROM asir_crm.quote_events e LEFT JOIN users u ON u.id=e.actor_id WHERE e.quote_id=? ORDER BY e.sequence DESC").all(id) as QuoteEvent[];
   const deliveries = await getDatabase().prepare("SELECT id,'email' AS channel,recipient,purpose,status,attempts,error_code AS errorCode,sent_at AS sentAt FROM email_outbox WHERE quote_id=? UNION ALL SELECT id,'sms' AS channel,recipient,'quote_customer' AS purpose,status,attempts,error_code AS errorCode,sent_at AS sentAt FROM sms_outbox WHERE quote_id=? ORDER BY 8 DESC NULLS FIRST").all(id, id) as QuoteDetail["deliveries"];
   return { quote, events, deliveries };
 }
@@ -102,6 +102,7 @@ export async function createQuote(leadId: string, input: QuoteInput, actor: Admi
       threadId = parent.threadId; version = latest.version + 1;
     } else {
       threadId = randomUUID();
+      // Historical thread label for old deployments; customer numbering lives on each quotes row.
       const sequence = await db.prepare("SELECT nextval('asir_crm.quote_number_seq') AS number").get() as { number: number };
       const number = `ASR-TKF-${todayInTurkey().slice(2).replaceAll("-", "")}-${String(sequence.number).padStart(4, "0")}`;
       await db.prepare("INSERT INTO asir_crm.quote_threads(id,lead_id,quote_number,created_at) VALUES(?,?,?,?)").run(threadId, leadId, number, stamp);
@@ -215,7 +216,7 @@ async function tokenRecord(token: string) {
 }
 export function publicQuote(quote: Quote): PublicQuote {
   // Explicit allowlist: no lead ID, quote ID, thread ID, email, phone, events, credentials or delivery data.
-  return { quoteNumber: quote.quoteNumber, version: quote.version, customerName: quote.customerName, projectType: quote.projectType,
+  return { quoteNumber: quote.quoteNumber, leadReference: quote.leadReference, version: quote.version, customerName: quote.customerName, projectType: quote.projectType,
     title: quote.title, message: quote.message, amountCents: quote.amountCents, currency: quote.currency, vatMode: quote.vatMode, validUntil: quote.validUntil,
     status: quote.status, createdAt: quote.createdAt, sentAt: quote.sentAt, firstViewedAt: quote.firstViewedAt, lastViewedAt: quote.lastViewedAt,
     acceptedAt: quote.acceptedAt, revisionRequestedAt: quote.revisionRequestedAt, revisionMessage: quote.revisionMessage,

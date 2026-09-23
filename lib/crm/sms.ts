@@ -22,7 +22,7 @@ export async function flushSmsOutbox(leadId?: string) {
         await db.prepare("UPDATE sms_outbox SET status='cancelled',retryable=false,quote_token=NULL,claim_token=NULL WHERE id=? AND claim_token=?").run(candidate.id, claim);
         return false;
       }
-      const lead = await db.prepare("SELECT id, name, project_type AS projectType FROM leads WHERE id=?").get(row.lead_id) as { id: string; name: string; projectType: string };
+      const lead = await db.prepare("SELECT id, reference_number AS reference, name, project_type AS projectType FROM leads WHERE id=?").get(row.lead_id) as { id: string; reference: string; name: string; projectType: string };
       const origin = validNotificationOrigin();
       providerId = await sendNetgsmSms(row.recipient, row.quote_id ? await prepareQuoteSms({ ...row, quote_id: row.quote_id }) : renderTeamSms(lead, origin), candidate.id);
       await finishQuoteDelivery("sms", candidate.id, claim, row.quote_id, providerId);

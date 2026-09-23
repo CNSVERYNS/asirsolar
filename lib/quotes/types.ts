@@ -10,7 +10,7 @@ export const MAX_QUOTE_FILES = 5;
 export type QuoteInput = { title: string; message: string; amountCents: number; currency: Currency; vatMode: VatMode; validUntil: string; emailRequested: boolean; smsRequested: boolean };
 export type QuoteAttachment = { id: string; filename: string; mimeType: string; sizeBytes: number };
 export type PublicQuote = Omit<QuoteInput, "emailRequested" | "smsRequested"> & {
-  quoteNumber: string; version: number; customerName: string; projectType: string; status: QuoteStatus;
+  quoteNumber: string; leadReference: string; version: number; customerName: string; projectType: string; status: QuoteStatus;
   createdAt: string; sentAt: string | null; firstViewedAt: string | null; lastViewedAt: string | null;
   acceptedAt: string | null; revisionRequestedAt: string | null; revisionMessage: string;
   expiredAt: string | null; revokedAt: string | null; attachments: QuoteAttachment[];

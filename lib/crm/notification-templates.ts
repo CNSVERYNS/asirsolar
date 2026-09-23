@@ -26,7 +26,7 @@ export function renderNotificationEmail(purpose: Extract<EmailPurpose, "team" | 
     return { subject: `Talebinizi aldık · Asır Solar · ${lead.reference}`, text, html };
   }
   const link = `${origin}/admin/talepler/${encodeURIComponent(lead.id)}`;
-  const fields = [["Talep numarası", lead.reference], ["Kayıt kimliği", lead.id], ["Ad Soyad", lead.name], ["Firma", lead.company || "—"], ["Telefon", lead.phone], ["E-posta", lead.email], ["Proje", lead.projectType]];
+  const fields = [["Talep numarası", lead.reference], ["Ad Soyad", lead.name], ["Firma", lead.company || "—"], ["Telefon", lead.phone], ["E-posta", lead.email], ["Proje", lead.projectType]];
   const text = `Web sitesinden yeni bir talep geldi.\n\n${fields.map(([label, value]) => `${label}: ${value}`).join("\n")}\n\n${lead.message}\n\nPanelde aç: ${link}\n\nBu e-postayı yanıtlayarak müşteriyle iletişime geçebilirsiniz.`;
   const html = emailLayout("Yeni keşif talebi", `<p>Web sitesinden yeni bir talep geldi. <strong>${escapeHtml(lead.reference)}</strong></p><table role="presentation" style="width:100%;font-size:15px;line-height:1.6;border-collapse:collapse">${fields.map(([label, value]) => `<tr><td style="padding:8px 12px 8px 0;vertical-align:top;color:#5a6964">${label}</td><td style="padding:8px 0;overflow-wrap:anywhere">${escapeHtml(value)}</td></tr>`).join("")}</table><p style="white-space:pre-wrap;overflow-wrap:anywhere">${escapeHtml(lead.message)}</p><p><a href="${escapeHtml(link)}" style="display:inline-block;padding:12px 20px;background:#173f35;color:#fff;text-decoration:none;border-radius:6px">Talebi panelde aç</a></p><p style="font-size:14px;color:#5a6964">Bu e-postayı yanıtlayarak müşteriyle iletişime geçebilirsiniz.</p>`, origin);
   return { subject: `Yeni keşif talebi · ${lead.reference}`, text, html };
@@ -37,7 +37,7 @@ const smsProjectLabels: Record<string, string> = {
   "Çatı Tipi": "çatı projesi", "Cephe Tipi": "cephe projesi", "Arazi Tipi": "arazi projesi",
   "Elektrik ve Pano Sistemleri": "elektrik ve pano sistemleri", "Bakım / Teknik Destek": "bakım / teknik destek",
 };
-export function renderTeamSms(lead: Pick<Lead, "id" | "name" | "projectType">, origin: string) {
+export function renderTeamSms(lead: Pick<Lead, "id" | "reference" | "name" | "projectType">, origin: string) {
   const name = lead.name.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, 100);
-  return `Asır Solar: ${name}, ${smsProjectLabels[lead.projectType] || "projesi"} için sizinle iletişime geçmek istiyor. Talep: ${origin}/admin/talepler/${encodeURIComponent(lead.id)}`;
+  return `Asır Solar ${lead.reference}: ${name}, ${smsProjectLabels[lead.projectType] || "projesi"} için sizinle iletişime geçmek istiyor. Talep: ${origin}/admin/talepler/${encodeURIComponent(lead.id)}`;
 }

@@ -44,7 +44,7 @@ test('quote lifecycle, immutable revisions, secure files and shared delivery wor
     const lead=await newLead(), key=randomUUID();
     const results=await Promise.all([quotes.createQuote(lead.id,input(),actor,key),quotes.createQuote(lead.id,input(),actor,key)]);
     assert.equal(results[0].id,results[1].id);assert.equal(results[0].status,'draft');
-    assert.equal(results[0].customerEmail,lead.email);assert.match(results[0].quoteNumber,/^ASR-TKF-\d{6}-\d{4,}$/);
+    assert.equal(results[0].customerEmail,lead.email);assert.match(results[0].quoteNumber,/^ASR-TKLF-[1-9]\d*$/);
     assert.equal((await quotes.getQuoteDetail(results[0].id)).deliveries.length,0);
     await assert.rejects(quotes.sendQuote(results[0].id,1,randomUUID(),actor),status(503));
     await assert.rejects(quotes.copyQuoteLink(results[0].id,actor),status(409));
@@ -117,7 +117,7 @@ test('quote lifecycle, immutable revisions, secure files and shared delivery wor
     const response=await quotes.actOnPublicQuote(token,'revision','Batarya kapasitesini artırabilir miyiz?');
     assert.equal(response.quote.status,'revision_requested');assert.equal((await quotes.actOnPublicQuote(token,'revision',response.quote.revisionMessage)).duplicate,true);
     const second=await quotes.createQuote(first.leadId,input({amount:'500000'}),actor,randomUUID(),first.id);
-    assert.equal(second.version,2);assert.equal(second.quoteNumber,first.quoteNumber);
+    assert.equal(second.version,2);assert.notEqual(second.quoteNumber,first.quoteNumber);assert.equal(second.threadId,first.threadId);
     assert.equal((await quotes.readPublicQuote(token)).status,'revision_requested','old version stays readable during drafting');
     await issue(second);await assert.rejects(quotes.readPublicQuote(token),status(404));
     const old=await quotes.quoteRecord(first.id);assert.equal(old.status,'revoked');assert.equal(old.amountCents,first.amountCents);assert.equal(old.revisionMessage,response.quote.revisionMessage);
@@ -155,7 +155,7 @@ test('quote lifecycle, immutable revisions, secure files and shared delivery wor
     assert.match(payload.htmlbody,/https:\/\/www\.asirsolar\.com\/teklif\/[A-Za-z0-9_-]{43}/);assert.ok(payload.htmlbody.includes('/images/brand/asir-logo.jpeg'));assert.ok(payload.htmlbody.includes('&lt;img'));assert.ok(!payload.htmlbody.includes('<img src=x'));assert.ok(payload.textbody.includes(quote.quoteNumber));assert.ok(!payload.textbody.includes('/admin/'));
     const stored=await db.getDatabase().prepare('SELECT quote_token FROM email_outbox WHERE quote_id=?').get(quote.id);assert.equal(stored.quote_token,null,'clear bearer payload after delivery');
     const detail=await quotes.getQuoteDetail(quote.id);assert.equal(detail.events.filter(e=>e.kind==='quote_email_accepted_by_provider').length,1);
-    const url=(await quotes.copyQuoteLink(quote.id,actor)).url;assert.ok(renderQuoteSms(quote,url).startsWith('ASIR SOLAR:'));assert.throws(()=>renderQuoteSms(quote,'http://localhost/teklif/x'));
+    const url=(await quotes.copyQuoteLink(quote.id,actor)).url;assert.ok(renderQuoteSms(quote,url).startsWith('ASIR SOLAR ASR-TKLF-'));assert.throws(()=>renderQuoteSms(quote,'http://localhost/teklif/x'));
     const template=renderQuoteEmail({...quote,customerName:'<script>x</script>'},url,'https://www.asirsolar.com');assert.ok(template.html.includes('&lt;script&gt;'));assert.ok(!template.html.includes('<script>'));
   });
   await t.test('parallel quote workers accept one email; USD does not overwrite the TRY CRM amount',async()=>{

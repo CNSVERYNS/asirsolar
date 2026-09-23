@@ -1,10 +1,10 @@
-import { createHash, randomBytes, randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type { Enquiry } from "../enquiry.ts";
 import { emailEnabled, smsEnabled, notificationRecipients } from "./notification-config.ts";
 import { getDatabase, transaction } from "./database.ts";
 import { CrmError } from "./validation.ts";
 import { stageLabel, sourceLabel, todayInTurkey, type AdminUser, type DashboardData, type EmailDelivery, type Lead, type LeadDetail, type LeadEvent, type LeadInput } from "./types.ts";
-const leadColumns = `l.id, l.reference, l.name, l.phone, l.email, l.company, l.project_type AS projectType, l.message, l.source, l.stage,
+const leadColumns = `l.id, l.reference_number AS reference, l.name, l.phone, l.email, l.company, l.project_type AS projectType, l.message, l.source, l.stage,
   l.assignee_id AS assigneeId, u.name AS assigneeName, l.priority, l.next_follow_up AS nextFollowUp, l.quote_cents AS quoteCents,
   l.rejection_reason AS rejectionReason, l.created_at AS createdAt, l.updated_at AS updatedAt, l.archived_at AS archivedAt, l.version`;
 async function checkAssignee(assignee: string | null) {
@@ -22,9 +22,8 @@ async function insertLead(input: LeadInput, actor: AdminUser | null, submission?
     await checkAssignee(input.assigneeId);
     const id = randomUUID();
     const now = new Date().toISOString();
-    const reference = `ASR-${now.slice(2, 10).replaceAll("-", "")}-${randomBytes(4).toString("hex").toUpperCase()}`;
-    await db.prepare(`INSERT INTO leads (id, reference, name, phone, email, company, project_type, message, source, stage, assignee_id, priority, next_follow_up, quote_cents, rejection_reason, consent_at, consent_version, submission_key, payload_hash, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(id, reference, input.name, input.phone, input.email, input.company, input.projectType, input.message, input.source, input.stage, input.assigneeId, input.priority, input.nextFollowUp, input.quoteCents, input.rejectionReason, submission ? now : null, submission ? "website-enquiry-2026-09" : null, submission?.key ?? null, submission?.hash ?? null, now, now);
+    const { reference } = await db.prepare(`INSERT INTO leads (id, name, phone, email, company, project_type, message, source, stage, assignee_id, priority, next_follow_up, quote_cents, rejection_reason, consent_at, consent_version, submission_key, payload_hash, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING reference_number AS reference`).get(id, input.name, input.phone, input.email, input.company, input.projectType, input.message, input.source, input.stage, input.assigneeId, input.priority, input.nextFollowUp, input.quoteCents, input.rejectionReason, submission ? now : null, submission ? "website-enquiry-2026-09" : null, submission?.key ?? null, submission?.hash ?? null, now, now) as { reference: string };
     await event(id, actor?.id ?? null, "created", `${sourceLabel(input.source)} üzerinden müşteri kaydı oluşturuldu.`);
     return { id, reference };
 }
@@ -32,7 +31,7 @@ export async function createWebsiteLead(enquiry: Enquiry, submissionKey: string)
     const hash = createHash("sha256").update(JSON.stringify(enquiry)).digest("hex");
     return await transaction(async (db) => {
         await db.prepare("SELECT pg_advisory_xact_lock(hashtextextended(?, 0))").get(`submission:${submissionKey}`);
-        const existing = await db.prepare("SELECT id, reference, payload_hash FROM leads WHERE submission_key = ?").get(submissionKey) as {
+        const existing = await db.prepare("SELECT id, reference_number AS reference, payload_hash FROM leads WHERE submission_key = ?").get(submissionKey) as {
             id: string;
             reference: string;
             payload_hash: string;
@@ -62,7 +61,10 @@ export async function getLead(id: string): Promise<LeadDetail> {
     const lead = await db.prepare(`SELECT ${leadColumns} FROM leads l LEFT JOIN users u ON u.id = l.assignee_id WHERE l.id = ?`).get(id) as Lead | undefined;
     if (!lead)
         throw new CrmError("Müşteri kaydı bulunamadı.", 404);
-    const events = await db.prepare("SELECT e.id, e.kind, e.content, COALESCE(u.name, 'Web sitesi') AS actorName, e.created_at AS createdAt FROM lead_events e LEFT JOIN users u ON u.id = e.actor_id WHERE e.lead_id = ? ORDER BY e.created_at DESC, e.sequence DESC").all(id) as LeadEvent[];
+    const events = await db.prepare(`SELECT e.id,e.kind,CASE WHEN qe.id IS NOT NULL THEN q.quote_number || ' · V' || q.version || ': ' || CASE WHEN qe.kind IN ('quote_email_accepted_by_provider','quote_sms_accepted_by_provider') THEN split_part(qe.content,' Bildirim: ',1) ELSE qe.content END WHEN e.kind='created' THEN l.reference_number || ': ' || e.content ELSE e.content END AS content,
+      COALESCE(u.name,CASE WHEN qe.actor_type='customer' THEN 'Müşteri' WHEN qe.actor_type='system' THEN 'Sistem' ELSE 'Web sitesi' END) AS actorName,e.created_at AS createdAt
+      FROM lead_events e JOIN leads l ON l.id=e.lead_id LEFT JOIN users u ON u.id=e.actor_id LEFT JOIN asir_crm.quote_events qe ON qe.id=e.id LEFT JOIN asir_crm.quotes q ON q.id=qe.quote_id
+      WHERE e.lead_id=? ORDER BY e.created_at DESC,e.sequence DESC`).all(id) as LeadEvent[];
     const deliveries = await db.prepare("SELECT id, recipient, purpose, status, attempts, sent_at AS sentAt, error_code AS errorCode, retryable FROM email_outbox WHERE lead_id = ? AND quote_id IS NULL ORDER BY purpose, recipient").all(id) as EmailDelivery[];
     const smsDeliveries = await db.prepare("SELECT id, recipient, status, attempts, sent_at AS sentAt, delivered_at AS deliveredAt, error_code AS errorCode, retryable, provider_id AS providerId FROM sms_outbox WHERE lead_id = ? AND quote_id IS NULL ORDER BY recipient").all(id) as LeadDetail["smsDeliveries"];
     return { lead, events, deliveries, smsDeliveries };
@@ -72,10 +74,12 @@ export async function listLeads(params: URLSearchParams): Promise<DashboardData>
     const where = [params.get("archived") === "true" ? "l.archived_at IS NOT NULL" : "l.archived_at IS NULL"];
     const values: (string | number)[] = [];
     const query = params.get("q")?.trim().slice(0, 120);
-    if (query) {
+    if (query && /^ASR-TLP-[1-9][0-9]{0,11}$/i.test(query)) { where.push("l.reference_number=?"); values.push(query.toUpperCase()); }
+    else if (query && /^ASR-TKLF-[1-9][0-9]{0,11}$/i.test(query)) { where.push("EXISTS(SELECT 1 FROM asir_crm.quotes ref_quote WHERE ref_quote.lead_id=l.id AND ref_quote.quote_number=?)"); values.push(query.toUpperCase()); }
+    else if (query) {
         const escaped = `%${query.replace(/[\\%_]/g, "\\$&")}%`;
-        where.push("(l.name ILIKE ? ESCAPE '\\' OR l.email ILIKE ? ESCAPE '\\' OR l.phone ILIKE ? ESCAPE '\\' OR l.company ILIKE ? ESCAPE '\\' OR l.reference ILIKE ? ESCAPE '\\')");
-        values.push(...Array<string>(5).fill(escaped));
+        where.push("(l.name ILIKE ? ESCAPE '\\' OR l.email ILIKE ? ESCAPE '\\' OR l.phone ILIKE ? ESCAPE '\\' OR l.company ILIKE ? ESCAPE '\\' OR l.reference_number ILIKE ? ESCAPE '\\' OR l.reference ILIKE ? ESCAPE '\\' OR l.project_type ILIKE ? ESCAPE '\\' OR EXISTS(SELECT 1 FROM asir_crm.quotes search_quote WHERE search_quote.lead_id=l.id AND (search_quote.quote_number ILIKE ? ESCAPE '\\' OR search_quote.legacy_quote_number ILIKE ? ESCAPE '\\')))");
+        values.push(...Array<string>(9).fill(escaped));
     }
     for (const [key, column] of [["stage", "stage"], ["source", "source"], ["priority", "priority"]]) {
         const value = params.get(key);
