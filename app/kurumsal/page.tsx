@@ -9,6 +9,7 @@ import { Marquee } from "@/components/Marquee";
 import { team } from "@/data/team";
 import { galleryImages } from "@/data/gallery";
 import { pageMetadata } from "@/lib/site";
+import { VerifiedReviews } from "@/components/VerifiedReviews";
 
 export const metadata: Metadata = pageMetadata({
   title: "Kurumsal — Güneş Enerjisi Mühendislik Ekibimiz",
@@ -38,6 +39,7 @@ export default function KurumsalPage() {
           </div>
         </Container>
       </section>
+      <VerifiedReviews />
 
       <section className="section">
         <Container>

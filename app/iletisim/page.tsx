@@ -11,6 +11,7 @@ import { organizationId, websiteId } from "@/lib/structured-data";
 import { resolveProjectType } from "@/lib/enquiry";
 import { WhatsAppLink } from "@/components/WhatsAppLink";
 import { whatsappContact } from "@/lib/whatsapp";
+import { LocationMap } from "@/components/LocationMap";
 
 export const metadata: Metadata = pageMetadata({
   title: "İletişim — Ücretsiz Keşif Talep Edin",
@@ -19,8 +20,10 @@ export const metadata: Metadata = pageMetadata({
   path: "/iletisim",
 });
 
-export default async function IletisimPage({ searchParams }: { searchParams: Promise<{ proje?: string | string[] }> }) {
-  const initialProjectType = resolveProjectType((await searchParams).proje);
+export default async function IletisimPage({ searchParams }: { searchParams: Promise<{ proje?: string | string[]; mesaj?: string | string[] }> }) {
+  const params = await searchParams;
+  const initialProjectType = resolveProjectType(params.proje);
+  const initialMessage = typeof params.mesaj === "string" ? params.mesaj.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "").slice(0, 1000) : "";
   return (
     <>
       <JsonLd data={{ "@context": "https://schema.org", "@type": "ContactPage", "@id": `${siteConfig.url}/iletisim#page`, url: `${siteConfig.url}/iletisim`, name: "Asır Solar iletişim ve keşif", mainEntity: { "@id": organizationId }, isPartOf: { "@id": websiteId } }} />
@@ -46,11 +49,12 @@ export default async function IletisimPage({ searchParams }: { searchParams: Pro
         <Container>
           <div className="two-col">
             <Reveal className="two-col__main">
-              <div id="contact-form"><ContactForm key={initialProjectType} initialProjectType={initialProjectType} available={databaseConfigured()} /></div>
+              <div id="contact-form"><ContactForm key={`${initialProjectType}:${initialMessage}`} initialProjectType={initialProjectType} initialMessage={initialMessage} available={databaseConfigured()} /></div>
             </Reveal>
 
             <Reveal className="two-col__side" delay={80}>
               <div className="info-list">
+                <div className="info-row"><span className="label">Çalışma saatleri</span><p>{company.workingHours}</p></div>
                 <div className="info-row">
                   <span className="label" style={{ marginBottom: 0 }}>
                     Adres
@@ -87,6 +91,7 @@ export default async function IletisimPage({ searchParams }: { searchParams: Pro
                   </div>
                 </div>
                 {whatsappContact && <div className="info-row"><span className="label" style={{ marginBottom: 0 }}>WhatsApp</span><WhatsAppLink variant="inline" /></div>}
+                <LocationMap />
               </div>
             </Reveal>
           </div>

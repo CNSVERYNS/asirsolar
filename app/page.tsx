@@ -10,6 +10,8 @@ import { CTASection } from "@/components/CTASection";
 import { CompassIcon, PanelIcon, PowerIcon, BoltIcon } from "@/components/Icons";
 import { services } from "@/data/services";
 import { company } from "@/data/company";
+import { LazySolarEstimator } from "@/components/LazySolarEstimator";
+import engineeringPhoto from "@/public/images/stock/worker-install.jpg";
 
 const featuredServices = [services[0], services[2], services[3]];
 const steps = [
@@ -94,7 +96,7 @@ export default function HomePage() {
       </section>
 
       <section className="engineering-story">
-        <div className="engineering-story__photo"><Image src="/images/stock/worker-install.jpg" alt="Güneş panellerinin montaj aşamasını gösteren temsili uygulama görseli" fill sizes="(max-width: 800px) 100vw, 50vw" /><span>PROJEDEN UYGULAMAYA.</span></div>
+        <div className="engineering-story__photo"><Image src={engineeringPhoto} alt="Güneş panellerinin montaj aşamasını gösteren temsili uygulama görseli" fill placeholder="blur" sizes="(max-width: 800px) 100vw, 50vw" /><span>PROJEDEN UYGULAMAYA.</span></div>
         <div className="engineering-story__content">
           <Reveal><p className="eyebrow eyebrow--light">MÜHENDİSLİK YAKLAŞIMIMIZ</p><h2>İyi bir kurulum,<br /><span>doğru sorularla başlar.</span></h2><p>Ne kadar enerjiye ihtiyacınız var? Çatınız neye uygun? Mevcut altyapınız hazır mı? Önce bunları netleştiriyor, sonra sisteminizi tasarlıyoruz.</p></Reveal>
           <ul className="engineering-checks"><li><span>01</span>Tüketim ve saha analizi</li><li><span>02</span>Panel yerleşimi ve gölgeleme değerlendirmesi</li><li><span>03</span>Pano, koruma ve topraklama planlaması</li></ul>
@@ -131,6 +133,7 @@ export default function HomePage() {
         </Container>
       </section>
       <FAQ index="05" />
+      <section className="section"><Container><LazySolarEstimator /><div className="tw:mt-6"><TextLink href="/ges-kurulumu/kocaeli/gebze-osb">Gebze OSB için GES keşif hazırlığı</TextLink></div></Container></section>
       <CTASection />
     </>
   );

@@ -5,8 +5,8 @@ import { type FormEvent, useRef, useState } from "react";
 import { company } from "@/data/company";
 import { projectTypes, validateEnquiry, type Enquiry, type EnquiryErrors } from "@/lib/enquiry";
 
-export function ContactForm({ initialProjectType = "Diğer / Bilmiyorum", available = true }: { initialProjectType?: string; available?: boolean }) {
-  const [values, setValues] = useState<Enquiry>({ name: "", phone: "", email: "", company: "", projectType: initialProjectType, message: "", consent: false });
+export function ContactForm({ initialProjectType = "Diğer / Bilmiyorum", initialMessage = "", available = true }: { initialProjectType?: string; initialMessage?: string; available?: boolean }) {
+  const [values, setValues] = useState<Enquiry>({ name: "", phone: "", email: "", company: "", projectType: initialProjectType, message: initialMessage, consent: false });
   const [errors, setErrors] = useState<EnquiryErrors>({});
   const [reference, setReference] = useState("");
   const [sending, setSending] = useState(false);

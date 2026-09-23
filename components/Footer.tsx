@@ -3,6 +3,7 @@ import { Container } from "@/components/Container";
 import { company } from "@/data/company";
 import { navLinks } from "@/lib/site";
 import { Mark } from "@/components/Mark";
+import { PrivacySettingsButton } from "./CookieBanner";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -26,7 +27,7 @@ export function Footer() {
 
           <div className="site-footer__cols">
             <div className="footer-col">
-              <h4>Navigasyon</h4>
+              <h2>Navigasyon</h2>
               <ul>
                 {navLinks.map((link) => (
                   <li key={link.href}>
@@ -34,10 +35,11 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
+              <Link href="/ges-hesaplama">GES hesaplama</Link><br /><Link href="/ges-kurulumu">Bölge ve OSB rehberi</Link>
             </div>
 
             <div className="footer-col">
-              <h4>Hizmetler</h4>
+              <h2>Hizmetler</h2>
               <ul>
                 <li>
                   <Link href="/hizmetler/gunes-enerjisi-sistemleri">Güneş Enerjisi Sistemleri</Link>
@@ -55,11 +57,12 @@ export function Footer() {
             </div>
 
             <div className="footer-col">
-              <h4>İletişim</h4>
+              <h2>İletişim</h2>
               <ul>
                 <li>
                   <a href={company.phoneHref}>{company.phoneDisplay}</a>
                 </li>
+                <li>{company.workingHours}</li>
                 <li>
                   <a href={`mailto:${company.generalEmail}`}>
                     {company.generalEmail}
@@ -87,6 +90,7 @@ export function Footer() {
             <Link href="/kvkk">KVKK</Link>
             <Link href="/gizlilik-politikasi">Gizlilik Politikası</Link>
             <Link href="/cerez-politikasi">Çerez Politikası</Link>
+            <PrivacySettingsButton />
           </div>
         </div>
       </Container>

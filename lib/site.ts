@@ -14,36 +14,42 @@ export const siteConfig = {
 // all. This helper keeps title/description/OG/canonical in sync from one
 // call per page. See node_modules/next/dist/docs/.../generate-metadata.md
 // ("Merging" section) — this is Next 16 behavior, not the old default.
-export const defaultOgImage = { url: "/images/stock/hero-farm.jpg", width: 2400, height: 1350, alt: "Güneş paneli sahası — temsili görsel, Asır Solar" };
+export const defaultOgImage = { url: "/og-image", width: 1200, height: 630, alt: "Asır Solar Güneş Enerjisi Sistemleri" };
 
 export function pageMetadata({
   title,
   description,
   path,
+  kind = "website",
+  modifiedAt,
 }: {
   title: string;
   description: string;
   path: string;
+  kind?: "website" | "article";
+  modifiedAt?: string;
 }) {
   const url = `${siteConfig.url}${path}`;
+  const image = { ...defaultOgImage, url: `/og-image?${new URLSearchParams({ path })}`, alt: `${title} | Asır Solar` };
   return {
     title,
     description,
     alternates: { canonical: url },
     openGraph: {
-      type: "website" as const,
+      type: kind,
+      ...(kind === "article" && modifiedAt ? { modifiedTime: modifiedAt } : {}),
       locale: "tr_TR",
       siteName: siteConfig.name,
       title,
       description,
       url,
-      images: [defaultOgImage],
+      images: [image],
     },
     twitter: {
       card: "summary_large_image" as const,
       title,
       description,
-      images: [defaultOgImage.url],
+      images: [image.url],
     },
   };
 }

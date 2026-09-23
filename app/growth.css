@@ -1,0 +1,50 @@
+.breadcrumbs { margin-bottom: 28px; font-size: 12px; color: var(--muted); }
+.hero-motion-toggle { position: absolute; right: 20px; top: 16px; z-index: 4; border: 1px solid #ffffff80; border-radius: 6px; padding: 12px; min-height: 44px; color: white; background: #172b24d9; font: inherit; font-size: 12px; cursor: pointer; }
+.marquee-pause { display: flex; align-items: center; justify-content: flex-end; gap: 10px; min-height: 44px; padding: 8px 24px; font-size: 13px; cursor: pointer; }
+.marquee-pause input { width: 20px; height: 20px; accent-color: var(--ink); }
+.marquee-section:has(.marquee-pause input:checked) .marquee__track { animation-play-state: paused; }
+.breadcrumbs ol { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
+.breadcrumbs li + li::before { content: "/"; margin-right: 8px; color: var(--muted); }
+.breadcrumbs a { text-decoration: underline; text-underline-offset: 3px; }
+.footer-col h2 { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--on-dark-muted); margin-bottom: var(--sp-4); font-weight: 600; }
+.local-area-card { border: 1px solid var(--line); border-radius: 10px; padding: 28px; margin: 28px 0; background: var(--surface); }
+.local-area-card h3 { font-size: clamp(22px,3vw,32px); margin: 14px 0; }
+.local-area-card p { max-width: 75ch; margin-bottom: 20px; }
+.installation-steps { display: grid; gap: 24px; padding-left: 24px; list-style: decimal; }
+.installation-steps li { padding-left: 8px; scroll-margin-top: 120px; }
+.installation-steps h3 { font-size: 20px; margin-bottom: 10px; }
+.estimator-shell { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: clamp(20px,4vw,48px); }
+.estimator-intro { max-width: 760px; }
+.estimator-intro h2 { font-size: clamp(26px,4vw,44px); margin: 16px 0; }
+.estimator-intro p { margin-bottom: 24px; }
+.solar-estimator h2 { font-size: clamp(24px,3vw,32px); margin: 16px 0; }
+.solar-estimator p { font-size: 14px; line-height: 1.7; }
+.solar-estimator .calculator-fields { margin-block: 24px; }
+.solar-estimator .calculator-field { display: flex; flex-direction: column; gap: 8px; font-size: 13px; min-width: 0; }
+.solar-estimator input, .solar-estimator select { width: 100%; min-width: 0; min-height: 48px; background: var(--paper); border: 1px solid #7b867e; border-radius: 5px; padding: 10px; color: var(--ink); font: inherit; }
+.solar-estimator input:focus-visible, .solar-estimator select:focus-visible, select:focus-visible { outline: 3px solid var(--brand-purple); outline-offset: 3px; }
+.estimate-assumptions summary, .estimate-method summary { cursor: pointer; min-height: 44px; padding-block: 14px; font-weight: 600; font-size: 14px; }
+.estimate-output { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 26px; min-width: 0; }
+.estimate-output .estimate-power { font-size: clamp(40px,5vw,64px); line-height: 1.15; font-weight: 600; letter-spacing: -.04em; }
+.estimate-power span { font-size: 24px; letter-spacing: 0; }
+.estimate-output dl { margin-block: 24px; }
+.estimate-output dl > div { display: flex; justify-content: space-between; gap: 20px; padding-block: 12px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.estimate-output dd { text-align: right; font-weight: 600; min-width: 90px; }
+.estimate-empty { min-height: 240px; padding-top: 35px; }
+.estimate-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; margin-bottom: 22px; }
+.estimate-method { border-top: 1px solid var(--line); margin-top: 30px; padding-top: 10px; }
+.estimate-method p { max-width: 85ch; margin: 14px 0; }
+.location-map { margin-top: 18px; min-height: 250px; border: 1px solid var(--line); padding: 18px; border-radius: 8px; }
+.location-map p { font-size: 13px; margin-bottom: 20px; }
+.location-map iframe { width: 100%; height: 260px; border: 0; }
+.exit-offer { width: min(590px,calc(100vw - 40px)); margin: auto; border: 1px solid var(--line); border-radius: 12px; padding: 42px; background: var(--paper); color: var(--ink); }
+.exit-offer::backdrop { background: rgb(12 30 22 / .6); }
+.exit-offer h2 { font-size: 36px; margin: 20px 0; }
+.exit-offer p { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+.exit-offer > .text-link { display: block; margin-top: 20px; }
+.exit-offer-close { position: absolute; right: 10px; top: 10px; width: 44px; height: 44px; border: 0; background: transparent; font-size: 30px; color: var(--ink); cursor: pointer; }
+.public-project-gallery { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit,minmax(min(100%,320px),1fr)); margin-block: 32px; }
+.public-project-image { position: relative; aspect-ratio: 4/3; overflow: hidden; border-radius: 8px; background: var(--surface); }
+.public-project-image img { object-fit: contain; }
+@media(max-width:680px) { .mobile-contact-bar[data-whatsapp="true"] { grid-template-columns: .85fr 1fr 1.4fr; } .mobile-contact-bar > a { text-align: center; font-size: 11px; } .mobile-contact-bar > a > span[aria-hidden="true"] { display: none; } .estimate-output { padding: 18px; } .solar-estimator .calculator-fields { grid-template-columns: 1fr; } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior: auto; } }

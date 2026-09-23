@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import poster from "@/public/images/solar-poster.webp";
 
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const pausedRef = useRef(false);
 
   function ensureSource(video: HTMLVideoElement) {
     if (!video.getAttribute("src")) {
@@ -24,14 +27,15 @@ export function HeroVideo() {
     let disposed = false;
     const syncPlayback = () => {
       if (disposed) return;
-      if (reducedMotion.matches || document.hidden || !inView) {
+      const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+      if (pausedRef.current || reducedMotion.matches || connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || "") || document.hidden || !inView) {
         video.pause();
         return;
       }
       ensureSource(video);
       void video.play().catch(() => { /* Keep the poster if autoplay is blocked. */ });
     };
-    const timer = window.setTimeout(syncPlayback, 800);
+    const timer = window.setTimeout(syncPlayback, 3000);
     const observer = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
       if (!inView) video.pause();
@@ -54,10 +58,17 @@ export function HeroVideo() {
   }, []);
 
   return (
-      <div className="hero-media" aria-hidden="true">
-        <Image src="/images/solar-poster.webp" alt="" fill preload sizes="100vw" className="hero-media__poster" />
+    <><div className="hero-media" aria-hidden="true">
+        <Image src={poster} alt="" fill preload sizes="100vw" className="hero-media__poster" />
         <video ref={videoRef} className="hero-media__video" data-ready={ready && !failed} autoPlay muted loop playsInline preload="none" disablePictureInPicture tabIndex={-1} onPlaying={() => setReady(true)} onError={() => setFailed(true)} />
         <div className="hero-media__shade" />
       </div>
+      {ready && !failed && <button type="button" className="hero-motion-toggle" aria-pressed={paused} onClick={() => {
+        const next = !paused;
+        pausedRef.current = next;
+        setPaused(next);
+        if (next) videoRef.current?.pause();
+        else void videoRef.current?.play().catch(() => setFailed(true));
+      }}>{paused ? "Videoyu oynat" : "Videoyu duraklat"}</button>}</>
   );
 }

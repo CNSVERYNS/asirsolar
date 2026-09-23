@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 import { Archivo } from "next/font/google";
 import "./globals.css";
 import "./brand.css";
+import "./utilities.css";
+import "./growth.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CookieBanner } from "@/components/CookieBanner";
@@ -12,7 +14,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { businessGraph } from "@/lib/structured-data";
 
 const archivo = Archivo({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-body",
   display: "swap",
 });

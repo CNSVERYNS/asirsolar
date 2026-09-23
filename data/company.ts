@@ -10,6 +10,7 @@ export const company = {
 
   phoneDisplay: "0262 644 69 89",
   phoneHref: "tel:+902626446989",
+  workingHours: "Pazartesi–Cuma 08.00–17.00",
 
   address: {
     line1: "Tatlıkuyu Mah. 1308/4. Sok. No:27/A",

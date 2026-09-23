@@ -11,6 +11,8 @@ import { guideDetails } from "@/data/guide-details";
 import { JsonLd } from "@/components/JsonLd";
 import { PaybackCalculator } from "@/components/PaybackCalculator";
 import { organizationId } from "@/lib/structured-data";
+import type { Article, WithContext } from "schema-dts";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export function generateStaticParams() {
   return guideItems.map((g) => ({ slug: g.slug }));
@@ -28,6 +30,8 @@ export async function generateMetadata({
     title: guide.question,
     description: guide.summary,
     path: `/rehber/${guide.slug}`,
+    kind: "article",
+    modifiedAt: guideDetails[guide.slug]?.updatedAt,
   });
 }
 
@@ -46,7 +50,7 @@ export default async function GuideDetailPage({
     .filter((g) => g.category === guide.category && g.slug !== guide.slug)
     .slice(0, 4);
 
-  const articleJsonLd = {
+  const articleJsonLd: WithContext<Article> = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: guide.question,
@@ -60,28 +64,14 @@ export default async function GuideDetailPage({
     ...(detail ? { dateModified: detail.updatedAt, citation: detail.sources.map(source => source.href) } : {}),
   };
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: siteConfig.url },
-      { "@type": "ListItem", position: 2, name: "Rehber", item: `${siteConfig.url}/rehber` },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: guide.question,
-        item: `${siteConfig.url}/rehber/${guide.slug}`,
-      },
-    ],
-  };
 
   return (
     <>
       <JsonLd data={articleJsonLd} />
-      <JsonLd data={breadcrumbJsonLd} />
 
       <section className="page-hero">
         <Container>
+          <Breadcrumbs path={`/rehber/${guide.slug}`} title={guide.question} />
           <Reveal>
             <TextLink href="/rehber" arrow="←">
               Rehber

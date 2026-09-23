@@ -1,9 +1,12 @@
 import type { NextConfig } from "next";
+import { contentSecurityPolicy } from "./lib/security-headers.ts";
+import { marketing } from "./lib/marketing-config.ts";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  poweredByHeader: false,
   serverExternalPackages: ["pg", "@electric-sql/pglite"],
-  outputFileTracingIncludes: { "/admin/*": ["./supabase/migrations/*.sql"], "/api/*": ["./supabase/migrations/*.sql"] },
+  outputFileTracingIncludes: { "/admin/*": ["./supabase/migrations/*.sql"], "/api/*": ["./supabase/migrations/*.sql"], "/og-image": ["./public/fonts/AtkinsonHyperlegible-Bold.ttf", "./public/icons/icon-192.png"] },
   outputFileTracingExcludes: { "/*": ["./.local-tools/**", "./.local-backups/**", "./.data/**", "./.env*", "./.git/**", "./.claude/**"] },
   images: {
     formats: ["image/avif", "image/webp"],
@@ -25,6 +28,16 @@ const nextConfig: NextConfig = {
   // (they're content-hashed and keep their own long-lived caching).
   async headers() {
     return [
+      { source: "/:path*", headers: [
+        { key: "Strict-Transport-Security", value: "max-age=31536000" },
+        { key: "X-Frame-Options", value: "DENY" },
+        { key: "X-Content-Type-Options", value: "nosniff" },
+        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+      ] },
+      // File downloads keep the stricter sandbox policy supplied by their route.
+      { source: "/:path((?!api/).*)", headers: [{ key: "Content-Security-Policy", value: contentSecurityPolicy({ development: process.env.NODE_ENV === "development", marketing: marketing.enabled }) }] },
+      { source: "/api/:path((?!projeler/gorseller/).*)", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }, { key: "Referrer-Policy", value: "no-referrer" }] },
       ...["/teklif/:path*", "/api/teklif/:path*"].map(source => ({ source, headers: [
         { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
         { key: "Referrer-Policy", value: "no-referrer" },

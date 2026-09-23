@@ -58,6 +58,10 @@ try {
   assert.equal((await request('/api/admin/projeler',{method:'POST',auth,body:{...projectInput,endDate:'2026-09-14'}})).status,400);
   const project=(await json(await request('/api/admin/projeler',{method:'POST',auth,body:projectInput}),201)).project;
   const projectUrl='/api/admin/projeler/'+project.id;
+  const detailPath='/projeler/'+project.id;
+  const ogPath='/og-image?path='+encodeURIComponent(detailPath);
+  assert.equal((await request(detailPath)).status,404);
+  assert.equal((await request(ogPath)).status,404);
   assert.equal((await json(await request('/api/projeler'),200)).projects.length,0);
   const png=await sharp({create:{width:1600,height:1000,channels:3,background:'#54228b'}}).png().toBuffer();
   const upload=async(bytes,origin=base)=>fetch(base+projectUrl+'/gorseller',{method:'POST',headers:{Origin:origin,Cookie:auth,'Content-Type':'image/png'},body:bytes});
@@ -68,6 +72,10 @@ try {
   assert.equal((await request(image.url)).status,404);
   assert.equal((await request(image.url,{auth})).status,200);
   await json(await request(projectUrl,{method:'PATCH',auth,body:{...projectInput,published:true}}),200);
+  const publishedPage=await request(detailPath);assert.equal(publishedPage.status,200);
+  const publishedHtml=await publishedPage.text();assert.ok(publishedHtml.includes('HTTP test project &lt;script&gt;'));assert.ok(!publishedHtml.includes('<script>alert(1)</script>'));
+  const publishedOg=await request(ogPath);assert.equal(publishedOg.status,200);assert.match(publishedOg.headers.get('content-type'),/image\/png/);assert.match(publishedOg.headers.get('cache-control'),/no-store/);
+  assert.ok((await (await request('/sitemap.xml')).text()).includes(detailPath+'</loc>'));
   const publicImage=await request(image.url);assert.equal(publicImage.status,200);assert.equal(publicImage.headers.get('content-type'),'image/webp');
   const resized=await request(image.url+'?w=640');assert.equal(resized.status,200);
   assert.equal((await sharp(Buffer.from(await resized.arrayBuffer())).metadata()).width,640);
@@ -81,6 +89,9 @@ try {
   assert.ok(projectHtml.includes('live-projects__heading'));assert.ok(!projectHtml.includes('marquee__track'));
   assert.ok((await (await request('/sitemap.xml')).text()).includes('/projeler</loc>'));
   await json(await request(projectUrl,{method:'PATCH',auth,body:projectInput}),200);
+  assert.equal((await request(detailPath)).status,404);
+  assert.equal((await request(ogPath)).status,404);
+  assert.ok(!(await (await request('/sitemap.xml')).text()).includes(detailPath+'</loc>'));
   assert.equal((await request(image.url)).status,404);
   assert.equal((await request(image.url+'?w=640',{headers:{'If-None-Match':etag}})).status,404);
   const privateVariant=await request(image.url+'?w=640',{auth});assert.equal(privateVariant.status,200);assert.match(privateVariant.headers.get('cache-control'),/no-store/);

@@ -1,0 +1,106 @@
+{
+  "retrievedAt": "2026-09-23T01:49:32.878Z",
+  "model": "PVGIS 5.3 / SARAH3",
+  "slope": 30,
+  "azimuth": 0,
+  "systemLossPercent": 14,
+  "mounting": "building",
+  "locations": [
+    {
+      "id": "kocaeli",
+      "label": "Marmara · Kocaeli",
+      "latitude": 40.765,
+      "longitude": 29.94,
+      "yieldKwhPerKwp": 1232.85,
+      "source": "https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?lat=40.765&lon=29.94&peakpower=1&loss=14&angle=30&aspect=0&mountingplace=building&pvtechchoice=crystSi&raddatabase=PVGIS-SARAH3&outputformat=json",
+      "period": [
+        2005,
+        2023
+      ]
+    },
+    {
+      "id": "istanbul",
+      "label": "Marmara · İstanbul",
+      "latitude": 41.01,
+      "longitude": 28.98,
+      "yieldKwhPerKwp": 1317.28,
+      "source": "https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?lat=41.01&lon=28.98&peakpower=1&loss=14&angle=30&aspect=0&mountingplace=building&pvtechchoice=crystSi&raddatabase=PVGIS-SARAH3&outputformat=json",
+      "period": [
+        2005,
+        2023
+      ]
+    },
+    {
+      "id": "izmir",
+      "label": "Ege · İzmir",
+      "latitude": 38.42,
+      "longitude": 27.14,
+      "yieldKwhPerKwp": 1511.22,
+      "source": "https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?lat=38.42&lon=27.14&peakpower=1&loss=14&angle=30&aspect=0&mountingplace=building&pvtechchoice=crystSi&raddatabase=PVGIS-SARAH3&outputformat=json",
+      "period": [
+        2005,
+        2023
+      ]
+    },
+    {
+      "id": "ankara",
+      "label": "İç Anadolu · Ankara",
+      "latitude": 39.93,
+      "longitude": 32.86,
+      "yieldKwhPerKwp": 1411.25,
+      "source": "https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?lat=39.93&lon=32.86&peakpower=1&loss=14&angle=30&aspect=0&mountingplace=building&pvtechchoice=crystSi&raddatabase=PVGIS-SARAH3&outputformat=json",
+      "period": [
+        2005,
+        2023
+      ]
+    },
+    {
+      "id": "antalya",
+      "label": "Akdeniz · Antalya",
+      "latitude": 36.9,
+      "longitude": 30.7,
+      "yieldKwhPerKwp": 1572.13,
+      "source": "https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?lat=36.9&lon=30.7&peakpower=1&loss=14&angle=30&aspect=0&mountingplace=building&pvtechchoice=crystSi&raddatabase=PVGIS-SARAH3&outputformat=json",
+      "period": [
+        2005,
+        2023
+      ]
+    },
+    {
+      "id": "samsun",
+      "label": "Karadeniz · Samsun",
+      "latitude": 41.29,
+      "longitude": 36.33,
+      "yieldKwhPerKwp": 1184.1,
+      "source": "https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?lat=41.29&lon=36.33&peakpower=1&loss=14&angle=30&aspect=0&mountingplace=building&pvtechchoice=crystSi&raddatabase=PVGIS-SARAH3&outputformat=json",
+      "period": [
+        2005,
+        2023
+      ]
+    },
+    {
+      "id": "erzurum",
+      "label": "Doğu Anadolu · Erzurum",
+      "latitude": 39.9,
+      "longitude": 41.27,
+      "yieldKwhPerKwp": 1383.29,
+      "source": "https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?lat=39.9&lon=41.27&peakpower=1&loss=14&angle=30&aspect=0&mountingplace=building&pvtechchoice=crystSi&raddatabase=PVGIS-SARAH3&outputformat=json",
+      "period": [
+        2005,
+        2023
+      ]
+    },
+    {
+      "id": "diyarbakir",
+      "label": "Güneydoğu Anadolu · Diyarbakır",
+      "latitude": 37.92,
+      "longitude": 40.23,
+      "yieldKwhPerKwp": 1446.56,
+      "source": "https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?lat=37.92&lon=40.23&peakpower=1&loss=14&angle=30&aspect=0&mountingplace=building&pvtechchoice=crystSi&raddatabase=PVGIS-SARAH3&outputformat=json",
+      "period": [
+        2005,
+        2023
+      ]
+    }
+  ]
+}

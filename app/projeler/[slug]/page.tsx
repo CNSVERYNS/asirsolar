@@ -7,6 +7,10 @@ import { Reveal } from "@/components/Reveal";
 import { PrimaryButton, TextLink } from "@/components/Button";
 import { projects } from "@/data/projects";
 import { pageMetadata } from "@/lib/site";
+import { getPublishedProject } from "@/lib/projects/public.server";
+import { PublishedProject } from "@/components/PublishedProject";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -19,7 +23,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
-  if (!project) return {};
+  if (!project) {
+    const published = await getPublishedProject(slug);
+    if (!published) notFound();
+    return pageMetadata({ title: published.name, description: published.description.slice(0, 170), path: `/projeler/${published.id}` });
+  }
   return pageMetadata({
     title: project.name,
     description: project.summary,
@@ -34,12 +42,17 @@ export default async function ProjectDetailPage({
 }) {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
-  if (!project) notFound();
+  if (!project) {
+    const published = await getPublishedProject(slug);
+    if (!published) notFound();
+    return <PublishedProject project={published} />;
+  }
 
   return (
     <>
       <section className="page-hero">
         <Container>
+          <Breadcrumbs path={`/projeler/${project.slug}`} title={project.name} />
           <Reveal>
             <TextLink href="/projeler" arrow="←">
               Tüm projeler

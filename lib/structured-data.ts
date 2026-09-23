@@ -1,15 +1,18 @@
 import { company } from "../data/company.ts";
 import { services, type Service } from "../data/services.ts";
 import { siteConfig } from "./site.ts";
+import type { Graph, Place, Service as SchemaService, WithContext } from "schema-dts";
+import { businessEvidence } from "../data/business-evidence.ts";
+import { verifiedBusinessProperties } from "./schema-builders.ts";
 
 export const organizationId = `${siteConfig.url}/#organization`;
 export const websiteId = `${siteConfig.url}/#website`;
-export const serviceArea = [
+export const serviceArea: Place[] = [
   { "@type": "City", name: "Gebze" },
   { "@type": "AdministrativeArea", name: "Kocaeli" },
 ];
 
-export function serviceSchema(service: Service) {
+export function serviceSchema(service: Service): WithContext<SchemaService> {
   const url = `${siteConfig.url}/hizmetler/${service.slug}`;
   return {
     "@context": "https://schema.org",
@@ -25,7 +28,7 @@ export function serviceSchema(service: Service) {
   };
 }
 
-export const businessGraph = {
+export const businessGraph: Graph = {
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -48,6 +51,7 @@ export const businessGraph = {
         addressCountry: "TR",
       },
       hasMap: company.address.mapsHref,
+      ...verifiedBusinessProperties(businessEvidence),
       areaServed: serviceArea,
       contactPoint: company.emails.map(person => ({
         "@type": "ContactPoint", name: person.name, email: person.email,

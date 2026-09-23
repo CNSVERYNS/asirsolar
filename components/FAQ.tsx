@@ -4,25 +4,12 @@ import { Reveal } from "@/components/Reveal";
 import { TextLink } from "@/components/Button";
 import { faqItems } from "@/data/faq";
 import { JsonLd } from "@/components/JsonLd";
+import { faqSchema } from "@/lib/schema-builders";
 
-// Native <details>/<summary> — the Q&A text is real DOM content (not
-// hidden-until-JS), which is what Google's FAQPage rich-result guidelines
-// and AI answer engines both need to read and cite it correctly. The
-// FAQPage JSON-LD below is generated from the exact same data, so the
-// structured data can never drift from what's visibly on the page.
+// The visible native disclosure and structured data share the same source.
+// FAQPage is semantic markup; Google no longer offers FAQ rich results.
 export function FAQ({ index = "07" }: { index?: string }) {
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer,
-      },
-    })),
-  };
+  const faqJsonLd = faqSchema(faqItems);
 
   return (
     <section className="section section--surface" id="sikca-sorulan-sorular">

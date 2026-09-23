@@ -2,6 +2,14 @@ export type ContentSection = { title: string; paragraphs: string[]; items?: stri
 type ServiceDetail = { sections: ContentSection[]; preparation: string[] };
 
 export const serviceDetails: Record<string, ServiceDetail> = {
+  "endustriyel-cati-ges": {
+    sections: [{ title: "Vardiyaya göre üretim planı", paragraphs: ["Yıllık üretim ile aynı anda kullanılan enerji ayrı hesaplanır. Tatil ve bakım duruşlarında tüketimin düşmesi, yalnızca yıllık faturaya bakılarak görülemeyen bir etkidir."], items: ["Son 12 ay faturaları ve varsa OSOS verisi", "Çatı statik projesi ve kaplama durumu", "Pano, trafo ve sözleşme gücü"] }],
+    preparation: ["Tesis adresi ve bağlı olunan OSB / dağıtım kuruluşu", "Saatlik tüketim ve vardiya programı", "Çatı planı, statik belgeler ve güncel fotoğraflar"],
+  },
+  "arazi-ges": {
+    sections: [{ title: "Parselden uygulamaya karar sırası", paragraphs: ["Önce parsel kullanım durumu ve bağlantı koşulları incelenir. Ardından yerleşim, zemin yaklaşımı, erişim ve kablo güzergâhları değerlendirilir. Bağlantı veya izin uygunluğu bir keşif formu sonucuyla onaylanmış sayılmaz."], items: ["Parsel ve mülkiyet / kullanım bilgileri", "Koordinat, topoğrafya ve mevcut saha belgeleri", "Hedef tüketim ve yatırım kapsamı"] }],
+    preparation: ["İl, ilçe, ada ve parsel", "Arazi fotoğrafları ve varsa topoğrafik ölçüm", "Tüketim tesisi ve bağlantı bilgileri"],
+  },
   "gunes-enerjisi-sistemleri": {
     sections: [
       { title: "Tüketiminize göre sistem planlaması", paragraphs: ["Sistem gücünü yalnızca boş çatı alanına göre seçmek yeterli değildir. Son 12 aylık tüketim, gündüz çalışma saatleri ve ileride eklenecek elektrikli yükler birlikte ele alınır. Konutun akşam ağırlıklı tüketimi ile bir işletmenin gündüz üretimi farklı çözümler gerektirebilir.", "Gebze ve Kocaeli’deki bir saha için üretim tahmini hazırlanırken konum, panel yönü ve eğimi, yakın çevredeki gölgeler ve sistem kayıpları değerlendirilir. Tahmini üretim ile aynı saatlerde kullanılabilecek enerji ayrı gösterilir."] },

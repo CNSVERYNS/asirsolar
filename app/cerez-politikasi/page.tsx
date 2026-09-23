@@ -43,6 +43,8 @@ export default function CerezPage() {
             kullanılır.
           </p>
           <h2>Tercihlerin Yönetimi</h2>
+          <p>İsteğe bağlı analiz veya reklam araçları etkinleştirilirse ayrı izniniz istenir. Reddetme tercihi de hatırlanır. Sayfa altındaki Çerez tercihleri düğmesiyle kararınızı değiştirebilirsiniz. Bu araçlar için verdiğiniz izni geri aldığınızda sayfa yeniden yüklenir; tarayıcınızda daha önce oluşmuş üçüncü taraf çerezlerini tarayıcı ayarlarından silebilirsiniz.</p>
+          <p>Harita içeriği yalnızca Haritayı yükle düğmesine bastığınızda Google Haritalar’dan alınır. Fizibilite teklif penceresinin aynı sekmede tekrar açılmasını önlemek için oturum depolaması kullanılır. Hesaplayıcıdaki sayılar, formu göndermediğiniz veya paylaşım bağlantısını kullanmadığınız sürece cihazınızda işlenir.</p>
           <p>Yönetim panelinde oturum açan ekip üyeleri için 12 saat geçerli
             bir oturum çerezi kullanılır. Bu çerez girişin doğrulanmasını
             sağlar; reklam veya izleme amacıyla kullanılmaz. Çıkış

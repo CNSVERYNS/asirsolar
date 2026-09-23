@@ -1,5 +1,6 @@
 "use client";
 import Image, { type ImageLoaderProps } from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import type { ManagedProject } from "@/lib/projects/types";
 import { formatDate } from "@/lib/crm/types";
@@ -26,7 +27,7 @@ function ProjectSlide({ project, position, total, active, nearby }: { project: M
         <button type="button" aria-label="Sonraki görsel" disabled={imageIndex === project.images.length - 1} onClick={() => setSelectedImage(imageIndex + 1)}>→</button>
       </div>}
     </div>}
-    <div className="live-projects__details"><span className="live-projects__kicker">ASIR SOLAR / PROJE {String(position + 1).padStart(2, "0")}</span><h3>{project.name}</h3><p className="live-projects__description">{project.description}</p><dl><div><dt>Başlangıç tarihi</dt><dd><time dateTime={project.startDate}>{formatDate(project.startDate)}</time></dd></div><div><dt>Bitiş tarihi</dt><dd>{project.endDate ? <time dateTime={project.endDate}>{formatDate(project.endDate)}</time> : "Henüz belirlenmedi"}</dd></div></dl></div>
+    <div className="live-projects__details"><span className="live-projects__kicker">ASIR SOLAR / PROJE {String(position + 1).padStart(2, "0")}</span><h3>{project.name}</h3><p className="live-projects__description">{project.description}</p><dl><div><dt>Başlangıç tarihi</dt><dd><time dateTime={project.startDate}>{formatDate(project.startDate)}</time></dd></div><div><dt>Bitiş tarihi</dt><dd>{project.endDate ? <time dateTime={project.endDate}>{formatDate(project.endDate)}</time> : "Henüz belirlenmedi"}</dd></div></dl><Link className="text-link" href={`/projeler/${project.id}`}>Proje detayını inceleyin <span aria-hidden="true">↗</span></Link></div>
   </article>;
 }
 

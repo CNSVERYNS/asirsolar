@@ -11,7 +11,9 @@ import { serviceDetails } from "@/data/service-details";
 import { JsonLd } from "@/components/JsonLd";
 import { serviceSchema } from "@/lib/structured-data";
 import { guideItems } from "@/data/guides";
-import { siteConfig, pageMetadata } from "@/lib/site";
+import { pageMetadata } from "@/lib/site";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { InstallationProcess } from "@/components/InstallationProcess";
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -46,27 +48,13 @@ export default async function ServiceDetailPage({
     .filter((g) => g.relatedServiceSlug === service.slug)
     .slice(0, 4);
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: siteConfig.url },
-      { "@type": "ListItem", position: 2, name: "Hizmetler", item: `${siteConfig.url}/hizmetler` },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: service.title,
-        item: `${siteConfig.url}/hizmetler/${service.slug}`,
-      },
-    ],
-  };
 
   return (
     <>
       <JsonLd data={serviceSchema(service)} />
-      <JsonLd data={breadcrumbJsonLd} />
       <section className="page-hero">
         <Container>
+          <Breadcrumbs path={`/hizmetler/${service.slug}`} title={service.title} />
           <Reveal>
             <TextLink href="/hizmetler" arrow="←">
               Tüm hizmetler
@@ -92,6 +80,7 @@ export default async function ServiceDetailPage({
                 src={service.image}
                 alt={`${service.title} — temsili uygulama görseli`}
                 fill
+                preload
                 sizes="(max-width: 900px) 100vw, 1280px"
                 style={{ objectFit: "cover" }}
               />
@@ -113,6 +102,7 @@ export default async function ServiceDetailPage({
                     {section.items && <ul className="content-checklist">{section.items.map(item => <li key={item}>{item}</li>)}</ul>}
                   </section>
                 ))}
+                {service.slug === "endustriyel-cati-ges" && <InstallationProcess path={`/hizmetler/${service.slug}`} />}
               </div>
             </div>
 

@@ -5,7 +5,9 @@ import { GalleryImage } from "@/data/gallery";
 // ve klavye/dokunmatik ile manuel kaydırmaya saygılıdır.
 export function Marquee({ images }: { images: GalleryImage[] }) {
   return (
-    <div className="marquee">
+    <div className="marquee-section">
+      <label className="marquee-pause"><input type="checkbox" /> Görsel hareketini duraklat</label>
+      <div className="marquee">
       <div className="marquee__track">
         {[...images, ...images].map((img, i) => (
           <div
@@ -23,6 +25,7 @@ export function Marquee({ images }: { images: GalleryImage[] }) {
             <span className="marquee__label">{img.label}</span>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

@@ -127,3 +127,15 @@ export const services: Service[] = [
 export function getServiceBySlug(slug: string): Service | undefined {
   return services.find((s) => s.slug === slug);
 }
+
+services.push({
+  num: "07", slug: "endustriyel-cati-ges", title: "Endüstriyel Çatı GES", icon: "panel", image: "/images/stock/industrial-roof.jpg",
+  summary: "Fabrika ve depo çatılarında tüketim analizi, yapısal uygunluk, proje ve kurulumun birlikte planlanması.",
+  description: ["Fabrika çatısında güç seçimi, kullanılabilir alanın yanında tesisin saatlik tüketimine dayanır. Vardiyalar, hafta sonu çalışma ve gelecekteki yük artışları üretim senaryosuna dahil edilir.", "Çatı statik belgeleri, kaplama, yangın erişimi ve elektrik bağlantı koşulları incelenmeden kapasite veya teslim takvimi kesinleştirilmez. Uygulama planı tesisin üretim programıyla birlikte hazırlanır."],
+  scope: ["Tüketim ve öz tüketim senaryosu", "Çatı, gölge ve montaj değerlendirmesi", "OSB / dağıtım bağlantı koordinasyonu", "Proje, teklif, montaj ve teslim planı"],
+}, {
+  num: "08", slug: "arazi-ges", title: "Arazi GES", icon: "power", image: "/images/stock/field-array.jpg",
+  summary: "Arazi tipi güneş enerjisi projelerinde parsel, topoğrafya, bağlantı ve uygulama koşullarına dayalı mühendislik değerlendirmesi.",
+  description: ["Araziye kurulacak bir GES için yüzölçümü tek başına yeterli bilgi değildir. Parsel durumu, eğim, zemin, drenaj, ulaşım ve yakın çevre gölgeleri ilk teknik değerlendirmenin parçalarıdır.", "Bağlantı noktası ve ilgili izin koşulları netleşmeden yatırım bedeli veya kullanılabilecek güç garanti edilmez. Yerleşim ve ekipman seçimi, üretim tahmini ile saha uygulama maliyetleri birlikte değerlendirilerek hazırlanır."],
+  scope: ["Parsel ve saha ön değerlendirmesi", "Topoğrafya, gölge ve yerleşim çalışması", "Bağlantı koşulları ve izin kapsamının belirlenmesi", "Teknik teklif, kurulum ve işletme planı"],
+});

@@ -38,7 +38,9 @@ for (let i = 0; i < urls.length; i += 5) {
     assert.equal(business?.["@id"], `${canonicalOrigin}/#organization`, path);
     assert.equal(business?.telephone, "+902626446989", path);
     assert.equal(business?.address?.addressLocality, "Gebze", path);
-    assert.equal(business?.hasOfferCatalog?.itemListElement?.length, 6, path);
+    assert.equal(business?.hasOfferCatalog?.itemListElement?.length, 8, path);
+    assert.equal(business?.openingHoursSpecification?.[0]?.opens, "08:00", path);
+    assert.equal(business?.openingHoursSpecification?.[0]?.closes, "17:00", path);
     assert.ok(!business.aggregateRating && !business.review, `${path}: no invented reviews`);
     if (path.startsWith("/hizmetler/")) {
       assert.equal(items.find(item => item["@type"] === "Service")?.provider?.["@id"], business["@id"]);
