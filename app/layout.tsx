@@ -5,6 +5,7 @@ import "./globals.css";
 import "./brand.css";
 import "./utilities.css";
 import "./growth.css";
+import "./geo.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CookieBanner } from "@/components/CookieBanner";
@@ -12,6 +13,7 @@ import { siteConfig, defaultOgImage } from "@/lib/site";
 import { SiteFrame } from "@/components/SiteFrame";
 import { JsonLd } from "@/components/JsonLd";
 import { businessGraph } from "@/lib/structured-data";
+import { PublicContent } from "@/components/PublicContent";
 
 const archivo = Archivo({
   subsets: ["latin", "latin-ext"],
@@ -58,11 +60,12 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="tr" className={archivo.variable}>
+      <head><PublicContent><JsonLd data={businessGraph} /></PublicContent></head>
       <body>
         <a href="#main" className="skip-link">
           İçeriğe geç
         </a>
-        <SiteFrame header={<><JsonLd data={businessGraph} /><Header /></>} footer={<Footer />} notice={<CookieBanner />}>{children}</SiteFrame>
+        <SiteFrame header={<Header />} footer={<Footer />} notice={<CookieBanner />}>{children}</SiteFrame>
       </body>
     </html>
   );

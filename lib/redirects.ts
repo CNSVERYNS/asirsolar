@@ -1,6 +1,7 @@
 // Published URLs remain permanent aliases. Keep destinations canonical (no chains).
 export const publicRedirects = [
-  { source: "/ges-hesaplama", destination: "/hesapla", permanent: true },
+  { source: "/hesapla", destination: "/hesaplayici", permanent: true },
+  { source: "/ges-hesaplama", destination: "/hesaplayici", permanent: true },
   { source: "/ges-kurulumu", destination: "/bolgeler", permanent: true },
   { source: "/gizlilik-politikasi", destination: "/gizlilik", permanent: true },
   { source: "/cerez-politikasi", destination: "/cerezler", permanent: true },

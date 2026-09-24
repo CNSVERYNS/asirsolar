@@ -90,7 +90,7 @@ export function Header() {
       </header>
 
       <MobileMenu open={menuOpen} onClose={closeMenu} />
-      <div className="desktop-whatsapp"><WhatsAppLink /></div>
+      <div className="desktop-whatsapp floating-contact-actions"><WhatsAppLink variant="inline" /><a className="floating-call" href={company.phoneHref} aria-label={`Asır Solar’ı arayın: ${company.phoneDisplay}`}>Bizi arayın <span aria-hidden="true">↗</span></a></div>
       {(pathname !== "/iletisim" || whatsappContact) && <div className="mobile-contact-bar" data-whatsapp={!!whatsappContact}>
         <a href={company.phoneHref} aria-label={`Asır Solar’ı arayın: ${company.phoneDisplay}`}>Tıkla ara<span aria-hidden="true">↗</span></a>
         <WhatsAppLink variant="mobile" />

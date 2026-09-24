@@ -19,7 +19,8 @@ const html = await (await fetch(origin)).text();
 assert.equal((html.match(/<h1[ >]/g) || []).length, 1);
 assert.ok(html.includes('id="application-panel"'));
 assert.ok(html.includes('id="mobile-menu"'));
-assert.ok(html.includes("Geleceğin enerjisi."));
+assert.ok(html.includes("Endüstriyel ve Bireysel"));
+assert.ok(html.includes("Güneş Enerjisi Sistemleri"));
 assert.ok(html.includes("/images/brand/asir-logo.jpeg"));
 for (const project of ["Konut / Villa", "İşletme / Fabrika", "Arazi Tipi"]) {
   const content = await (await fetch(`${origin}/iletisim?proje=${encodeURIComponent(project)}`)).text();

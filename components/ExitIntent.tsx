@@ -8,7 +8,7 @@ export function ExitIntent() {
   const pathname = usePathname(), shown = useRef(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    if (pathname === "/iletisim" || pathname === "/hesapla" || !window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px)").matches) return;
+    if (pathname === "/iletisim" || pathname === "/hesaplayici" || !window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px)").matches) return;
     const start = performance.now();
     const leave = (event: MouseEvent) => {
       if (shown.current || event.clientY > 0 || performance.now() - start < 45000 || scrollY < 250 || document.querySelector("dialog[open]") || document.querySelector('.cookie-banner[data-visible="true"]') || document.activeElement?.matches("input,textarea,select,[contenteditable=true]")) return;

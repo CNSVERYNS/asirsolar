@@ -35,7 +35,7 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-              <Link href="/hesapla">GES hesaplama</Link><br /><Link href="/bolgeler">Bölge ve OSB rehberi</Link>
+              <Link href="/hesaplayici">GES hesaplama</Link><br /><Link href="/catima-gunes-paneli-nasil-yaptiririm">Çatı GES kurulum rehberi</Link><br /><Link href="/bolgeler">Bölge ve OSB rehberi</Link>
             </div>
 
             <div className="footer-col">

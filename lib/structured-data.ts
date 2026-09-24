@@ -69,6 +69,12 @@ export const businessGraph: Graph = {
       },
     },
     {
+      "@type": "Organization", "@id": organizationId,
+      name: company.brandName, legalName: company.legalName,
+      url: siteConfig.url, logo: `${siteConfig.url}/images/brand/asir-logo.jpeg`,
+      telephone: company.phoneHref.replace("tel:", ""), email: company.generalEmail,
+    },
+    {
       "@type": "WebSite", "@id": websiteId, name: company.brandName,
       url: siteConfig.url, inLanguage: "tr-TR", publisher: { "@id": organizationId },
     },

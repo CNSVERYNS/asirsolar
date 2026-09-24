@@ -4,7 +4,7 @@ import sharp from 'sharp';
 // GET-only: safe for production; never submits forms or authenticates to CRM.
 const target=new URL(process.argv[2]||'http://localhost:3000').origin;
 const get=path=>fetch(new URL(path,target),{redirect:'manual',signal:AbortSignal.timeout(60000)});
-const pages=['/','/hesapla','/bolgeler','/bolgeler/kocaeli','/bolgeler/kocaeli/gebze-osb','/hizmetler/cati-ges','/hizmetler/arazi-ges','/iletisim'];
+const pages=['/','/hesaplayici','/bolgeler','/bolgeler/kocaeli','/bolgeler/kocaeli/gebze-osb','/hizmetler/cati-ges','/hizmetler/arazi-ges','/iletisim'];
 for(const path of pages){
  const response=await get(path);assert.equal(response.status,200,path);const html=await response.text();
  assert.match(response.headers.get('content-security-policy'),/frame-ancestors 'none'/);assert.ok(!response.headers.get('content-security-policy').includes('unsafe-eval'));

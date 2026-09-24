@@ -24,13 +24,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/rehber",
     "/ekibimiz",
     "/iletisim",
-    "/hesapla",
+    "/catima-gunes-paneli-nasil-yaptiririm",
+    "/hesaplayici",
     "/bolgeler",
   ].map((path) => ({
     url: `${siteConfig.url}${path}`,
     changeFrequency: "monthly" as const,
     priority: path ? 0.7 : 1,
-    ...(["", "/hizmetler", "/kurumsal", "/iletisim", "/hesapla", "/bolgeler"].includes(path) ? { lastModified: "2026-09-22" } : {}),
+    ...(["", "/hizmetler", "/kurumsal", "/iletisim", "/hesaplayici", "/bolgeler"].includes(path) ? { lastModified: "2026-09-22" } : {}),
+    ...(["", "/hesaplayici", "/catima-gunes-paneli-nasil-yaptiririm"].includes(path) ? { lastModified: "2026-09-23" } : {}),
   }));
 
   const serviceRoutes = services.map((s) => ({

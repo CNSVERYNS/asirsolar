@@ -11,9 +11,14 @@ import { CompassIcon, PanelIcon, PowerIcon, BoltIcon } from "@/components/Icons"
 import { services } from "@/data/services";
 import { company } from "@/data/company";
 import { LazySolarEstimator } from "@/components/LazySolarEstimator";
+import { HomeProjects } from "@/components/HomeProjects";
 import engineeringPhoto from "@/public/images/stock/worker-install.jpg";
 
-const featuredServices = [services[0], services[2], services[3]];
+export const dynamic = "force-dynamic";
+const featuredServices = [
+  { ...services[6], title: "Çatı GES" }, { ...services[7], title: "Arazi GES" },
+  { ...services[2], title: "Mühendislik & Danışmanlık" }, { ...services[5], title: "Bakım-Onarım" },
+];
 const steps = [
   { title: "Sizi ve sahanızı tanıyoruz.", description: "Tüketiminizi, çatınızı ve elektrik altyapınızı yerinde değerlendiriyoruz.", detail: "Keşif & ihtiyaç analizi" },
   { title: "Doğru sistemi tasarlıyoruz.", description: "Panel yerleşimini, ekipman seçimini ve uygulama kapsamını netleştiriyoruz.", detail: "Projelendirme & teklif" },
@@ -29,11 +34,11 @@ export default function HomePage() {
         <Container>
           <div className="solar-hero__content">
             <p className="eyebrow eyebrow--light"><span className="status-dot" /> GÜNEŞTEN GELEN GÜÇ, MÜHENDİSLİKLE.</p>
-            <h1 id="hero-title">Geleceğin enerjisi.<br /><span>Bugünün kararı.</span></h1>
+            <h1 id="hero-title" className="geo-hero-title">Endüstriyel ve Bireysel <span>Güneş Enerjisi Sistemleri</span></h1>
             <p className="solar-hero__description">Çatınızın potansiyelini enerjiye dönüştürüyoruz. Güneş enerjisi ve elektrik sistemlerinde, keşiften devreye almaya yanınızdayız.</p>
             <div className="solar-hero__actions">
-              <PrimaryButton href="/iletisim">Ücretsiz keşif talep edin</PrimaryButton>
-              <Link href="#cozumler" className="hero-text-link">Çözümlerimizi keşfedin <span aria-hidden="true">↗</span></Link>
+              <PrimaryButton href="/iletisim">Ücretsiz Keşif İste</PrimaryButton>
+              <Link href="/hesaplayici" className="hero-text-link">Tasarruf Hesapla <span aria-hidden="true">↗</span></Link>
             </div>
           </div>
           <div className="solar-hero__bottom">
@@ -72,18 +77,18 @@ export default function HomePage() {
             <Reveal><p className="eyebrow"><span className="section-index">02 /</span> HİZMETLERİMİZ</p><h2>İhtiyacınıza göre tasarlanır.<br /><span className="text-soft">Güvenle hayata geçirilir.</span></h2></Reveal>
             <TextLink href="/hizmetler">Tüm hizmetlerimiz</TextLink>
           </div>
-          <div className="solution-cards">
+          <div className="solution-cards geo-service-cards">
             {featuredServices.map((service, i) => (
               <Reveal key={service.slug} delay={i * 70}>
                 <Link href={`/hizmetler/${service.slug}`} className="solution-card">
-                  <div className="solution-card__image"><Image src={service.image} alt={service.title} fill sizes="(max-width: 680px) 100vw, 33vw" /><span className="solution-card__number">0{i + 1}</span><span className="round-arrow" aria-hidden="true">↗</span></div>
-                  <h3>{service.title}</h3><p>{service.summary}</p>
+                  <div className="solution-card__image"><Image src={service.image} alt={`${service.title} için temsili uygulama görseli`} fill sizes="(max-width: 680px) 100vw, 50vw" /><span className="solution-card__number">0{i + 1}</span><span className="round-arrow" aria-hidden="true">↗</span></div>
+                  <h2>{service.title}</h2><p>{service.summary}</p>
                 </Link>
               </Reveal>
             ))}
           </div>
           <div className="additional-services">
-            {[services[1], services[4], services[5]].map((service) => <Link key={service.slug} href={`/hizmetler/${service.slug}`}>{service.title}<span aria-hidden="true">↗</span></Link>)}
+            {[services[1], services[4], services[3]].map((service) => <Link key={service.slug} href={`/hizmetler/${service.slug}`}>{service.title}<span aria-hidden="true">↗</span></Link>)}
           </div>
         </Container>
       </section>
@@ -94,6 +99,8 @@ export default function HomePage() {
           <SolutionFinder />
         </Container>
       </section>
+
+      <HomeProjects />
 
       <section className="engineering-story">
         <div className="engineering-story__photo"><Image src={engineeringPhoto} alt="Güneş panellerinin montaj aşamasını gösteren temsili uygulama görseli" fill placeholder="blur" sizes="(max-width: 800px) 100vw, 50vw" /><span>PROJEDEN UYGULAMAYA.</span></div>
@@ -108,6 +115,7 @@ export default function HomePage() {
         <Container>
           <div className="editorial-heading"><Reveal><p className="eyebrow"><span className="section-index">04 /</span> NASIL ÇALIŞIYORUZ?</p><h2>İlk görüşmeden<br /><span className="text-soft">ilk üretime.</span></h2></Reveal><p className="text-muted">Her aşaması planlı.<br />Her adımında yanınızdayız.</p></div>
           <ol className="journey-grid">{steps.map((step, i) => <li key={step.title}><span className="journey-number">0{i + 1}<span aria-hidden="true">↗</span></span><p className="eyebrow">{step.detail}</p><h3>{step.title}</h3><p className="text-muted">{step.description}</p></li>)}</ol>
+          <div className="tw:mt-8"><TextLink href="/catima-gunes-paneli-nasil-yaptiririm">Çatıma güneş paneli nasıl yaptırırım? Adım adım okuyun</TextLink></div>
         </Container>
       </section>
       <section className="section local-planning">

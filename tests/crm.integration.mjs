@@ -93,10 +93,14 @@ try {
   assert.equal((await request(image.url+'?w=960',{headers:{'If-None-Match':etag}})).status,200);
   assert.equal((await json(await request('/api/projeler'),200)).projects[0].images.length,1);
   const projectHtml=await (await request('/projeler')).text();
+  const homeHtml=await (await request('/')).text();
+  assert.ok(homeHtml.includes('home-project-grid'));assert.ok(homeHtml.includes(detailPath));
+  assert.ok(homeHtml.includes('HTTP test project &lt;script&gt;'));assert.ok(!homeHtml.includes('<script>alert(1)</script>'));
   assert.ok(projectHtml.includes('HTTP test project &lt;script&gt;'));assert.ok(!projectHtml.includes('<script>alert(1)</script>'));
   assert.ok(projectHtml.includes('live-projects__heading'));assert.ok(!projectHtml.includes('marquee__track'));
   assert.ok((await (await request('/sitemap.xml')).text()).includes('/projeler</loc>'));
   await json(await request(projectUrl,{method:'PATCH',auth,body:projectInput}),200);
+  assert.ok(!(await (await request('/')).text()).includes(detailPath));
   assert.equal((await request(detailPath)).status,404);
   assert.equal((await request(ogPath)).status,404);
   assert.ok(!(await (await request('/sitemap.xml')).text()).includes(detailPath+'</loc>'));

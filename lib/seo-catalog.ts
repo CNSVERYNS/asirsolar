@@ -4,7 +4,8 @@ import { projects } from "../data/projects.ts";
 import { localAreas, localAreaPath } from "../data/local-areas.ts";
 export type PublicPage = { path: string; title: string; section: string };
 export const publicPages: PublicPage[] = [
-  { path: "/", title: "Güneşin gücü. Doğru mühendislik.", section: "GÜNEŞ ENERJİSİ SİSTEMLERİ" },
+  { path: "/", title: "Endüstriyel ve Bireysel Güneş Enerjisi Sistemleri", section: "GÜNEŞ ENERJİSİ SİSTEMLERİ" },
+  { path: "/catima-gunes-paneli-nasil-yaptiririm", title: "Çatıma güneş paneli nasıl yaptırırım?", section: "ÇATI GES KURULUM REHBERİ" },
   { path: "/kurumsal", title: "Asır Solar’ı tanıyın", section: "KURUMSAL" },
   { path: "/hizmetler", title: "Güneş enerjisi ve mühendislik hizmetleri", section: "HİZMETLER" },
   { path: "/projeler", title: "Güneş enerjisi projelerimiz", section: "PROJELER" },
@@ -14,7 +15,7 @@ export const publicPages: PublicPage[] = [
   { path: "/kvkk", title: "Kişisel verilerin korunması", section: "ASIR SOLAR" },
   { path: "/gizlilik", title: "Gizlilik politikası", section: "ASIR SOLAR" },
   { path: "/cerezler", title: "Çerez politikası", section: "ASIR SOLAR" },
-  { path: "/hesapla", title: "GES kapasite ve amortisman hesabı", section: "YATIRIM ÖN DEĞERLENDİRMESİ" },
+  { path: "/hesaplayici", title: "GES kapasite ve amortisman hesabı", section: "YATIRIM ÖN DEĞERLENDİRMESİ" },
   { path: "/bolgeler", title: "Bölgenize göre GES planlaması", section: "BÖLGE VE OSB REHBERİ" },
   ...Array.from(new Set(localAreas.map(area => area.citySlug))).map(citySlug => ({ path: `/bolgeler/${citySlug}`, title: `${localAreas.find(area => area.citySlug === citySlug)!.city} GES kurulum planlaması`, section: "YEREL MÜHENDİSLİK" })),
   ...localAreas.map(area => ({ path: localAreaPath(area), title: area.title, section: "FABRİKA ÇATI GES" })),
