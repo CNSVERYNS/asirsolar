@@ -17,11 +17,10 @@ export function CTASection() {
           </Reveal>
           <Reveal className="cta__side" delay={80}>
             <p className="cta__desc">
-              Projenizin kapsamını paylaşın. Ekibimiz ihtiyaçlarınızı
-              değerlendirerek sizinle iletişime geçsin.
+              {company.pricing.description}
             </p>
             <div className="cta__actions">
-              <PrimaryButton href="/iletisim">Ücretsiz keşif talep edin</PrimaryButton>
+              <PrimaryButton href="/iletisim#contact-form">Ücretsiz Keşif Planla</PrimaryButton>
               <a href={company.phoneHref} className="btn btn--outline">
                 {company.phoneDisplay}
               </a>

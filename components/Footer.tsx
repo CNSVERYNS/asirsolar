@@ -20,9 +20,9 @@ export function Footer() {
               SOLAR
             </p>
             <p className="site-footer__tag">
-              Güneş enerjisi sistemlerini projelendiriyor, kuruyor ve devreye
-              alıyoruz.
+              {company.pricing.description}
             </p>
+            <Link href="/iletisim#contact-form" className="btn btn--primary">Ücretsiz Keşif Planla <span aria-hidden="true">↗</span></Link>
           </div>
 
           <div className="site-footer__cols">

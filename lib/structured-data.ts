@@ -48,6 +48,7 @@ export const businessGraph: Graph = {
         streetAddress: company.address.line1,
         addressLocality: "Gebze",
         addressRegion: "Kocaeli",
+        postalCode: company.address.postalCode,
         addressCountry: "TR",
       },
       hasMap: company.address.mapsHref,
